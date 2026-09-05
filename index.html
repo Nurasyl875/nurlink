@@ -1,0 +1,131 @@
+ <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Nurlink</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #111827, #4f46e5);
+            color: white;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 50px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 13px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        main {
+            margin-top: 150px;
+        }
+
+        h1 {
+            font-size: 60px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background: #18181b;
+            padding: 35px;
+            width: 320px;
+            border-radius: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">NURLINK</div>
+
+        <button onclick="openLogin()">
+            Войти
+        </button>
+    </nav>
+
+    <main>
+        <h1>Connect with your world.</h1>
+        <p>Общайся. Создавай. Находи новых людей.</p>
+    </main>
+
+    <div class="modal" id="loginModal">
+
+        <div class="box">
+
+            <h2>Вход в Nurlink</h2>
+
+            <input id="username" type="text" placeholder="Имя пользователя">
+
+            <input id="password" type="password" placeholder="Пароль">
+
+            <button onclick="login()">
+                Войти
+            </button>
+
+            <button onclick="closeLogin()">
+                Закрыть
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function openLogin() {
+            document.getElementById("loginModal").style.display = "flex";
+        }
+
+        function closeLogin() {
+            document.getElementById("loginModal").style.display = "none";
+        }
+
+        function login() {
+
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (username === "nurlas" && password === "1234") {
+                window.location.href = "home.html";
+            } else {
+                alert("Неверный логин или пароль ❌");
+            }
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,614 @@
+ <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurlink — Home</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0b10;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #24242d;
+            background: rgba(11, 11, 16, 0.95);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .search {
+            width: 280px;
+            background: #181820;
+            border: 1px solid #292936;
+            padding: 12px 18px;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+        }
+
+        .profile-top {
+            background: #181820;
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 240px 1fr 240px;
+            gap: 25px;
+        }
+
+        .card {
+            background: #14141c;
+            border: 1px solid #24242d;
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+        .profile-card {
+            text-align: center;
+        }
+
+        .avatar {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8b5cf6, #4f46e5);
+        }
+
+        .username {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .handle {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .menu {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .menu-item {
+            padding: 12px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #22222d;
+            transform: translateX(5px);
+        }
+
+        .post-box h2 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 90px;
+            background: #0f0f16;
+            border: 1px solid #292936;
+            border-radius: 12px;
+            padding: 14px;
+            color: white;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .post-button {
+            margin-top: 12px;
+            padding: 11px 22px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #7c3aed, #4f46e5);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .post-button:hover {
+            transform: scale(1.04);
+            opacity: 0.9;
+        }
+
+        .post {
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+
+        .post:hover {
+            border-color: #45455a;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mini-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #292936;
+        }
+
+        .post-name {
+            font-weight: bold;
+        }
+
+        .post-time {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .post-text {
+            color: #d0d0d5;
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: flex;
+            gap: 25px;
+            margin-top: 18px;
+            color: #888;
+        }
+
+        .action {
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+        }
+
+        .action:hover {
+            color: #a78bfa;
+        }
+
+        .right-title {
+            margin-bottom: 15px;
+        }
+
+        .trend {
+            padding: 12px 0;
+            border-bottom: 1px solid #24242d;
+        }
+
+        .trend small {
+            color: #777;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            padding: 30px;
+            font-size: 13px;
+        }
+
+        /* Окно */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            width: 400px;
+            max-width: 90%;
+            background: #181820;
+            border: 1px solid #333344;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .close-button {
+            margin-top: 20px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #292936;
+            color: white;
+        }
+
+        .setting-input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: #0f0f16;
+            border: 1px solid #333344;
+            color: white;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+
+            .left-column,
+            .right-column {
+                display: none;
+            }
+
+            .search {
+                display: none;
+            }
+
+            header {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo" onclick="goHome()">NURLINK</div>
+
+    <input
+        class="search"
+        id="searchInput"
+        type="text"
+        placeholder="Search posts..."
+        oninput="searchPosts()"
+    >
+
+    <div class="profile-top" onclick="openProfile()">👤 nurlas</div>
+</header>
+
+
+<div class="container">
+
+    <!-- Левая колонка -->
+    <aside class="left-column">
+
+        <div class="card profile-card">
+
+            <div class="avatar">N</div>
+
+            <div class="username">Nurasyl</div>
+            <div class="handle">@nurlas</div>
+
+            <div class="menu">
+                <div class="menu-item" onclick="goHome()">🏠 Home</div>
+                <div class="menu-item" onclick="openProfile()">👤 Profile</div>
+                <div class="menu-item" onclick="openMessages()">💬 Messages</div>
+                <div class="menu-item" onclick="openNotifications()">🔔 Notifications</div>
+                <div class="menu-item" onclick="openSettings()">⚙ Settings</div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- Центральная колонка -->
+    <main>
+
+        <div class="card post-box">
+
+            <h2>What's happening?</h2>
+
+            <textarea
+                id="postInput"
+                placeholder="Share something with the world..."
+            ></textarea>
+
+            <button class="post-button" onclick="createPost()">
+                Post
+            </button>
+
+        </div>
+
+
+        <!-- Здесь появляются посты -->
+        <div id="posts">
+
+            <div class="card post">
+
+                <div class="post-header">
+
+                    <div class="mini-avatar">N</div>
+
+                    <div>
+                        <div class="post-name">Nurasyl</div>
+                        <div class="post-time">@nurlas · now</div>
+                    </div>
+
+                </div>
+
+                <div class="post-text">
+                    Welcome to Nurlink! 🚀 Building something new.
+                </div>
+
+                <div class="actions">
+                    <button class="action" onclick="likePost(this)">
+                        ❤️ Like <span>0</span>
+                    </button>
+
+                    <button class="action" onclick="alert('Comments coming soon! 💬')">
+                        💬 Comment
+                    </button>
+
+                    <button class="action" onclick="alert('Share feature coming soon! ↗')">
+                        ↗ Share
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Правая колонка -->
+    <aside class="right-column">
+
+        <div class="card">
+
+            <h3 class="right-title">Trending 🔥</h3>
+
+            <div class="trend">
+                <small>Technology</small>
+                <div>#Programming</div>
+            </div>
+
+            <div class="trend">
+                <small>Gaming</small>
+                <div>#CS2</div>
+            </div>
+
+            <div class="trend">
+                <small>Future</small>
+                <div>#AI</div>
+            </div>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<footer>
+    Created by Nurasyl Shamelkhanov © 2026
+</footer>
+
+
+<!-- Универсальное окно -->
+<div class="modal" id="modal">
+
+    <div class="modal-content">
+
+        <h2 id="modalTitle">Nurlink</h2>
+
+        <div id="modalText"></div>
+
+        <button class="close-button" onclick="closeModal()">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // Создание поста
+    function createPost() {
+
+        const input = document.getElementById("postInput");
+        const text = input.value.trim();
+
+        if (text === "") {
+            alert("Write something first!");
+            return;
+        }
+
+        const posts = document.getElementById("posts");
+
+        const newPost = document.createElement("div");
+
+        newPost.className = "card post";
+
+        newPost.innerHTML = `
+            <div class="post-header">
+
+                <div class="mini-avatar">N</div>
+
+                <div>
+                    <div class="post-name">Nurasyl</div>
+                    <div class="post-time">@nurlas · now</div>
+                </div>
+
+            </div>
+
+            <div class="post-text">${text}</div>
+
+            <div class="actions">
+
+                <button class="action" onclick="likePost(this)">
+                    ❤️ Like <span>0</span>
+                </button>
+
+                <button class="action" onclick="alert('Comments coming soon! 💬')">
+                    💬 Comment
+                </button>
+
+                <button class="action" onclick="alert('Share feature coming soon! ↗')">
+                    ↗ Share
+                </button>
+
+            </div>
+        `;
+
+        posts.prepend(newPost);
+
+        input.value = "";
+    }
+
+
+    // Лайк
+    function likePost(button) {
+
+        const counter = button.querySelector("span");
+
+        let likes = Number(counter.textContent);
+
+        likes++;
+
+        counter.textContent = likes;
+
+        button.style.color = "#ff5c8a";
+    }
+
+
+    // Поиск постов
+    function searchPosts() {
+
+        const search = document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const posts = document.querySelectorAll(".post");
+
+        posts.forEach(function(post) {
+
+            const text = post.innerText.toLowerCase();
+
+            if (text.includes(search)) {
+                post.style.display = "block";
+            } else {
+                post.style.display = "none";
+            }
+
+        });
+    }
+
+
+    // Главная
+    function goHome() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    // Профиль
+    function openProfile() {
+        openModal(
+            "Nurasyl's Profile",
+            "👤 Nurasyl<br><br>@nurlas<br><br>Founder of Nurlink 🚀"
+        );
+    }
+
+
+    // Сообщения
+    function openMessages() {
+        openModal(
+            "Messages",
+            "💬 You don't have any messages yet."
+        );
+    }
+
+
+    // Уведомления
+    function openNotifications() {
+        openModal(
+            "Notifications",
+            "🔔 Welcome to Nurlink! Your project is growing 🚀"
+        );
+    }
+
+
+    // Настройки
+    function openSettings() {
+        openModal(
+            "Settings",
+            "⚙️ Settings page is coming soon!"
+        );
+    }
+
+
+    // Открытие окна
+    function openModal(title, text) {
+
+        document.getElementById("modalTitle").innerHTML = title;
+
+        document.getElementById("modalText").innerHTML = text;
+
+        document.getElementById("modal").style.display = "flex";
+    }
+
+
+    // Закрытие окна
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+</script>
+
+</body>
+</html>
