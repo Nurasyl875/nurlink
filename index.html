@@ -1,10 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f172a">
-
 <title>Nurlink</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,7 +11,7 @@
 <style>
 :root{
     --bg:#f5f7fb;
-    --card:#ffffff;
+    --card:#fff;
     --text:#111827;
     --muted:#6b7280;
     --border:#e5e7eb;
@@ -22,11 +21,7 @@
     --shadow:0 8px 30px rgba(15,23,42,.07);
 }
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
@@ -44,19 +39,9 @@ body.dark{
     --shadow:0 8px 30px rgba(0,0,0,.25);
 }
 
-button,
-input,
-textarea{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.hidden{
-    display:none!important;
-}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
 
 /* AUTH */
 
@@ -88,9 +73,7 @@ button{
     letter-spacing:-2px;
 }
 
-.logo span{
-    color:var(--blue);
-}
+.logo span,.nav-logo span{color:var(--blue)}
 
 .tagline{
     text-align:center;
@@ -98,10 +81,7 @@ button{
     margin:8px 0 30px;
 }
 
-.auth-title{
-    font-size:25px;
-    margin-bottom:18px;
-}
+.auth-title{font-size:25px;margin-bottom:18px}
 
 .input{
     width:100%;
@@ -114,9 +94,7 @@ button{
     margin-bottom:12px;
 }
 
-.input:focus{
-    border-color:var(--blue);
-}
+.input:focus{border-color:var(--blue)}
 
 .primary{
     width:100%;
@@ -124,15 +102,11 @@ button{
     border-radius:14px;
     padding:14px;
     background:var(--blue);
-    color:white;
+    color:#fff;
     font-weight:800;
-    transition:.2s;
 }
 
-.primary:hover{
-    background:var(--blue2);
-    transform:translateY(-1px);
-}
+.primary:hover{background:var(--blue2)}
 
 .auth-switch{
     text-align:center;
@@ -163,24 +137,16 @@ button{
     padding:0 22px;
 }
 
-.dark .navbar{
-    background:rgba(17,24,39,.88);
-}
+.dark .navbar{background:rgba(17,24,39,.88)}
 
 .nav-logo{
     font-size:27px;
     font-weight:900;
     letter-spacing:-1px;
+    cursor:pointer;
 }
 
-.nav-logo span{
-    color:var(--blue);
-}
-
-.nav-actions{
-    display:flex;
-    gap:5px;
-}
+.nav-actions{display:flex;gap:5px}
 
 .nav-btn{
     border:0;
@@ -191,13 +157,8 @@ button{
     font-weight:700;
 }
 
-.nav-btn:hover{
-    background:var(--bg);
-}
-
-.mobile-label{
-    display:inline;
-}
+.nav-btn:hover{background:var(--bg)}
+.mobile-label{display:inline}
 
 /* LAYOUT */
 
@@ -210,14 +171,13 @@ button{
     padding:22px 15px 50px;
 }
 
-.sidebar,
-.rightbar{
+.sidebar,.rightbar{
     position:sticky;
     top:90px;
     height:max-content;
 }
 
-.side-card{
+.side-card,.info-card{
     background:var(--card);
     border:1px solid var(--border);
     border-radius:20px;
@@ -249,15 +209,10 @@ button{
     font-weight:700;
 }
 
-.side-menu button:hover{
-    background:var(--bg);
-}
+.side-menu button:hover{background:var(--bg)}
+.main{min-width:0}
 
-.main{
-    min-width:0;
-}
-
-/* AVATARS */
+/* AVATAR */
 
 .avatar{
     width:45px;
@@ -265,7 +220,7 @@ button{
     min-width:45px;
     border-radius:50%;
     background:linear-gradient(135deg,#2563eb,#7c3aed);
-    color:white;
+    color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -292,13 +247,14 @@ button{
     object-fit:cover;
 }
 
-/* CREATE POST */
+/* CARDS */
 
 .create-card,
 .post,
 .search-card,
 .profile-card,
-.info-card{
+.info-card,
+.chat-card{
     background:var(--card);
     border:1px solid var(--border);
     border-radius:20px;
@@ -343,23 +299,19 @@ button{
     font-weight:700;
 }
 
-.photo-label:hover{
-    background:var(--border);
-}
-
-.publish-btn{
+.publish-btn,
+.open-btn{
     border:0;
     background:var(--blue);
-    color:white;
-    padding:10px 18px;
+    color:#fff;
     border-radius:11px;
     font-weight:800;
 }
 
-.preview{
-    margin-top:12px;
-    position:relative;
-}
+.publish-btn{padding:10px 18px}
+.open-btn{padding:9px 13px}
+
+.preview{margin-top:12px}
 
 .preview img{
     width:100%;
@@ -381,19 +333,15 @@ button{
     gap:11px;
 }
 
-.post-author{
-    font-weight:800;
-}
+.post-author{font-weight:800}
 
-.post-username{
+.post-username,
+.post-date{
     color:var(--muted);
     font-size:13px;
 }
 
-.post-date{
-    color:var(--muted);
-    font-size:12px;
-}
+.post-date{font-size:12px}
 
 .post-content{
     margin-top:15px;
@@ -432,13 +380,9 @@ button{
     color:var(--text);
 }
 
-.action.liked{
-    color:var(--danger);
-}
+.action.liked{color:var(--danger)}
 
-.delete{
-    margin-left:auto;
-}
+.delete{margin-left:auto}
 
 /* COMMENTS */
 
@@ -485,7 +429,7 @@ button{
 .comment-send{
     border:0;
     background:var(--blue);
-    color:white;
+    color:#fff;
     border-radius:11px;
     padding:0 14px;
 }
@@ -545,10 +489,6 @@ button{
     font-weight:800;
 }
 
-.outline:hover{
-    background:var(--bg);
-}
-
 /* SEARCH */
 
 .search-card{
@@ -586,29 +526,84 @@ button{
     min-width:0;
 }
 
-.user-name{
-    font-weight:800;
-}
+.user-name{font-weight:800}
 
 .user-handle{
     color:var(--muted);
     font-size:13px;
 }
 
-.open-btn{
+/* CHAT */
+
+.chat-card{
+    overflow:hidden;
+}
+
+.chat-header{
+    padding:16px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.chat-messages{
+    height:450px;
+    overflow-y:auto;
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.chat-message{
+    max-width:75%;
+    padding:10px 13px;
+    border-radius:15px;
+    line-height:1.4;
+    overflow-wrap:anywhere;
+}
+
+.chat-message.mine{
+    align-self:flex-end;
+    background:var(--blue);
+    color:#fff;
+    border-bottom-right-radius:5px;
+}
+
+.chat-message.theirs{
+    align-self:flex-start;
+    background:var(--bg);
+    border-bottom-left-radius:5px;
+}
+
+.chat-input-row{
+    display:flex;
+    gap:8px;
+    padding:12px;
+    border-top:1px solid var(--border);
+}
+
+.chat-input{
+    flex:1;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px;
+    background:var(--card);
+    color:var(--text);
+    outline:none;
+}
+
+.chat-send{
     border:0;
     background:var(--blue);
-    color:white;
-    border-radius:10px;
-    padding:9px 13px;
+    color:#fff;
+    border-radius:12px;
+    padding:0 17px;
     font-weight:800;
 }
 
 /* RIGHT */
-
-.info-card{
-    padding:18px;
-}
 
 .info-card h3{
     margin-bottom:10px;
@@ -674,7 +669,7 @@ button{
     left:50%;
     transform:translateX(-50%) translateY(100px);
     background:#111827;
-    color:white;
+    color:#fff;
     padding:13px 18px;
     border-radius:13px;
     z-index:200;
@@ -742,6 +737,10 @@ button{
         padding:25px;
         border-radius:22px;
     }
+
+    .chat-messages{
+        height:55vh;
+    }
 }
 </style>
 </head>
@@ -752,115 +751,85 @@ button{
 
 <section id="authPage" class="auth-page">
 
-    <div class="auth-card">
+<div class="auth-card">
 
-        <div class="logo">
-            Nur<span>link</span>
-        </div>
+<div class="logo">Nur<span>link</span></div>
 
-        <div class="tagline">
-            Твоя сеть. Твои люди. Твой мир.
-        </div>
+<div class="tagline">
+Твоя сеть. Твои люди. Твой мир.
+</div>
 
-        <!-- LOGIN -->
+<div id="loginBox">
 
-        <div id="loginBox">
+<h2 class="auth-title">Добро пожаловать 👋</h2>
 
-            <h2 class="auth-title">
-                Добро пожаловать 👋
-            </h2>
+<input
+id="loginEmail"
+class="input"
+type="email"
+placeholder="Email">
 
-            <input
-                id="loginEmail"
-                class="input"
-                type="email"
-                placeholder="Email"
-            >
+<input
+id="loginPassword"
+class="input"
+type="password"
+placeholder="Пароль">
 
-            <input
-                id="loginPassword"
-                class="input"
-                type="password"
-                placeholder="Пароль"
-            >
+<button class="primary" onclick="login()">
+Войти
+</button>
 
-            <button
-                class="primary"
-                onclick="login()"
-            >
-                Войти
-            </button>
+<div class="auth-switch">
+Нет аккаунта?
+<button class="link-btn" onclick="showRegister()">
+Зарегистрироваться
+</button>
+</div>
 
-            <div class="auth-switch">
-                Нет аккаунта?
-                <button
-                    class="link-btn"
-                    onclick="showRegister()"
-                >
-                    Зарегистрироваться
-                </button>
-            </div>
+</div>
 
-        </div>
+<div id="registerBox" class="hidden">
 
+<h2 class="auth-title">Создать аккаунт 🚀</h2>
 
-        <!-- REGISTER -->
+<input
+id="regName"
+class="input"
+placeholder="Имя"
+maxlength="40">
 
-        <div id="registerBox" class="hidden">
+<input
+id="regUsername"
+class="input"
+placeholder="Username"
+maxlength="20">
 
-            <h2 class="auth-title">
-                Создать аккаунт 🚀
-            </h2>
+<input
+id="regEmail"
+class="input"
+type="email"
+placeholder="Email">
 
-            <input
-                id="regName"
-                class="input"
-                placeholder="Имя"
-                maxlength="40"
-            >
+<input
+id="regPassword"
+class="input"
+type="password"
+placeholder="Пароль">
 
-            <input
-                id="regUsername"
-                class="input"
-                placeholder="Username"
-                maxlength="20"
-            >
+<button class="primary" onclick="register()">
+Создать аккаунт
+</button>
 
-            <input
-                id="regEmail"
-                class="input"
-                type="email"
-                placeholder="Email"
-            >
+<div class="auth-switch">
+Уже есть аккаунт?
+<button class="link-btn" onclick="showLogin()">
+Войти
+</button>
+</div>
 
-            <input
-                id="regPassword"
-                class="input"
-                type="password"
-                placeholder="Пароль"
-            >
+</div>
 
-            <button
-                class="primary"
-                onclick="register()"
-            >
-                Создать аккаунт
-            </button>
-
-            <div class="auth-switch">
-                Уже есть аккаунт?
-                <button
-                    class="link-btn"
-                    onclick="showLogin()"
-                >
-                    Войти
-                </button>
-            </div>
-
-        </div>
-
-    </div>
-
+</div>
 </section>
 
 
@@ -868,192 +837,138 @@ button{
 
 <section id="app" class="hidden">
 
-    <nav class="navbar">
+<nav class="navbar">
 
-        <div
-            class="nav-logo"
-            onclick="showFeed()"
-            style="cursor:pointer"
-        >
-            Nur<span>link</span>
-        </div>
+<div class="nav-logo" onclick="showFeed()">
+Nur<span>link</span>
+</div>
 
-        <div class="nav-actions">
+<div class="nav-actions">
 
-            <button
-                class="nav-btn"
-                onclick="showFeed()"
-            >
-                🏠 <span class="mobile-label">Главная</span>
-            </button>
+<button class="nav-btn" onclick="showFeed()">
+🏠 <span class="mobile-label">Главная</span>
+</button>
 
-            <button
-                class="nav-btn"
-                onclick="showSearch()"
-            >
-                🔎 <span class="mobile-label">Поиск</span>
-            </button>
+<button class="nav-btn" onclick="showSearch()">
+🔎 <span class="mobile-label">Поиск</span>
+</button>
 
-            <button
-                class="nav-btn"
-                onclick="showProfile()"
-            >
-                👤 <span class="mobile-label">Профиль</span>
-            </button>
+<button class="nav-btn" onclick="showProfile()">
+👤 <span class="mobile-label">Профиль</span>
+</button>
 
-            <button
-                class="nav-btn"
-                onclick="toggleDark()"
-                title="Тёмная тема"
-            >
-                🌙
-            </button>
+<button class="nav-btn" onclick="toggleDark()">
+🌙
+</button>
 
-            <button
-                class="nav-btn"
-                onclick="logout()"
-            >
-                🚪
-            </button>
+<button class="nav-btn" onclick="logout()">
+🚪
+</button>
 
-        </div>
-
-    </nav>
+</div>
+</nav>
 
 
-    <div class="layout">
+<div class="layout">
 
-        <!-- LEFT -->
+<aside class="sidebar">
 
-        <aside class="sidebar">
+<div class="side-card">
 
-            <div class="side-card">
+<div id="sideUser" class="side-user"></div>
 
-                <div
-                    id="sideUser"
-                    class="side-user"
-                ></div>
+<div class="side-menu">
 
-                <div class="side-menu">
+<button onclick="showFeed()">
+🏠 Главная
+</button>
 
-                    <button onclick="showFeed()">
-                        🏠 Главная
-                    </button>
+<button onclick="showSearch()">
+🔎 Найти людей
+</button>
 
-                    <button onclick="showSearch()">
-                        🔎 Найти людей
-                    </button>
+<button onclick="showProfile()">
+👤 Мой профиль
+</button>
 
-                    <button onclick="showProfile()">
-                        👤 Мой профиль
-                    </button>
+<button onclick="openEdit()">
+✏️ Редактировать
+</button>
 
-                    <button onclick="openEdit()">
-                        ✏️ Редактировать
-                    </button>
+</div>
+</div>
 
-                </div>
-
-            </div>
-
-        </aside>
+</aside>
 
 
-        <!-- MAIN -->
-
-        <main id="content" class="main">
-
-        </main>
+<main id="content" class="main"></main>
 
 
-        <!-- RIGHT -->
+<aside class="rightbar">
 
-        <aside class="rightbar">
+<div class="info-card">
 
-            <div class="info-card">
+<h3>✨ Nurlink</h3>
 
-                <h3>✨ Nurlink</h3>
+<p>
+Общайся, делись моментами
+и находи новых людей.
+</p>
 
-                <p>
-                    Общайся, делись моментами
-                    и находи новых людей.
-                </p>
+<br>
 
-                <br>
-
-                <p>
-                    Nurlink 6.0
-                </p>
-
-            </div>
-
-        </aside>
-
-    </div>
-
-</section>
-
-
-<!-- EDIT MODAL -->
-
-<div
-    id="editModal"
-    class="modal hidden"
->
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <h2>Мой профиль</h2>
-
-            <button
-                class="close"
-                onclick="closeEdit()"
-            >
-                ×
-            </button>
-
-        </div>
-
-        <input
-            id="editName"
-            class="input"
-            placeholder="Имя"
-            maxlength="40"
-        >
-
-        <input
-            id="editAvatar"
-            class="input"
-            placeholder="Ссылка на аватар (необязательно)"
-        >
-
-        <textarea
-            id="editBio"
-            class="input"
-            placeholder="Расскажи о себе..."
-            maxlength="300"
-        ></textarea>
-
-        <button
-            class="primary"
-            onclick="saveProfile()"
-        >
-            Сохранить изменения
-        </button>
-
-    </div>
+<p>Nurlink 6.0</p>
 
 </div>
 
+</aside>
 
-<!-- TOAST -->
+</div>
+</section>
 
-<div
-    id="toast"
-    class="toast"
-></div>
+
+<!-- EDIT -->
+
+<div id="editModal" class="modal hidden">
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<h2>Мой профиль</h2>
+
+<button class="close" onclick="closeEdit()">
+×
+</button>
+
+</div>
+
+<input
+id="editName"
+class="input"
+placeholder="Имя"
+maxlength="40">
+
+<input
+id="editAvatar"
+class="input"
+placeholder="Ссылка на аватар">
+
+<textarea
+id="editBio"
+class="input"
+placeholder="Расскажи о себе..."
+maxlength="300"></textarea>
+
+<button class="primary" onclick="saveProfile()">
+Сохранить изменения
+</button>
+
+</div>
+</div>
+
+
+<div id="toast" class="toast"></div>
 
 
 <script>
@@ -1070,8 +985,8 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 
@@ -1082,6 +997,7 @@ window.supabase.createClient(
 let currentUser = null;
 let currentProfile = null;
 let selectedImage = null;
+let chatUser = null;
 
 
 /* =========================================
@@ -1091,7 +1007,6 @@ let selectedImage = null;
 function $(id){
     return document.getElementById(id);
 }
-
 
 function escapeHTML(text){
 
@@ -1106,7 +1021,6 @@ function escapeHTML(text){
         .replaceAll("'","&#039;");
 }
 
-
 function toast(text){
 
     $("toast").textContent = text;
@@ -1118,8 +1032,7 @@ function toast(text){
     },2500);
 }
 
-
-function avatarHTML(profile, size="normal"){
+function avatarHTML(profile,size="normal"){
 
     const cls =
         size === "large"
@@ -1131,14 +1044,12 @@ function avatarHTML(profile, size="normal"){
     if(profile && profile.avatar_url){
 
         return `
-            <div class="${cls}">
-                <img
-                    src="${escapeHTML(profile.avatar_url)}"
-                    onerror="this.style.display='none'"
-                >
-            </div>
+        <div class="${cls}">
+            <img
+                src="${escapeHTML(profile.avatar_url)}"
+                onerror="this.style.display='none'">
+        </div>
         `;
-
     }
 
     const name =
@@ -1147,31 +1058,22 @@ function avatarHTML(profile, size="normal"){
         "?";
 
     return `
-        <div class="${cls}">
-            ${escapeHTML(
-                name.charAt(0).toUpperCase()
-            )}
-        </div>
+    <div class="${cls}">
+        ${escapeHTML(name.charAt(0).toUpperCase())}
+    </div>
     `;
 }
-
 
 function timeAgo(date){
 
     const seconds =
         Math.floor(
-            (Date.now() -
-            new Date(date).getTime()) / 1000
+            (Date.now()-new Date(date).getTime())/1000
         );
 
-    if(seconds < 60)
-        return "только что";
-
-    if(seconds < 3600)
-        return Math.floor(seconds/60)+" мин";
-
-    if(seconds < 86400)
-        return Math.floor(seconds/3600)+" ч";
+    if(seconds<60) return "только что";
+    if(seconds<3600) return Math.floor(seconds/60)+" мин";
+    if(seconds<86400) return Math.floor(seconds/3600)+" ч";
 
     return Math.floor(seconds/86400)+" дн";
 }
@@ -1189,9 +1091,7 @@ function toggleDark(){
         "nurlink_dark",
         document.body.classList.contains("dark")
     );
-
 }
-
 
 if(localStorage.getItem("nurlink_dark")==="true"){
     document.body.classList.add("dark");
@@ -1206,31 +1106,24 @@ function showRegister(){
 
     $("loginBox").classList.add("hidden");
     $("registerBox").classList.remove("hidden");
-
 }
-
 
 function showLogin(){
 
     $("registerBox").classList.add("hidden");
     $("loginBox").classList.remove("hidden");
-
 }
-
 
 function showApp(){
 
     $("authPage").classList.add("hidden");
     $("app").classList.remove("hidden");
-
 }
-
 
 function showAuth(){
 
     $("app").classList.add("hidden");
     $("authPage").classList.remove("hidden");
-
 }
 
 
@@ -1244,10 +1137,7 @@ async function register(){
         $("regName").value.trim();
 
     const username =
-        $("regUsername")
-        .value
-        .trim()
-        .toLowerCase();
+        $("regUsername").value.trim().toLowerCase();
 
     const email =
         $("regEmail").value.trim();
@@ -1255,59 +1145,42 @@ async function register(){
     const password =
         $("regPassword").value;
 
-
-    if(!name ||
-       !username ||
-       !email ||
-       !password){
-
+    if(!name||!username||!email||!password){
         toast("Заполни все поля");
-
         return;
     }
-
 
     if(!/^[a-z0-9_]+$/.test(username)){
-
-        toast(
-            "Username: только английские буквы, цифры и _"
-        );
-
+        toast("Username: только английские буквы, цифры и _");
         return;
     }
 
-
-    if(password.length < 6){
-
-        toast(
-            "Пароль должен быть минимум 6 символов"
-        );
-
+    if(password.length<6){
+        toast("Пароль минимум 6 символов");
         return;
     }
 
-
-    const {data: existing} =
+    const {data:existing,error:existingError} =
         await supabaseClient
         .from("profiles")
         .select("id")
         .eq("username",username)
         .maybeSingle();
 
-
-    if(existing){
-
-        toast("Этот username уже занят");
-
+    if(existingError){
+        toast(existingError.message);
         return;
     }
 
+    if(existing){
+        toast("Этот username уже занят");
+        return;
+    }
 
     const {data,error} =
         await supabaseClient.auth.signUp({
 
             email,
-
             password,
 
             options:{
@@ -1316,25 +1189,17 @@ async function register(){
                     username:username
                 }
             }
-
         });
 
-
     if(error){
-
         toast(error.message);
-
         return;
     }
-
 
     if(!data.user){
-
         toast("Не удалось создать аккаунт");
-
         return;
     }
-
 
     if(data.session){
 
@@ -1342,23 +1207,17 @@ async function register(){
             await supabaseClient
             .from("profiles")
             .insert({
-
                 id:data.user.id,
                 username,
                 display_name:name,
                 bio:"",
                 avatar_url:""
-
             });
 
-
         if(profileError){
-
             toast(profileError.message);
-
             return;
         }
-
 
         toast("Аккаунт создан 🎉");
 
@@ -1366,12 +1225,8 @@ async function register(){
 
     }else{
 
-        toast(
-            "Проверь почту и подтверди регистрацию 📧"
-        );
-
+        toast("Проверь почту и подтверди регистрацию 📧");
     }
-
 }
 
 
@@ -1387,37 +1242,26 @@ async function login(){
     const password =
         $("loginPassword").value;
 
-
-    if(!email || !password){
-
+    if(!email||!password){
         toast("Введи email и пароль");
-
         return;
     }
-
 
     const {data,error} =
         await supabaseClient.auth
         .signInWithPassword({
-
             email,
             password
-
         });
 
-
     if(error){
-
         toast(error.message);
-
         return;
     }
 
-
-    currentUser = data.user;
+    currentUser=data.user;
 
     await loadApp();
-
 }
 
 
@@ -1428,23 +1272,16 @@ async function login(){
 async function loadApp(){
 
     const {
-        data:{
-            user
-        }
+        data:{user}
     } =
         await supabaseClient.auth.getUser();
 
-
     if(!user){
-
         showAuth();
-
         return;
     }
 
-
-    currentUser = user;
-
+    currentUser=user;
 
     const {data:profile,error} =
         await supabaseClient
@@ -1453,17 +1290,12 @@ async function loadApp(){
         .eq("id",user.id)
         .maybeSingle();
 
-
     if(error){
-
         toast(error.message);
-
         return;
     }
 
-
-    currentProfile = profile;
-
+    currentProfile=profile;
 
     if(!profile){
 
@@ -1475,42 +1307,35 @@ async function loadApp(){
             user.user_metadata?.username ||
             "user"+Date.now();
 
-
-        const {data:created,error:createError} =
+        const {
+            data:created,
+            error:createError
+        } =
             await supabaseClient
             .from("profiles")
             .insert({
-
                 id:user.id,
                 username,
                 display_name:name,
                 bio:"",
                 avatar_url:""
-
             })
             .select()
             .single();
 
-
         if(createError){
-
             toast(createError.message);
-
             return;
         }
 
-
-        currentProfile = created;
-
+        currentProfile=created;
     }
-
 
     showApp();
 
     updateSideUser();
 
     showFeed();
-
 }
 
 
@@ -1520,39 +1345,31 @@ async function loadApp(){
 
 function updateSideUser(){
 
-    if(!currentProfile)
-        return;
+    if(!currentProfile)return;
 
+    $("sideUser").innerHTML=`
 
-    $("sideUser").innerHTML = `
+    ${avatarHTML(currentProfile,"small")}
 
-        ${avatarHTML(currentProfile,"small")}
+    <div style="min-width:0">
 
-        <div style="min-width:0">
-
-            <div style="
-                font-weight:800;
-                overflow:hidden;
-                text-overflow:ellipsis;
-            ">
-                ${escapeHTML(
-                    currentProfile.display_name
-                )}
-            </div>
-
-            <div style="
-                color:var(--muted);
-                font-size:12px;
-            ">
-                @${escapeHTML(
-                    currentProfile.username
-                )}
-            </div>
-
+        <div style="
+            font-weight:800;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        ">
+            ${escapeHTML(currentProfile.display_name)}
         </div>
 
-    `;
+        <div style="
+            color:var(--muted);
+            font-size:12px;
+        ">
+            @${escapeHTML(currentProfile.username)}
+        </div>
 
+    </div>
+    `;
 }
 
 
@@ -1564,12 +1381,12 @@ async function logout(){
 
     await supabaseClient.auth.signOut();
 
-    currentUser = null;
-    currentProfile = null;
+    currentUser=null;
+    currentProfile=null;
+    chatUser=null;
 
     showAuth();
     showLogin();
-
 }
 
 
@@ -1579,74 +1396,64 @@ async function logout(){
 
 function showFeed(){
 
-    $("content").innerHTML = `
+    $("content").innerHTML=`
 
-        <div class="create-card">
+    <div class="create-card">
 
-            <div class="create-top">
+        <div class="create-top">
 
-                ${avatarHTML(currentProfile)}
+            ${avatarHTML(currentProfile)}
 
-                <textarea
-                    id="postText"
-                    class="create-text"
-                    placeholder="Что нового?"
-                    maxlength="1000"
-                ></textarea>
-
-            </div>
-
-            <div
-                id="imagePreview"
-                class="preview hidden"
-            ></div>
-
-            <div class="create-bottom">
-
-                <label class="photo-label">
-
-                    📷 Фото
-
-                    <input
-                        id="postImage"
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onchange="previewImage(event)"
-                    >
-
-                </label>
-
-                <button
-                    class="publish-btn"
-                    onclick="createPost()"
-                >
-                    Опубликовать
-                </button>
-
-            </div>
+            <textarea
+                id="postText"
+                class="create-text"
+                placeholder="Что нового?"
+                maxlength="1000"></textarea>
 
         </div>
 
+        <div id="imagePreview"
+             class="preview hidden">
+        </div>
 
-        <div id="feed">
+        <div class="create-bottom">
 
-            <div class="loading">
-                Загрузка Nurlink...
-            </div>
+            <label class="photo-label">
+
+                📷 Фото
+
+                <input
+                    id="postImage"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onchange="previewImage(event)">
+
+            </label>
+
+            <button
+                class="publish-btn"
+                onclick="createPost()">
+                Опубликовать
+            </button>
 
         </div>
+    </div>
+
+    <div id="feed">
+        <div class="loading">
+            Загрузка Nurlink...
+        </div>
+    </div>
 
     `;
 
-
     loadPosts();
-
 }
 
 
 /* =========================================
-   IMAGE PREVIEW
+   IMAGE
 ========================================= */
 
 function previewImage(event){
@@ -1654,48 +1461,34 @@ function previewImage(event){
     const file =
         event.target.files[0];
 
-    if(!file)
-        return;
+    if(!file)return;
 
-
-    if(file.size > 8 * 1024 * 1024){
+    if(file.size>8*1024*1024){
 
         toast("Фото должно быть меньше 8 МБ");
 
-        event.target.value = "";
+        event.target.value="";
 
         return;
     }
 
+    selectedImage=file;
 
-    selectedImage = file;
+    const reader=new FileReader();
 
+    reader.onload=e=>{
 
-    const reader =
-        new FileReader();
-
-
-    reader.onload = function(e){
-
-        $("imagePreview").innerHTML = `
-            <img src="${e.target.result}">
-        `;
+        $("imagePreview").innerHTML =
+            `<img src="${e.target.result}">`;
 
         $("imagePreview")
             .classList
             .remove("hidden");
-
     };
 
-
     reader.readAsDataURL(file);
-
 }
 
-
-/* =========================================
-   UPLOAD IMAGE
-========================================= */
 
 async function uploadImage(file){
 
@@ -1705,14 +1498,12 @@ async function uploadImage(file){
         .pop()
         .toLowerCase();
 
-
     const fileName =
-        currentUser.id +
-        "/" +
-        crypto.randomUUID() +
-        "." +
+        currentUser.id+
+        "/"+
+        crypto.randomUUID()+
+        "."+
         extension;
-
 
     const {error} =
         await supabaseClient.storage
@@ -1726,24 +1517,14 @@ async function uploadImage(file){
             }
         );
 
-
-    if(error){
-
-        console.error(error);
-
-        throw error;
-
-    }
-
+    if(error)throw error;
 
     const {data} =
         supabaseClient.storage
         .from("nurlink")
         .getPublicUrl(fileName);
 
-
     return data.publicUrl;
-
 }
 
 
@@ -1754,21 +1535,16 @@ async function uploadImage(file){
 async function createPost(){
 
     const text =
-        $("postText")
-        .value
-        .trim();
+        $("postText").value.trim();
 
-
-    if(!text && !selectedImage){
+    if(!text&&!selectedImage){
 
         toast("Добавь текст или фото");
 
         return;
     }
 
-
-    let imageUrl = "";
-
+    let imageUrl="";
 
     try{
 
@@ -1777,101 +1553,53 @@ async function createPost(){
             toast("Загружаю фото...");
 
             imageUrl =
-                await uploadImage(
-                    selectedImage
-                );
-
+                await uploadImage(selectedImage);
         }
-
 
         const {error} =
             await supabaseClient
             .from("posts")
             .insert({
-
                 user_id:currentUser.id,
-
-                content:
-                    text || "📷 Фото",
-
+                content:text||"📷 Фото",
                 image_url:imageUrl
-
             });
 
+        if(error)throw error;
 
-        if(error){
+        $("postText").value="";
+        $("postImage").value="";
 
-            /*
-             If old database doesn't have
-             image_url yet, tell the user.
-            */
-
-            if(
-                error.message &&
-                error.message
-                .toLowerCase()
-                .includes("image_url")
-            ){
-
-                toast(
-                    "Нужно добавить image_url в таблицу posts"
-                );
-
-                return;
-            }
-
-
-            throw error;
-
-        }
-
-
-        $("postText").value = "";
-
-        selectedImage = null;
-
-        $("postImage").value = "";
+        selectedImage=null;
 
         $("imagePreview")
             .classList
             .add("hidden");
 
-
         toast("Пост опубликован 🚀");
 
         await loadPosts();
-
 
     }catch(error){
 
         console.error(error);
 
         toast(error.message);
-
     }
-
 }
 
 
 /* =========================================
-   LOAD POSTS
+   POSTS
 ========================================= */
 
 async function loadPosts(){
 
-    const feed =
-        $("feed");
+    const feed=$("feed");
 
+    if(!feed)return;
 
-    if(!feed)
-        return;
-
-
-    /*
-       Try to get image_url.
-    */
-
-    let result =
+    const result =
         await supabaseClient
         .from("posts")
         .select(`
@@ -1885,92 +1613,54 @@ async function loadPosts(){
         `)
         .order(
             "created_at",
-            {
-                ascending:false
-            }
+            {ascending:false}
         );
-
-
-    /*
-       If image_url doesn't exist,
-       load without it.
-    */
-
-    if(
-        result.error &&
-        result.error.message
-        .toLowerCase()
-        .includes("image_url")
-    ){
-
-        result =
-            await supabaseClient
-            .from("posts")
-            .select(`
-                *,
-                profiles(
-                    id,
-                    username,
-                    display_name,
-                    avatar_url
-                )
-            `)
-            .order(
-                "created_at",
-                {
-                    ascending:false
-                }
-            );
-
-    }
-
 
     if(result.error){
 
-        feed.innerHTML = `
-            <div class="post">
-                <b>Ошибка загрузки</b>
-                <p style="color:var(--muted);margin-top:8px">
-                    ${escapeHTML(
-                        result.error.message
-                    )}
-                </p>
-            </div>
+        feed.innerHTML=`
+        <div class="post">
+
+            <b>Ошибка загрузки</b>
+
+            <p style="
+                color:var(--muted);
+                margin-top:8px
+            ">
+                ${escapeHTML(result.error.message)}
+            </p>
+
+        </div>
         `;
 
         return;
     }
 
-
-    const posts =
-        result.data || [];
-
+    const posts=result.data||[];
 
     if(!posts.length){
 
-        feed.innerHTML = `
-            <div class="post">
+        feed.innerHTML=`
+        <div class="post">
 
-                <h3>
-                    Здесь пока пусто 👀
-                </h3>
+            <h3>
+                Здесь пока пусто 👀
+            </h3>
 
-                <p style="
-                    color:var(--muted);
-                    margin-top:8px;
-                ">
-                    Создай первый пост Nurlink!
-                </p>
+            <p style="
+                color:var(--muted);
+                margin-top:8px
+            ">
+                Создай первый пост Nurlink!
+            </p>
 
-            </div>
+        </div>
         `;
 
         return;
     }
 
-
-    feed.innerHTML = "";
-
+    feed.innerHTML="";
 
     for(const post of posts){
 
@@ -1980,171 +1670,128 @@ async function loadPosts(){
         const comments =
             await getComments(post.id);
 
-
         const liked =
             likes.some(
-                x =>
-                x.user_id ===
-                currentUser.id
+                x=>x.user_id===currentUser.id
             );
 
-
-        const profile =
-            post.profiles;
-
+        const profile=post.profiles;
 
         const element =
             document.createElement("article");
 
+        element.className="post";
 
-        element.className = "post";
+        element.innerHTML=`
 
+        <div class="post-header">
 
-        element.innerHTML = `
+            ${avatarHTML(profile)}
 
-            <div class="post-header">
+            <div>
 
-                ${avatarHTML(profile)}
+                <div class="post-author">
+                    ${escapeHTML(
+                        profile?.display_name||
+                        profile?.username||
+                        "User"
+                    )}
+                </div>
 
-                <div>
+                <div class="post-username">
+                    @${escapeHTML(
+                        profile?.username||""
+                    )}
+                </div>
 
-                    <div class="post-author">
-                        ${escapeHTML(
-                            profile?.display_name ||
-                            profile?.username ||
-                            "User"
-                        )}
-                    </div>
-
-                    <div class="post-username">
-                        @${escapeHTML(
-                            profile?.username || ""
-                        )}
-                    </div>
-
-                    <div class="post-date">
-                        ${timeAgo(post.created_at)}
-                    </div>
-
+                <div class="post-date">
+                    ${timeAgo(post.created_at)}
                 </div>
 
             </div>
+        </div>
 
+        <div class="post-content">
+            ${escapeHTML(post.content)}
+        </div>
 
-            <div class="post-content">
-                ${escapeHTML(post.content)}
-            </div>
+        ${
+            post.image_url
+            ?
+            `<img
+                class="post-image"
+                src="${escapeHTML(post.image_url)}"
+                loading="lazy">`
+            :
+            ""
+        }
 
+        <div class="post-actions">
+
+            <button
+                class="action ${liked?"liked":""}"
+                onclick="toggleLike(${post.id},${liked})">
+
+                ❤️ ${likes.length}
+
+            </button>
+
+            <button
+                class="action"
+                onclick="toggleComments(${post.id})">
+
+                💬 ${comments.length}
+
+            </button>
 
             ${
-                post.image_url
+                post.user_id===currentUser.id
                 ?
-                `
-                <img
-                    class="post-image"
-                    src="${escapeHTML(
-                        post.image_url
-                    )}"
-                    loading="lazy"
-                >
-                `
+                `<button
+                    class="action delete"
+                    onclick="deletePost(${post.id})">
+
+                    🗑️
+
+                </button>`
                 :
                 ""
             }
 
+        </div>
 
-            <div class="post-actions">
+        <div
+            id="comments-${post.id}"
+            class="comments hidden">
+
+            <div id="comment-list-${post.id}">
+                ${renderComments(comments)}
+            </div>
+
+            <div class="comment-input-row">
+
+                <input
+                    id="comment-input-${post.id}"
+                    class="comment-input"
+                    placeholder="Написать комментарий..."
+                    maxlength="300">
 
                 <button
-                    class="action ${liked ? "liked" : ""}"
-                    onclick="
-                        toggleLike(
-                            ${post.id},
-                            ${liked}
-                        )
-                    "
-                >
-                    ❤️ ${likes.length}
+                    class="comment-send"
+                    onclick="addComment(${post.id})">
+
+                    ➤
+
                 </button>
-
-
-                <button
-                    class="action"
-                    onclick="
-                        toggleComments(
-                            ${post.id}
-                        )
-                    "
-                >
-                    💬 ${comments.length}
-                </button>
-
-
-                ${
-                    post.user_id === currentUser.id
-                    ?
-                    `
-                    <button
-                        class="action delete"
-                        onclick="
-                            deletePost(
-                                ${post.id}
-                            )
-                        "
-                    >
-                        🗑️
-                    </button>
-                    `
-                    :
-                    ""
-                }
 
             </div>
 
-
-            <div
-                id="comments-${post.id}"
-                class="comments hidden"
-            >
-
-                <div
-                    id="comment-list-${post.id}"
-                >
-                    ${renderComments(comments)}
-                </div>
-
-
-                <div class="comment-input-row">
-
-                    <input
-                        id="comment-input-${post.id}"
-                        class="comment-input"
-                        placeholder="Написать комментарий..."
-                        maxlength="300"
-                    >
-
-                    <button
-                        class="comment-send"
-                        onclick="
-                            addComment(
-                                ${post.id}
-                            )
-                        "
-                    >
-                        ➤
-                    </button>
-
-                </div>
-
-            </div>
+        </div>
 
         `;
 
-
         feed.appendChild(element);
-
     }
-
 }
 
 
@@ -2158,23 +1805,16 @@ async function getLikes(postId){
         await supabaseClient
         .from("likes")
         .select("user_id")
-        .eq(
-            "post_id",
-            postId
-        );
-
+        .eq("post_id",postId);
 
     if(error){
 
         console.error(error);
 
         return [];
-
     }
 
-
-    return data || [];
-
+    return data||[];
 }
 
 
@@ -2183,16 +1823,10 @@ async function toggleLike(postId,liked){
     if(liked){
 
         await supabaseClient
-        .from("likes")
-        .delete()
-        .eq(
-            "post_id",
-            postId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        );
+            .from("likes")
+            .delete()
+            .eq("post_id",postId)
+            .eq("user_id",currentUser.id);
 
     }else{
 
@@ -2200,13 +1834,9 @@ async function toggleLike(postId,liked){
             await supabaseClient
             .from("likes")
             .insert({
-
                 post_id:postId,
-
                 user_id:currentUser.id
-
             });
-
 
         if(error){
 
@@ -2214,12 +1844,9 @@ async function toggleLike(postId,liked){
 
             return;
         }
-
     }
 
-
     await loadPosts();
-
 }
 
 
@@ -2240,29 +1867,20 @@ async function getComments(postId){
                 avatar_url
             )
         `)
-        .eq(
-            "post_id",
-            postId
-        )
+        .eq("post_id",postId)
         .order(
             "created_at",
-            {
-                ascending:true
-            }
+            {ascending:true}
         );
-
 
     if(error){
 
         console.error(error);
 
         return [];
-
     }
 
-
-    return data || [];
-
+    return data||[];
 }
 
 
@@ -2271,16 +1889,15 @@ function renderComments(comments){
     if(!comments.length){
 
         return `
-            <div style="
-                color:var(--muted);
-                padding:8px 0;
-            ">
-                Пока нет комментариев.
-            </div>
+        <div style="
+            color:var(--muted);
+            padding:8px 0">
+
+            Пока нет комментариев.
+
+        </div>
         `;
-
     }
-
 
     return comments.map(comment=>`
 
@@ -2294,13 +1911,13 @@ function renderComments(comments){
             <div class="comment-content">
 
                 <div class="comment-name">
+
                     ${escapeHTML(
-                        comment.profiles
-                        ?.display_name ||
-                        comment.profiles
-                        ?.username ||
+                        comment.profiles?.display_name||
+                        comment.profiles?.username||
                         "User"
                     )}
+
                 </div>
 
                 <div>
@@ -2314,55 +1931,37 @@ function renderComments(comments){
         </div>
 
     `).join("");
-
 }
 
 
 function toggleComments(postId){
 
     const box =
-        $(
-            "comments-" +
-            postId
-        );
-
+        $("comments-"+postId);
 
     if(box)
         box.classList.toggle("hidden");
-
 }
 
 
 async function addComment(postId){
 
     const input =
-        $(
-            "comment-input-" +
-            postId
-        );
-
+        $("comment-input-"+postId);
 
     const text =
         input.value.trim();
 
-
-    if(!text)
-        return;
-
+    if(!text)return;
 
     const {error} =
         await supabaseClient
         .from("comments")
         .insert({
-
             post_id:postId,
-
             user_id:currentUser.id,
-
             content:text
-
         });
-
 
     if(error){
 
@@ -2371,11 +1970,9 @@ async function addComment(postId){
         return;
     }
 
-
-    input.value = "";
+    input.value="";
 
     await loadPosts();
-
 }
 
 
@@ -2385,27 +1982,15 @@ async function addComment(postId){
 
 async function deletePost(postId){
 
-    if(
-        !confirm(
-            "Удалить этот пост?"
-        )
-    )
+    if(!confirm("Удалить этот пост?"))
         return;
-
 
     const {error} =
         await supabaseClient
         .from("posts")
         .delete()
-        .eq(
-            "id",
-            postId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        );
-
+        .eq("id",postId)
+        .eq("user_id",currentUser.id);
 
     if(error){
 
@@ -2414,11 +1999,9 @@ async function deletePost(postId){
         return;
     }
 
-
     toast("Пост удалён");
 
     await loadPosts();
-
 }
 
 
@@ -2430,7 +2013,6 @@ async function showProfile(){
 
     await refreshProfile();
 
-
     const followers =
         await countFollowers(
             currentUser.id
@@ -2441,84 +2023,91 @@ async function showProfile(){
             currentUser.id
         );
 
+    $("content").innerHTML=`
 
-    $("content").innerHTML = `
+    <div class="profile-card">
 
-        <div class="profile-card">
+        ${avatarHTML(
+            currentProfile,
+            "large"
+        )}
 
-            ${avatarHTML(
-                currentProfile,
-                "large"
+        <div class="profile-name">
+
+            ${escapeHTML(
+                currentProfile.display_name
             )}
-
-            <div class="profile-name">
-                ${escapeHTML(
-                    currentProfile.display_name
-                )}
-            </div>
-
-            <div class="profile-username">
-                @${escapeHTML(
-                    currentProfile.username
-                )}
-            </div>
-
-            <div class="bio">
-                ${
-                    currentProfile.bio
-                    ?
-                    escapeHTML(
-                        currentProfile.bio
-                    )
-                    :
-                    "Расскажи о себе 👋"
-                }
-            </div>
-
-
-            <div class="stats">
-
-                <div class="stat">
-                    <strong>
-                        ${followers}
-                    </strong>
-                    <span>
-                        Подписчики
-                    </span>
-                </div>
-
-                <div class="stat">
-                    <strong>
-                        ${following}
-                    </strong>
-                    <span>
-                        Подписки
-                    </span>
-                </div>
-
-            </div>
-
-
-            <button
-                class="outline"
-                onclick="openEdit()"
-            >
-                ✏️ Редактировать профиль
-            </button>
 
         </div>
 
+        <div class="profile-username">
 
-        <div id="profilePosts"></div>
+            @${escapeHTML(
+                currentProfile.username
+            )}
+
+        </div>
+
+        <div class="bio">
+
+            ${
+                currentProfile.bio
+                ?
+                escapeHTML(
+                    currentProfile.bio
+                )
+                :
+                "Расскажи о себе 👋"
+            }
+
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <strong>
+                    ${followers}
+                </strong>
+
+                <span>
+                    Подписчики
+                </span>
+
+            </div>
+
+            <div class="stat">
+
+                <strong>
+                    ${following}
+                </strong>
+
+                <span>
+                    Подписки
+                </span>
+
+            </div>
+
+        </div>
+
+        <button
+            class="outline"
+            onclick="openEdit()">
+
+            ✏️ Редактировать профиль
+
+        </button>
+
+    </div>
+
+    <div id="profilePosts"></div>
 
     `;
-
 
     await loadUserPosts(
         currentUser.id,
         "profilePosts"
     );
-
 }
 
 
@@ -2532,19 +2121,13 @@ async function refreshProfile(){
         await supabaseClient
         .from("profiles")
         .select("*")
-        .eq(
-            "id",
-            currentUser.id
-        )
+        .eq("id",currentUser.id)
         .single();
 
-
     if(!error)
-        currentProfile = data;
-
+        currentProfile=data;
 
     updateSideUser();
-
 }
 
 
@@ -2557,13 +2140,9 @@ async function loadUserPosts(
     containerId
 ){
 
-    const box =
-        $(containerId);
+    const box=$(containerId);
 
-
-    if(!box)
-        return;
-
+    if(!box)return;
 
     const {data,error} =
         await supabaseClient
@@ -2577,46 +2156,35 @@ async function loadUserPosts(
                 avatar_url
             )
         `)
-        .eq(
-            "user_id",
-            userId
-        )
+        .eq("user_id",userId)
         .order(
             "created_at",
-            {
-                ascending:false
-            }
+            {ascending:false}
         );
-
 
     if(error){
 
-        box.innerHTML = `
-            <div class="post">
-                ${escapeHTML(
-                    error.message
-                )}
-            </div>
+        box.innerHTML=`
+        <div class="post">
+            ${escapeHTML(error.message)}
+        </div>
         `;
 
         return;
     }
-
 
     if(!data.length){
 
-        box.innerHTML = `
-            <div class="post">
-                Пока нет постов.
-            </div>
+        box.innerHTML=`
+        <div class="post">
+            Пока нет постов.
+        </div>
         `;
 
         return;
     }
 
-
-    box.innerHTML =
-        data.map(post=>`
+    box.innerHTML=data.map(post=>`
 
         <article class="post">
 
@@ -2629,43 +2197,43 @@ async function loadUserPosts(
                 <div>
 
                     <div class="post-author">
+
                         ${escapeHTML(
-                            post.profiles
-                            ?.display_name ||
+                            post.profiles?.display_name||
                             "User"
                         )}
+
                     </div>
 
                     <div class="post-username">
+
                         @${escapeHTML(
-                            post.profiles
-                            ?.username || ""
+                            post.profiles?.username||
+                            ""
                         )}
+
                     </div>
 
                 </div>
 
             </div>
 
-
             <div class="post-content">
+
                 ${escapeHTML(
                     post.content
                 )}
-            </div>
 
+            </div>
 
             ${
                 post.image_url
                 ?
-                `
-                <img
+                `<img
                     class="post-image"
                     src="${escapeHTML(
                         post.image_url
-                    )}"
-                >
-                `
+                    )}">`
                 :
                 ""
             }
@@ -2673,7 +2241,6 @@ async function loadUserPosts(
         </article>
 
     `).join("");
-
 }
 
 
@@ -2683,26 +2250,20 @@ async function loadUserPosts(
 
 function openEdit(){
 
-    if(!currentProfile)
-        return;
-
+    if(!currentProfile)return;
 
     $("editName").value =
-        currentProfile.display_name || "";
-
+        currentProfile.display_name||"";
 
     $("editAvatar").value =
-        currentProfile.avatar_url || "";
-
+        currentProfile.avatar_url||"";
 
     $("editBio").value =
-        currentProfile.bio || "";
-
+        currentProfile.bio||"";
 
     $("editModal")
         .classList
         .remove("hidden");
-
 }
 
 
@@ -2711,27 +2272,19 @@ function closeEdit(){
     $("editModal")
         .classList
         .add("hidden");
-
 }
 
 
 async function saveProfile(){
 
     const display_name =
-        $("editName")
-        .value
-        .trim();
+        $("editName").value.trim();
 
     const avatar_url =
-        $("editAvatar")
-        .value
-        .trim();
+        $("editAvatar").value.trim();
 
     const bio =
-        $("editBio")
-        .value
-        .trim();
-
+        $("editBio").value.trim();
 
     if(!display_name){
 
@@ -2740,24 +2293,17 @@ async function saveProfile(){
         return;
     }
 
-
     const {data,error} =
         await supabaseClient
         .from("profiles")
         .update({
-
             display_name,
             avatar_url,
             bio
-
         })
-        .eq(
-            "id",
-            currentUser.id
-        )
+        .eq("id",currentUser.id)
         .select()
         .single();
-
 
     if(error){
 
@@ -2766,8 +2312,7 @@ async function saveProfile(){
         return;
     }
 
-
-    currentProfile = data;
+    currentProfile=data;
 
     updateSideUser();
 
@@ -2776,7 +2321,6 @@ async function saveProfile(){
     toast("Профиль обновлён ✨");
 
     await showProfile();
-
 }
 
 
@@ -2786,28 +2330,25 @@ async function saveProfile(){
 
 function showSearch(){
 
-    $("content").innerHTML = `
+    $("content").innerHTML=`
 
-        <div class="search-card">
+    <div class="search-card">
 
-            <h2>
-                🔎 Найти людей
-            </h2>
+        <h2>
+            🔎 Найти людей
+        </h2>
 
-            <input
-                id="searchInput"
-                class="search-input"
-                placeholder="Имя или username..."
-                oninput="searchUsers()"
-            >
+        <input
+            id="searchInput"
+            class="search-input"
+            placeholder="Имя или username..."
+            oninput="searchUsers()">
 
-        </div>
+    </div>
 
-
-        <div id="searchResults"></div>
+    <div id="searchResults"></div>
 
     `;
-
 }
 
 
@@ -2818,13 +2359,11 @@ function searchUsers(){
 
     clearTimeout(searchTimeout);
 
-
     searchTimeout =
         setTimeout(
             performSearch,
             300
         );
-
 }
 
 
@@ -2833,28 +2372,22 @@ async function performSearch(){
     const input =
         $("searchInput");
 
-
-    if(!input)
-        return;
-
+    if(!input)return;
 
     const query =
         input.value
         .trim()
         .toLowerCase();
 
-
     const results =
         $("searchResults");
 
-
     if(!query){
 
-        results.innerHTML = "";
+        results.innerHTML="";
 
         return;
     }
-
 
     const {data,error} =
         await supabaseClient
@@ -2865,40 +2398,32 @@ async function performSearch(){
         )
         .limit(20);
 
-
     if(error){
 
-        results.innerHTML = `
-            <div class="post">
-                ${escapeHTML(
-                    error.message
-                )}
-            </div>
+        results.innerHTML=`
+        <div class="post">
+            ${escapeHTML(error.message)}
+        </div>
         `;
 
         return;
     }
 
-
     const users =
-        (data || [])
-        .filter(
-            user =>
-            user.id !== currentUser.id
+        (data||[]).filter(
+            user=>user.id!==currentUser.id
         );
-
 
     if(!users.length){
 
-        results.innerHTML = `
-            <div class="post">
-                Никого не нашли 😢
-            </div>
+        results.innerHTML=`
+        <div class="post">
+            Никого не нашли 😢
+        </div>
         `;
 
         return;
     }
-
 
     results.innerHTML =
         users.map(user=>`
@@ -2912,37 +2437,36 @@ async function performSearch(){
                 <div>
 
                     <div class="user-name">
+
                         ${escapeHTML(
                             user.display_name
                         )}
+
                     </div>
 
                     <div class="user-handle">
+
                         @${escapeHTML(
                             user.username
                         )}
+
                     </div>
 
                 </div>
 
             </div>
 
-
             <button
                 class="open-btn"
-                onclick="
-                    viewUser(
-                        '${user.id}'
-                    )
-                "
-            >
+                onclick="viewUser('${user.id}')">
+
                 Открыть
+
             </button>
 
         </div>
 
     `).join("");
-
 }
 
 
@@ -2956,27 +2480,21 @@ async function viewUser(userId){
         await supabaseClient
         .from("profiles")
         .select("*")
-        .eq(
-            "id",
-            userId
-        )
+        .eq("id",userId)
         .single();
 
-
-    if(error || !user){
+    if(error||!user){
 
         toast("Пользователь не найден");
 
         return;
     }
 
-
     const followers =
         await countFollowers(userId);
 
     const following =
         await countFollowing(userId);
-
 
     const {data:follow} =
         await supabaseClient
@@ -2992,83 +2510,88 @@ async function viewUser(userId){
         )
         .maybeSingle();
 
+    const isFollowing=!!follow;
 
-    const isFollowing =
-        !!follow;
+    $("content").innerHTML=`
 
+    <div class="profile-card">
 
-    $("content").innerHTML = `
+        ${avatarHTML(
+            user,
+            "large"
+        )}
 
-        <div class="profile-card">
+        <div class="profile-name">
 
-            ${avatarHTML(
-                user,
-                "large"
+            ${escapeHTML(
+                user.display_name
             )}
 
-            <div class="profile-name">
-                ${escapeHTML(
-                    user.display_name
-                )}
-            </div>
+        </div>
 
-            <div class="profile-username">
-                @${escapeHTML(
-                    user.username
-                )}
-            </div>
+        <div class="profile-username">
 
-            <div class="bio">
-                ${
-                    user.bio
-                    ?
-                    escapeHTML(user.bio)
-                    :
-                    "Нет информации о себе."
-                }
-            </div>
+            @${escapeHTML(
+                user.username
+            )}
 
+        </div>
 
-            <div class="stats">
+        <div class="bio">
 
-                <div class="stat">
+            ${
+                user.bio
+                ?
+                escapeHTML(user.bio)
+                :
+                "Нет информации о себе."
+            }
 
-                    <strong>
-                        ${followers}
-                    </strong>
+        </div>
 
-                    <span>
-                        Подписчики
-                    </span>
+        <div class="stats">
 
-                </div>
+            <div class="stat">
 
+                <strong>
+                    ${followers}
+                </strong>
 
-                <div class="stat">
-
-                    <strong>
-                        ${following}
-                    </strong>
-
-                    <span>
-                        Подписки
-                    </span>
-
-                </div>
+                <span>
+                    Подписчики
+                </span>
 
             </div>
 
+            <div class="stat">
+
+                <strong>
+                    ${following}
+                </strong>
+
+                <span>
+                    Подписки
+                </span>
+
+            </div>
+
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:center;
+            gap:8px;
+            flex-wrap:wrap;
+        ">
 
             <button
                 class="primary"
-                style="max-width:280px"
-                onclick="
-                    toggleFollow(
-                        '${user.id}',
-                        ${isFollowing}
-                    )
-                "
-            >
+                style="width:auto"
+                onclick="toggleFollow(
+                    '${user.id}',
+                    ${isFollowing}
+                )">
+
                 ${
                     isFollowing
                     ?
@@ -3076,21 +2599,31 @@ async function viewUser(userId){
                     :
                     "Подписаться"
                 }
+
+            </button>
+
+            <button
+                class="outline"
+                onclick="openChat(
+                    '${user.id}'
+                )">
+
+                💬 Написать
+
             </button>
 
         </div>
 
+    </div>
 
-        <div id="otherUserPosts"></div>
+    <div id="otherUserPosts"></div>
 
     `;
-
 
     await loadUserPosts(
         userId,
         "otherUserPosts"
     );
-
 }
 
 
@@ -3115,13 +2648,9 @@ async function countFollowers(userId){
             userId
         );
 
+    if(error)return 0;
 
-    if(error)
-        return 0;
-
-
-    return count || 0;
-
+    return count||0;
 }
 
 
@@ -3142,13 +2671,9 @@ async function countFollowing(userId){
             userId
         );
 
+    if(error)return 0;
 
-    if(error)
-        return 0;
-
-
-    return count || 0;
-
+    return count||0;
 }
 
 
@@ -3172,14 +2697,12 @@ async function toggleFollow(
                 userId
             );
 
-
         if(error){
 
             toast(error.message);
 
             return;
         }
-
 
         toast("Ты отписался");
 
@@ -3189,15 +2712,9 @@ async function toggleFollow(
             await supabaseClient
             .from("follows")
             .insert({
-
-                follower_id:
-                    currentUser.id,
-
-                following_id:
-                    userId
-
+                follower_id:currentUser.id,
+                following_id:userId
             });
-
 
         if(error){
 
@@ -3206,14 +2723,244 @@ async function toggleFollow(
             return;
         }
 
-
         toast("Ты подписался 🎉");
-
     }
 
-
     await viewUser(userId);
+}
 
+
+/* =========================================
+   CHAT
+========================================= */
+
+async function openChat(userId){
+
+    const {data:user,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id",userId)
+        .single();
+
+    if(error||!user){
+
+        toast("Пользователь не найден");
+
+        return;
+    }
+
+    chatUser=user;
+
+    $("content").innerHTML=`
+
+    <div class="chat-card">
+
+        <div class="chat-header">
+
+            ${avatarHTML(
+                user,
+                "small"
+            )}
+
+            <div style="flex:1">
+
+                <div style="
+                    font-weight:800
+                ">
+
+                    ${escapeHTML(
+                        user.display_name
+                    )}
+
+                </div>
+
+                <div style="
+                    color:var(--muted);
+                    font-size:13px
+                ">
+
+                    @${escapeHTML(
+                        user.username
+                    )}
+
+                </div>
+
+            </div>
+
+            <button
+                class="outline"
+                onclick="viewUser(
+                    '${user.id}'
+                )">
+
+                Профиль
+
+            </button>
+
+        </div>
+
+        <div
+            id="chatMessages"
+            class="chat-messages">
+
+            <div class="loading">
+                Загрузка...
+            </div>
+
+        </div>
+
+        <div class="chat-input-row">
+
+            <input
+                id="chatInput"
+                class="chat-input"
+                placeholder="Написать сообщение..."
+                maxlength="1000"
+                onkeydown="
+                    if(event.key==='Enter'){
+                        event.preventDefault();
+                        sendMessage();
+                    }
+                ">
+
+            <button
+                class="chat-send"
+                onclick="sendMessage()">
+
+                ➤
+
+            </button>
+
+        </div>
+
+    </div>
+
+    `;
+
+    await loadChat();
+}
+
+
+async function loadChat(){
+
+    const box =
+        $("chatMessages");
+
+    if(!box||!chatUser)return;
+
+    const {data,error} =
+        await supabaseClient
+        .from("messages")
+        .select("*")
+        .or(
+            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatUser.id}),and(sender_id.eq.${chatUser.id},receiver_id.eq.${currentUser.id})`
+        )
+        .order(
+            "created_at",
+            {
+                ascending:true
+            }
+        );
+
+    if(error){
+
+        box.innerHTML=`
+        <div style="
+            color:var(--danger)">
+
+            ${escapeHTML(
+                error.message
+            )}
+
+        </div>
+        `;
+
+        return;
+    }
+
+    const messages=data||[];
+
+    if(!messages.length){
+
+        box.innerHTML=`
+        <div style="
+            color:var(--muted);
+            text-align:center;
+            margin:auto">
+
+            Пока нет сообщений 👋
+            <br>
+            Напиши первым!
+
+        </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML =
+        messages.map(message=>{
+
+            const mine =
+                message.sender_id===
+                currentUser.id;
+
+            return `
+
+            <div class="
+                chat-message
+                ${mine?"mine":"theirs"}
+            ">
+
+                ${escapeHTML(
+                    message.content
+                )}
+
+            </div>
+
+            `;
+
+        }).join("");
+
+    box.scrollTop =
+        box.scrollHeight;
+}
+
+
+async function sendMessage(){
+
+    if(!chatUser)return;
+
+    const input =
+        $("chatInput");
+
+    const content =
+        input.value.trim();
+
+    if(!content)return;
+
+    const {error} =
+        await supabaseClient
+        .from("messages")
+        .insert({
+            sender_id:currentUser.id,
+            receiver_id:chatUser.id,
+            content:content
+        });
+
+    if(error){
+
+        toast(error.message);
+
+        console.error(error);
+
+        return;
+    }
+
+    input.value="";
+
+    await loadChat();
 }
 
 
@@ -3222,17 +2969,15 @@ async function toggleFollow(
 ========================================= */
 
 supabaseClient.auth.onAuthStateChange(
-    async (event,session)=>{
+    async(event,session)=>{
 
         if(session){
 
-            currentUser =
-                session.user;
+            currentUser=session.user;
 
             await loadApp();
 
         }
-
     }
 );
 
@@ -3244,26 +2989,21 @@ supabaseClient.auth.onAuthStateChange(
 (async function(){
 
     const {
-        data:{
-            session
-        }
+        data:{session}
     } =
         await supabaseClient
         .auth
         .getSession();
 
-
     if(session){
 
-        currentUser =
-            session.user;
+        currentUser=session.user;
 
         await loadApp();
 
     }else{
 
         showAuth();
-
     }
 
 })();
