@@ -1,753 +1,798 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f172a">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Nurlink</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-    --bg:#f5f7fb;
-    --card:#fff;
-    --text:#111827;
-    --muted:#6b7280;
-    --border:#e5e7eb;
-    --blue:#2563eb;
-    --blue2:#1d4ed8;
-    --danger:#ef4444;
-    --shadow:0 8px 30px rgba(15,23,42,.07);
+ --bg:#f4f6f8;
+ --card:#fff;
+ --text:#111827;
+ --muted:#6b7280;
+ --border:#e5e7eb;
+ --blue:#2563eb;
+ --danger:#ef4444;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    transition:.2s;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
 }
 
 body.dark{
-    --bg:#0b1120;
-    --card:#111827;
-    --text:#f9fafb;
-    --muted:#9ca3af;
-    --border:#243044;
-    --shadow:0 8px 30px rgba(0,0,0,.25);
+ --bg:#0b1120;
+ --card:#111827;
+ --text:#f9fafb;
+ --muted:#9ca3af;
+ --border:#263244;
 }
 
 button,input,textarea{font:inherit}
+
 button{cursor:pointer}
+
 .hidden{display:none!important}
 
-/* AUTH */
-
 .auth-page{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    background:
-        radial-gradient(circle at top left,#3b82f6,transparent 35%),
-        radial-gradient(circle at bottom right,#7c3aed,transparent 35%),
-        #0f172a;
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ background:linear-gradient(135deg,#172554,#2563eb,#7c3aed);
 }
 
 .auth-card{
-    width:100%;
-    max-width:430px;
-    background:var(--card);
-    border-radius:28px;
-    padding:34px;
-    box-shadow:0 25px 70px rgba(0,0,0,.3);
+ width:100%;
+ max-width:420px;
+ background:var(--card);
+ padding:32px;
+ border-radius:25px;
+ box-shadow:0 25px 70px #0005;
 }
 
 .logo{
-    text-align:center;
-    font-size:42px;
-    font-weight:900;
-    letter-spacing:-2px;
+ text-align:center;
+ font-size:42px;
+ font-weight:900;
 }
 
-.logo span,.nav-logo span{color:var(--blue)}
+.logo span,.nav-logo span{color:#2563eb}
 
 .tagline{
-    text-align:center;
-    color:var(--muted);
-    margin:8px 0 30px;
+ text-align:center;
+ color:var(--muted);
+ margin:8px 0 28px;
 }
 
-.auth-title{font-size:25px;margin-bottom:18px}
+.auth-title{margin-bottom:18px}
 
 .input{
-    width:100%;
-    padding:14px 16px;
-    border:1px solid var(--border);
-    border-radius:14px;
-    background:var(--card);
-    color:var(--text);
-    outline:none;
-    margin-bottom:12px;
+ width:100%;
+ padding:13px 15px;
+ margin-bottom:12px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ background:var(--card);
+ color:var(--text);
 }
 
 .input:focus{border-color:var(--blue)}
 
 .primary{
-    width:100%;
-    border:0;
-    border-radius:14px;
-    padding:14px;
-    background:var(--blue);
-    color:#fff;
-    font-weight:800;
+ width:100%;
+ padding:13px;
+ border:0;
+ border-radius:12px;
+ background:var(--blue);
+ color:white;
+ font-weight:bold;
 }
 
-.primary:hover{background:var(--blue2)}
-
 .auth-switch{
-    text-align:center;
-    margin-top:20px;
-    color:var(--muted);
+ text-align:center;
+ margin-top:18px;
+ color:var(--muted);
 }
 
 .link-btn{
-    border:0;
-    background:none;
-    color:var(--blue);
-    font-weight:800;
+ border:0;
+ background:none;
+ color:var(--blue);
+ font-weight:bold;
 }
-
-/* NAV */
 
 .navbar{
-    height:68px;
-    position:sticky;
-    top:0;
-    z-index:50;
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 22px;
+ height:65px;
+ position:sticky;
+ top:0;
+ z-index:100;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 20px;
+ background:var(--card);
+ border-bottom:1px solid var(--border);
 }
-
-.dark .navbar{background:rgba(17,24,39,.88)}
 
 .nav-logo{
-    font-size:27px;
-    font-weight:900;
-    letter-spacing:-1px;
-    cursor:pointer;
+ font-size:28px;
+ font-weight:900;
+ cursor:pointer;
 }
 
-.nav-actions{display:flex;gap:5px}
+.nav-actions{
+ display:flex;
+ gap:5px;
+}
 
 .nav-btn{
-    border:0;
-    background:transparent;
-    color:var(--text);
-    padding:10px 12px;
-    border-radius:12px;
-    font-weight:700;
+ border:0;
+ background:transparent;
+ color:var(--text);
+ padding:10px;
+ border-radius:10px;
 }
 
 .nav-btn:hover{background:var(--bg)}
-.mobile-label{display:inline}
-
-/* LAYOUT */
 
 .layout{
-    max-width:1120px;
-    margin:auto;
-    display:grid;
-    grid-template-columns:230px minmax(0,650px) 230px;
-    gap:20px;
-    padding:22px 15px 50px;
+ max-width:1150px;
+ margin:auto;
+ display:grid;
+ grid-template-columns:220px minmax(0,650px) 220px;
+ gap:20px;
+ padding:20px 15px;
 }
 
 .sidebar,.rightbar{
-    position:sticky;
-    top:90px;
-    height:max-content;
+ position:sticky;
+ top:85px;
+ height:max-content;
 }
 
-.side-card,.info-card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:14px;
-    box-shadow:var(--shadow);
+.side-card,.info-card,.create-card,.post,.stories-section,.profile-card,.search-card,.chat-card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:18px;
+ box-shadow:0 5px 20px #00000008;
 }
+
+.side-card{padding:12px}
 
 .side-user{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px;
-    margin-bottom:8px;
+ display:flex;
+ align-items:center;
+ gap:10px;
+ padding:10px;
 }
 
 .side-menu{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
+ display:flex;
+ flex-direction:column;
 }
 
 .side-menu button{
-    border:0;
-    background:transparent;
-    color:var(--text);
-    text-align:left;
-    padding:13px;
-    border-radius:12px;
-    font-weight:700;
+ border:0;
+ background:transparent;
+ color:var(--text);
+ text-align:left;
+ padding:12px;
+ border-radius:10px;
+ font-weight:bold;
 }
 
 .side-menu button:hover{background:var(--bg)}
-.main{min-width:0}
 
-/* AVATAR */
+.info-card{padding:18px}
+
+.info-card p{
+ color:var(--muted);
+ line-height:1.5;
+}
 
 .avatar{
-    width:45px;
-    height:45px;
-    min-width:45px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#2563eb,#7c3aed);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:900;
-    overflow:hidden;
+ width:45px;
+ height:45px;
+ min-width:45px;
+ border-radius:50%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:linear-gradient(135deg,#2563eb,#7c3aed);
+ color:white;
+ font-weight:bold;
+ overflow:hidden;
 }
 
 .avatar.small{
-    width:38px;
-    height:38px;
-    min-width:38px;
+ width:38px;
+ height:38px;
+ min-width:38px;
 }
 
 .avatar.large{
-    width:105px;
-    height:105px;
-    min-width:105px;
-    font-size:38px;
+ width:110px;
+ height:110px;
+ min-width:110px;
+ font-size:40px;
 }
 
 .avatar img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+ width:100%;
+ height:100%;
+ object-fit:cover;
 }
 
-/* CARDS */
+/* STORIES */
 
-.create-card,
-.post,
-.search-card,
-.profile-card,
-.info-card,
-.chat-card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:20px;
-    box-shadow:var(--shadow);
+.stories-section{
+ padding:15px;
+ margin-bottom:18px;
 }
+
+.stories-title{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:13px;
+}
+
+.stories-title b{font-size:18px}
+
+.stories-list{
+ display:flex;
+ gap:12px;
+ overflow-x:auto;
+}
+
+.stories-list::-webkit-scrollbar{display:none}
+
+.story,.add-story{
+ width:78px;
+ min-width:78px;
+ height:105px;
+ border-radius:15px;
+ overflow:hidden;
+ position:relative;
+}
+
+.story{
+ padding:3px;
+ background:linear-gradient(135deg,#2563eb,#ec4899);
+ cursor:pointer;
+}
+
+.story img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ border-radius:12px;
+}
+
+.story-name{
+ position:absolute;
+ bottom:0;
+ left:0;
+ right:0;
+ padding:18px 5px 6px;
+ color:white;
+ font-size:11px;
+ font-weight:bold;
+ background:linear-gradient(transparent,#000b);
+}
+
+.add-story{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ background:var(--bg);
+ border:2px dashed var(--border);
+ color:var(--blue);
+ cursor:pointer;
+}
+
+.add-story span{font-size:30px}
+
+.add-story small{
+ color:var(--muted);
+ font-size:10px;
+}
+
+.stories-loading{
+ color:var(--muted);
+ padding:15px;
+ text-align:center;
+}
+
+/* STORY VIEWER */
+
+.story-modal{
+ position:fixed;
+ inset:0;
+ z-index:9999;
+ background:#000e;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+
+.story-viewer{
+ height:90vh;
+ width:100%;
+ max-width:430px;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+
+.story-viewer img{
+ max-height:100%;
+ max-width:100%;
+ object-fit:contain;
+ border-radius:15px;
+}
+
+.story-close{
+ position:absolute;
+ top:10px;
+ right:5px;
+ z-index:5;
+ width:40px;
+ height:40px;
+ border:0;
+ border-radius:50%;
+ background:#ffffff22;
+ color:white;
+ font-size:27px;
+}
+
+.story-arrow{
+ position:absolute;
+ top:50%;
+ transform:translateY(-50%);
+ width:42px;
+ height:42px;
+ border:0;
+ border-radius:50%;
+ background:#ffffff22;
+ color:white;
+ font-size:28px;
+ z-index:5;
+}
+
+.story-prev{left:-55px}
+.story-next{right:-55px}
+
+.story-counter{
+ position:absolute;
+ top:15px;
+ left:50%;
+ transform:translateX(-50%);
+ color:white;
+ background:#0008;
+ padding:5px 10px;
+ border-radius:10px;
+ font-size:12px;
+}
+
+.story-delete{
+ position:absolute;
+ bottom:15px;
+ right:5px;
+ border:0;
+ border-radius:10px;
+ background:#ef4444;
+ color:white;
+ padding:10px 14px;
+ font-weight:bold;
+}
+
+/* CREATE POST */
 
 .create-card{
-    padding:18px;
-    margin-bottom:18px;
+ padding:18px;
+ margin-bottom:18px;
 }
 
 .create-top{
-    display:flex;
-    gap:12px;
+ display:flex;
+ gap:12px;
 }
 
 .create-text{
-    width:100%;
-    border:0;
-    outline:0;
-    background:transparent;
-    color:var(--text);
-    resize:none;
-    min-height:55px;
-    font-size:16px;
+ flex:1;
+ min-height:60px;
+ resize:none;
+ border:0;
+ outline:0;
+ background:transparent;
+ color:var(--text);
+}
+
+.preview{
+ margin-top:12px;
+}
+
+.preview img{
+ width:100%;
+ max-height:400px;
+ object-fit:cover;
+ border-radius:14px;
 }
 
 .create-bottom{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-top:1px solid var(--border);
-    padding-top:12px;
+ border-top:1px solid var(--border);
+ margin-top:10px;
+ padding-top:12px;
+ display:flex;
+ justify-content:space-between;
 }
 
 .photo-label{
-    border:0;
-    background:var(--bg);
-    color:var(--text);
-    padding:9px 13px;
-    border-radius:10px;
-    font-weight:700;
+ padding:9px 12px;
+ border-radius:10px;
+ background:var(--bg);
+ font-weight:bold;
+ cursor:pointer;
 }
 
-.publish-btn,
-.open-btn{
-    border:0;
-    background:var(--blue);
-    color:#fff;
-    border-radius:11px;
-    font-weight:800;
-}
-
-.publish-btn{padding:10px 18px}
-.open-btn{padding:9px 13px}
-
-.preview{margin-top:12px}
-
-.preview img{
-    width:100%;
-    max-height:400px;
-    object-fit:cover;
-    border-radius:15px;
+.publish-btn{
+ padding:10px 17px;
+ border:0;
+ border-radius:10px;
+ background:var(--blue);
+ color:white;
+ font-weight:bold;
 }
 
 /* POSTS */
 
 .post{
-    padding:18px;
-    margin-bottom:18px;
+ padding:18px;
+ margin-bottom:18px;
 }
 
 .post-header{
-    display:flex;
-    align-items:center;
-    gap:11px;
+ display:flex;
+ gap:10px;
+ align-items:center;
 }
 
-.post-author{font-weight:800}
+.post-author{font-weight:bold}
 
-.post-username,
-.post-date{
-    color:var(--muted);
-    font-size:13px;
+.post-username,.post-date{
+ color:var(--muted);
+ font-size:12px;
 }
-
-.post-date{font-size:12px}
 
 .post-content{
-    margin-top:15px;
-    line-height:1.55;
-    white-space:pre-wrap;
-    overflow-wrap:anywhere;
+ margin-top:15px;
+ line-height:1.55;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
 }
 
 .post-image{
-    width:100%;
-    max-height:520px;
-    object-fit:cover;
-    border-radius:16px;
-    margin-top:15px;
+ width:100%;
+ max-height:550px;
+ object-fit:cover;
+ margin-top:14px;
+ border-radius:15px;
 }
 
 .post-actions{
-    display:flex;
-    gap:7px;
-    margin-top:15px;
-    padding-top:12px;
-    border-top:1px solid var(--border);
+ display:flex;
+ gap:5px;
+ border-top:1px solid var(--border);
+ margin-top:15px;
+ padding-top:10px;
 }
 
 .action{
-    border:0;
-    background:transparent;
-    color:var(--muted);
-    padding:9px 12px;
-    border-radius:10px;
-    font-weight:700;
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ padding:9px;
+ border-radius:9px;
 }
 
-.action:hover{
-    background:var(--bg);
-    color:var(--text);
-}
+.action:hover{background:var(--bg)}
 
-.action.liked{color:var(--danger)}
+.action.liked{color:#ef4444}
 
 .delete{margin-left:auto}
 
 /* COMMENTS */
 
 .comments{
-    margin-top:14px;
-    border-top:1px solid var(--border);
-    padding-top:12px;
+ border-top:1px solid var(--border);
+ margin-top:10px;
+ padding-top:10px;
 }
 
 .comment{
-    display:flex;
-    gap:9px;
-    padding:9px 0;
+ display:flex;
+ gap:8px;
+ margin-bottom:10px;
 }
 
 .comment-content{
-    background:var(--bg);
-    border-radius:12px;
-    padding:8px 11px;
-    flex:1;
+ background:var(--bg);
+ padding:8px 10px;
+ border-radius:10px;
+ flex:1;
 }
 
 .comment-name{
-    font-size:13px;
-    font-weight:800;
+ font-size:12px;
+ font-weight:bold;
 }
 
 .comment-input-row{
-    display:flex;
-    gap:8px;
-    margin-top:10px;
+ display:flex;
+ gap:7px;
 }
 
 .comment-input{
-    flex:1;
-    padding:11px;
-    border:1px solid var(--border);
-    border-radius:11px;
-    background:var(--card);
-    color:var(--text);
-    outline:none;
+ flex:1;
+ padding:10px;
+ border:1px solid var(--border);
+ border-radius:10px;
+ background:var(--card);
+ color:var(--text);
 }
 
 .comment-send{
-    border:0;
-    background:var(--blue);
-    color:#fff;
-    border-radius:11px;
-    padding:0 14px;
+ border:0;
+ background:var(--blue);
+ color:white;
+ border-radius:10px;
+ padding:0 14px;
 }
 
 /* PROFILE */
 
 .profile-card{
-    padding:28px;
-    text-align:center;
-    margin-bottom:18px;
+ padding:25px;
+ text-align:center;
+ margin-bottom:18px;
 }
 
-.profile-card .avatar{
-    margin:0 auto 15px;
-}
+.profile-card .avatar{margin:auto}
 
 .profile-name{
-    font-size:27px;
-    font-weight:900;
+ font-size:27px;
+ font-weight:900;
+ margin-top:12px;
 }
 
-.profile-username{
-    color:var(--muted);
-    margin-top:3px;
-}
+.profile-username{color:var(--muted)}
 
 .bio{
-    color:var(--muted);
-    max-width:500px;
-    margin:15px auto;
-    line-height:1.5;
+ max-width:500px;
+ margin:15px auto;
+ color:var(--muted);
+ line-height:1.5;
 }
 
 .stats{
-    display:flex;
-    justify-content:center;
-    gap:45px;
-    margin:20px 0;
+ display:flex;
+ justify-content:center;
+ gap:45px;
+ margin:20px;
 }
 
 .stat strong{
-    display:block;
-    font-size:21px;
+ display:block;
+ font-size:20px;
 }
 
 .stat span{
-    color:var(--muted);
-    font-size:13px;
+ color:var(--muted);
+ font-size:12px;
 }
 
 .outline{
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--text);
-    border-radius:12px;
-    padding:10px 16px;
-    font-weight:800;
+ padding:10px 16px;
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ border-radius:10px;
+ font-weight:bold;
 }
 
 /* SEARCH */
 
 .search-card{
-    padding:18px;
-    margin-bottom:18px;
+ padding:18px;
+ margin-bottom:15px;
 }
 
 .search-input{
-    width:100%;
-    padding:14px;
-    border:1px solid var(--border);
-    border-radius:13px;
-    background:var(--card);
-    color:var(--text);
-    outline:none;
-    margin-top:12px;
+ width:100%;
+ padding:13px;
+ margin-top:10px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ background:var(--card);
+ color:var(--text);
 }
 
 .user-result{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    background:var(--card);
-    border:1px solid var(--border);
-    padding:14px;
-    border-radius:16px;
-    margin-bottom:10px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:12px;
+ margin-bottom:10px;
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:14px;
 }
 
 .user-info{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-width:0;
+ display:flex;
+ gap:10px;
+ align-items:center;
 }
 
-.user-name{font-weight:800}
-
-.user-handle{
-    color:var(--muted);
-    font-size:13px;
-}
+.user-name{font-weight:bold}
+.user-handle{font-size:12px;color:var(--muted)}
 
 /* CHAT */
 
-.chat-card{
-    overflow:hidden;
-}
+.chat-card{overflow:hidden}
 
 .chat-header{
-    padding:16px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    gap:12px;
+ display:flex;
+ align-items:center;
+ gap:10px;
+ padding:15px;
+ border-bottom:1px solid var(--border);
 }
 
 .chat-messages{
-    height:450px;
-    overflow-y:auto;
-    padding:18px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+ height:450px;
+ overflow-y:auto;
+ padding:15px;
+ display:flex;
+ flex-direction:column;
+ gap:8px;
 }
 
 .chat-message{
-    max-width:75%;
-    padding:10px 13px;
-    border-radius:15px;
-    line-height:1.4;
-    overflow-wrap:anywhere;
+ max-width:75%;
+ padding:10px 13px;
+ border-radius:14px;
+ overflow-wrap:anywhere;
 }
 
-.chat-message.mine{
-    align-self:flex-end;
-    background:var(--blue);
-    color:#fff;
-    border-bottom-right-radius:5px;
+.mine{
+ align-self:flex-end;
+ background:var(--blue);
+ color:white;
 }
 
-.chat-message.theirs{
-    align-self:flex-start;
-    background:var(--bg);
-    border-bottom-left-radius:5px;
+.theirs{
+ align-self:flex-start;
+ background:var(--bg);
 }
 
 .chat-input-row{
-    display:flex;
-    gap:8px;
-    padding:12px;
-    border-top:1px solid var(--border);
+ display:flex;
+ gap:8px;
+ padding:12px;
+ border-top:1px solid var(--border);
 }
 
 .chat-input{
-    flex:1;
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:12px;
-    background:var(--card);
-    color:var(--text);
-    outline:none;
+ flex:1;
+ padding:12px;
+ border:1px solid var(--border);
+ border-radius:11px;
+ background:var(--card);
+ color:var(--text);
 }
 
 .chat-send{
-    border:0;
-    background:var(--blue);
-    color:#fff;
-    border-radius:12px;
-    padding:0 17px;
-    font-weight:800;
-}
-
-/* RIGHT */
-
-.info-card h3{
-    margin-bottom:10px;
-}
-
-.info-card p{
-    color:var(--muted);
-    line-height:1.5;
+ border:0;
+ background:var(--blue);
+ color:white;
+ border-radius:11px;
+ padding:0 16px;
 }
 
 /* MODAL */
 
 .modal{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    background:rgba(0,0,0,.6);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ background:#0009;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
 }
 
 .modal-box{
-    width:100%;
-    max-width:500px;
-    background:var(--card);
-    border-radius:22px;
-    padding:24px;
-    box-shadow:0 25px 80px rgba(0,0,0,.3);
+ width:100%;
+ max-width:500px;
+ background:var(--card);
+ border-radius:20px;
+ padding:22px;
 }
 
 .modal-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:18px;
+ display:flex;
+ justify-content:space-between;
+ margin-bottom:18px;
 }
 
 .close{
-    border:0;
-    background:var(--bg);
-    color:var(--text);
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    font-size:20px;
+ border:0;
+ background:var(--bg);
+ color:var(--text);
+ width:35px;
+ height:35px;
+ border-radius:50%;
+ font-size:20px;
 }
-
-/* LOADING */
 
 .loading{
-    text-align:center;
-    padding:50px;
-    color:var(--muted);
+ text-align:center;
+ color:var(--muted);
+ padding:50px;
 }
 
-/* TOAST */
-
 .toast{
-    position:fixed;
-    bottom:25px;
-    left:50%;
-    transform:translateX(-50%) translateY(100px);
-    background:#111827;
-    color:#fff;
-    padding:13px 18px;
-    border-radius:13px;
-    z-index:200;
-    transition:.3s;
-    opacity:0;
+ position:fixed;
+ z-index:10000;
+ bottom:25px;
+ left:50%;
+ transform:translate(-50%,100px);
+ background:#111827;
+ color:white;
+ padding:13px 18px;
+ border-radius:12px;
+ opacity:0;
+ transition:.3s;
 }
 
 .toast.show{
-    transform:translateX(-50%) translateY(0);
-    opacity:1;
+ transform:translate(-50%,0);
+ opacity:1;
 }
 
-/* MOBILE */
-
 @media(max-width:900px){
-
-    .layout{
-        grid-template-columns:1fr;
-        max-width:700px;
-    }
-
-    .sidebar,
-    .rightbar{
-        display:none;
-    }
-
-    .mobile-label{
-        display:none;
-    }
+ .layout{grid-template-columns:1fr}
+ .sidebar,.rightbar{display:none}
+ .story-prev{left:5px}
+ .story-next{right:5px}
 }
 
 @media(max-width:600px){
-
-    .navbar{
-        padding:0 10px;
-    }
-
-    .nav-logo{
-        font-size:22px;
-    }
-
-    .nav-btn{
-        padding:8px;
-    }
-
-    .layout{
-        padding:12px 9px 40px;
-    }
-
-    .create-card,
-    .post,
-    .profile-card{
-        border-radius:16px;
-    }
-
-    .post{
-        padding:15px;
-    }
-
-    .stats{
-        gap:25px;
-    }
-
-    .auth-card{
-        padding:25px;
-        border-radius:22px;
-    }
-
-    .chat-messages{
-        height:55vh;
-    }
+ .navbar{padding:0 10px}
+ .nav-logo{font-size:23px}
+ .layout{padding:10px 8px}
+ .mobile-label{display:none}
+ .story-viewer{height:85vh}
 }
 </style>
 </head>
 
 <body>
-
-<!-- AUTH -->
 
 <section id="authPage" class="auth-page">
 
@@ -764,16 +809,16 @@ button{cursor:pointer}
 <h2 class="auth-title">Добро пожаловать 👋</h2>
 
 <input
-id="loginEmail"
-class="input"
-type="email"
-placeholder="Email">
+ id="loginEmail"
+ class="input"
+ type="email"
+ placeholder="Email">
 
 <input
-id="loginPassword"
-class="input"
-type="password"
-placeholder="Пароль">
+ id="loginPassword"
+ class="input"
+ type="password"
+ placeholder="Пароль">
 
 <button class="primary" onclick="login()">
 Войти
@@ -788,33 +833,34 @@ placeholder="Пароль">
 
 </div>
 
+
 <div id="registerBox" class="hidden">
 
-<h2 class="auth-title">Создать аккаунт 🚀</h2>
+<h2 class="auth-title">
+Создать аккаунт 🚀
+</h2>
 
 <input
-id="regName"
-class="input"
-placeholder="Имя"
-maxlength="40">
+ id="regName"
+ class="input"
+ placeholder="Имя">
 
 <input
-id="regUsername"
-class="input"
-placeholder="Username"
-maxlength="20">
+ id="regUsername"
+ class="input"
+ placeholder="Username">
 
 <input
-id="regEmail"
-class="input"
-type="email"
-placeholder="Email">
+ id="regEmail"
+ class="input"
+ type="email"
+ placeholder="Email">
 
 <input
-id="regPassword"
-class="input"
-type="password"
-placeholder="Пароль">
+ id="regPassword"
+ class="input"
+ type="password"
+ placeholder="Пароль">
 
 <button class="primary" onclick="register()">
 Создать аккаунт
@@ -833,8 +879,6 @@ placeholder="Пароль">
 </section>
 
 
-<!-- APP -->
-
 <section id="app" class="hidden">
 
 <nav class="navbar">
@@ -846,15 +890,15 @@ Nur<span>link</span>
 <div class="nav-actions">
 
 <button class="nav-btn" onclick="showFeed()">
-🏠 <span class="mobile-label">Главная</span>
+🏠
 </button>
 
 <button class="nav-btn" onclick="showSearch()">
-🔎 <span class="mobile-label">Поиск</span>
+🔎
 </button>
 
 <button class="nav-btn" onclick="showProfile()">
-👤 <span class="mobile-label">Профиль</span>
+👤
 </button>
 
 <button class="nav-btn" onclick="toggleDark()">
@@ -866,6 +910,7 @@ Nur<span>link</span>
 </button>
 
 </div>
+
 </nav>
 
 
@@ -879,29 +924,22 @@ Nur<span>link</span>
 
 <div class="side-menu">
 
-<button onclick="showFeed()">
-🏠 Главная
-</button>
+<button onclick="showFeed()">🏠 Главная</button>
 
-<button onclick="showSearch()">
-🔎 Найти людей
-</button>
+<button onclick="showSearch()">🔎 Поиск</button>
 
-<button onclick="showProfile()">
-👤 Мой профиль
-</button>
+<button onclick="showProfile()">👤 Профиль</button>
 
-<button onclick="openEdit()">
-✏️ Редактировать
-</button>
+<button onclick="openEdit()">✏️ Редактировать</button>
 
 </div>
+
 </div>
 
 </aside>
 
 
-<main id="content" class="main"></main>
+<main id="content"></main>
 
 
 <aside class="rightbar">
@@ -917,7 +955,7 @@ Nur<span>link</span>
 
 <br>
 
-<p>Nurlink 6.0</p>
+<p>Nurlink • Social Network</p>
 
 </div>
 
@@ -927,41 +965,37 @@ Nur<span>link</span>
 </section>
 
 
-<!-- EDIT -->
-
 <div id="editModal" class="modal hidden">
 
 <div class="modal-box">
 
 <div class="modal-head">
 
-<h2>Мой профиль</h2>
+<h2>Редактировать профиль</h2>
 
-<button class="close" onclick="closeEdit()">
-×
-</button>
+<button class="close" onclick="closeEdit()">×</button>
 
 </div>
 
 <input
-id="editName"
-class="input"
-placeholder="Имя"
-maxlength="40">
+ id="editName"
+ class="input"
+ placeholder="Имя">
 
 <input
-id="editAvatar"
-class="input"
-placeholder="Ссылка на аватар">
+ id="editAvatar"
+ class="input"
+ placeholder="Ссылка на аватар">
 
 <textarea
-id="editBio"
-class="input"
-placeholder="Расскажи о себе..."
-maxlength="300"></textarea>
+ id="editBio"
+ class="input"
+ placeholder="О себе"
+ rows="4">
+</textarea>
 
 <button class="primary" onclick="saveProfile()">
-Сохранить изменения
+Сохранить
 </button>
 
 </div>
@@ -973,2038 +1007,2433 @@ maxlength="300"></textarea>
 
 <script>
 
-/* =========================================
-   SUPABASE
-========================================= */
+/* ================================
+SUPABASE
+================================ */
 
-const SUPABASE_URL =
+const SUPABASE_URL=
 "https://yaycdogysqslorprxhgs.supabase.co";
 
-const SUPABASE_KEY =
+const SUPABASE_KEY=
 "sb_publishable_zby9kHgYS0i-KTBFKswqDA_P2XMlWuy";
 
-const supabaseClient =
+const supabaseClient=
 window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+ SUPABASE_URL,
+ SUPABASE_KEY
 );
 
 
-/* =========================================
-   GLOBAL
-========================================= */
+/* ================================
+STATE
+================================ */
 
-let currentUser = null;
-let currentProfile = null;
-let selectedImage = null;
-let chatUser = null;
+let currentUser=null;
+let currentProfile=null;
+let selectedImage=null;
+let chatUser=null;
+
+let storyItems=[];
+let currentStoryIndex=0;
 
 
-/* =========================================
-   HELPERS
-========================================= */
+/* ================================
+HELPERS
+================================ */
 
 function $(id){
-    return document.getElementById(id);
+ return document.getElementById(id);
 }
 
-function escapeHTML(text){
+function escapeHTML(value){
 
-    if(text === null || text === undefined)
-        return "";
+ if(value===null||value===undefined)
+  return "";
 
-    return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+ return String(value)
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
 }
 
 function toast(text){
 
-    $("toast").textContent = text;
+ $("toast").textContent=text;
 
-    $("toast").classList.add("show");
+ $("toast").classList.add("show");
 
-    setTimeout(()=>{
-        $("toast").classList.remove("show");
-    },2500);
+ setTimeout(()=>{
+  $("toast").classList.remove("show");
+ },2500);
 }
 
 function avatarHTML(profile,size="normal"){
 
-    const cls =
-        size === "large"
-        ? "avatar large"
-        : size === "small"
-        ? "avatar small"
-        : "avatar";
+ let cls="avatar";
 
-    if(profile && profile.avatar_url){
+ if(size==="small")
+  cls+=" small";
 
-        return `
-        <div class="${cls}">
-            <img
-                src="${escapeHTML(profile.avatar_url)}"
-                onerror="this.style.display='none'">
-        </div>
-        `;
-    }
+ if(size==="large")
+  cls+=" large";
 
-    const name =
-        profile?.display_name ||
-        profile?.username ||
-        "?";
+ if(profile?.avatar_url){
 
-    return `
-    <div class="${cls}">
-        ${escapeHTML(name.charAt(0).toUpperCase())}
-    </div>
-    `;
+  return `
+  <div class="${cls}">
+   <img
+    src="${escapeHTML(profile.avatar_url)}"
+    onerror="this.style.display='none'">
+  </div>`;
+ }
+
+ const name=
+ profile?.display_name||
+ profile?.username||
+ "?";
+
+ return `
+ <div class="${cls}">
+  ${escapeHTML(
+   name.charAt(0).toUpperCase()
+  )}
+ </div>`;
 }
 
 function timeAgo(date){
 
-    const seconds =
-        Math.floor(
-            (Date.now()-new Date(date).getTime())/1000
-        );
+ const seconds=
+ Math.floor(
+  (Date.now()-new Date(date).getTime())/1000
+ );
 
-    if(seconds<60) return "только что";
-    if(seconds<3600) return Math.floor(seconds/60)+" мин";
-    if(seconds<86400) return Math.floor(seconds/3600)+" ч";
+ if(seconds<60)
+  return "только что";
 
-    return Math.floor(seconds/86400)+" дн";
+ if(seconds<3600)
+  return Math.floor(seconds/60)+" мин";
+
+ if(seconds<86400)
+  return Math.floor(seconds/3600)+" ч";
+
+ return Math.floor(seconds/86400)+" дн";
 }
 
 
-/* =========================================
-   DARK MODE
-========================================= */
-
-function toggleDark(){
-
-    document.body.classList.toggle("dark");
-
-    localStorage.setItem(
-        "nurlink_dark",
-        document.body.classList.contains("dark")
-    );
-}
-
-if(localStorage.getItem("nurlink_dark")==="true"){
-    document.body.classList.add("dark");
-}
-
-
-/* =========================================
-   AUTH UI
-========================================= */
+/* ================================
+AUTH
+================================ */
 
 function showRegister(){
 
-    $("loginBox").classList.add("hidden");
-    $("registerBox").classList.remove("hidden");
+ $("loginBox").classList.add("hidden");
+ $("registerBox").classList.remove("hidden");
 }
 
 function showLogin(){
 
-    $("registerBox").classList.add("hidden");
-    $("loginBox").classList.remove("hidden");
+ $("registerBox").classList.add("hidden");
+ $("loginBox").classList.remove("hidden");
 }
 
 function showApp(){
 
-    $("authPage").classList.add("hidden");
-    $("app").classList.remove("hidden");
+ $("authPage").classList.add("hidden");
+ $("app").classList.remove("hidden");
 }
 
 function showAuth(){
 
-    $("app").classList.add("hidden");
-    $("authPage").classList.remove("hidden");
+ $("app").classList.add("hidden");
+ $("authPage").classList.remove("hidden");
 }
 
 
-/* =========================================
-   REGISTER
-========================================= */
+/* ================================
+REGISTER
+================================ */
 
 async function register(){
 
-    const name =
-        $("regName").value.trim();
+ const name=
+ $("regName").value.trim();
 
-    const username =
-        $("regUsername").value.trim().toLowerCase();
+ const username=
+ $("regUsername")
+ .value
+ .trim()
+ .toLowerCase();
 
-    const email =
-        $("regEmail").value.trim();
+ const email=
+ $("regEmail").value.trim();
 
-    const password =
-        $("regPassword").value;
+ const password=
+ $("regPassword").value;
 
-    if(!name||!username||!email||!password){
-        toast("Заполни все поля");
-        return;
-    }
+ if(!name||!username||!email||!password){
 
-    if(!/^[a-z0-9_]+$/.test(username)){
-        toast("Username: только английские буквы, цифры и _");
-        return;
-    }
+  toast("Заполни все поля");
 
-    if(password.length<6){
-        toast("Пароль минимум 6 символов");
-        return;
-    }
+  return;
+ }
 
-    const {data:existing,error:existingError} =
-        await supabaseClient
-        .from("profiles")
-        .select("id")
-        .eq("username",username)
-        .maybeSingle();
+ if(!/^[a-z0-9_]+$/.test(username)){
 
-    if(existingError){
-        toast(existingError.message);
-        return;
-    }
+  toast(
+   "Username: английские буквы, цифры и _"
+  );
 
-    if(existing){
-        toast("Этот username уже занят");
-        return;
-    }
+  return;
+ }
 
-    const {data,error} =
-        await supabaseClient.auth.signUp({
+ if(password.length<6){
 
-            email,
-            password,
+  toast("Пароль минимум 6 символов");
 
-            options:{
-                data:{
-                    display_name:name,
-                    username:username
-                }
-            }
-        });
+  return;
+ }
 
-    if(error){
-        toast(error.message);
-        return;
-    }
+ const {
+  data:existing,
+  error:existingError
+ }=
+ await supabaseClient
+ .from("profiles")
+ .select("id")
+ .eq("username",username)
+ .maybeSingle();
 
-    if(!data.user){
-        toast("Не удалось создать аккаунт");
-        return;
-    }
+ if(existingError){
 
-    if(data.session){
+  toast(existingError.message);
 
-        const {error:profileError} =
-            await supabaseClient
-            .from("profiles")
-            .insert({
-                id:data.user.id,
-                username,
-                display_name:name,
-                bio:"",
-                avatar_url:""
-            });
+  return;
+ }
 
-        if(profileError){
-            toast(profileError.message);
-            return;
-        }
+ if(existing){
 
-        toast("Аккаунт создан 🎉");
+  toast("Username уже занят");
 
-        await loadApp();
+  return;
+ }
 
-    }else{
+ const {
+  data,
+  error
+ }=
+ await supabaseClient.auth.signUp({
 
-        toast("Проверь почту и подтверди регистрацию 📧");
-    }
+  email,
+  password,
+
+  options:{
+   data:{
+    display_name:name,
+    username:username
+   }
+  }
+
+ });
+
+ if(error){
+
+  toast(error.message);
+
+  return;
+ }
+
+ if(!data.user){
+
+  toast("Ошибка регистрации");
+
+  return;
+ }
+
+ if(data.session){
+
+  const {
+   error:profileError
+  }=
+  await supabaseClient
+  .from("profiles")
+  .insert({
+
+   id:data.user.id,
+   username,
+   display_name:name,
+   bio:"",
+   avatar_url:""
+
+  });
+
+  if(profileError){
+
+   toast(profileError.message);
+
+   return;
+  }
+
+  currentUser=data.user;
+
+  await loadApp();
+
+ }else{
+
+  toast(
+   "Проверь почту для подтверждения 📧"
+  );
+ }
 }
 
 
-/* =========================================
-   LOGIN
-========================================= */
+/* ================================
+LOGIN
+================================ */
 
 async function login(){
 
-    const email =
-        $("loginEmail").value.trim();
+ const email=
+ $("loginEmail").value.trim();
 
-    const password =
-        $("loginPassword").value;
+ const password=
+ $("loginPassword").value;
 
-    if(!email||!password){
-        toast("Введи email и пароль");
-        return;
-    }
+ if(!email||!password){
 
-    const {data,error} =
-        await supabaseClient.auth
-        .signInWithPassword({
-            email,
-            password
-        });
+  toast("Введи email и пароль");
 
-    if(error){
-        toast(error.message);
-        return;
-    }
+  return;
+ }
 
-    currentUser=data.user;
+ const {
+  data,
+  error
+ }=
+ await supabaseClient.auth.signInWithPassword({
 
-    await loadApp();
+  email,
+  password
+
+ });
+
+ if(error){
+
+  toast(error.message);
+
+  return;
+ }
+
+ currentUser=data.user;
+
+ await loadApp();
 }
 
 
-/* =========================================
-   LOAD APP
-========================================= */
+/* ================================
+LOAD APP
+================================ */
 
 async function loadApp(){
 
-    const {
-        data:{user}
-    } =
-        await supabaseClient.auth.getUser();
+ const {
+  data:{user}
+ }=
+ await supabaseClient.auth.getUser();
 
-    if(!user){
-        showAuth();
-        return;
-    }
+ if(!user){
 
-    currentUser=user;
+  showAuth();
 
-    const {data:profile,error} =
-        await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id",user.id)
-        .maybeSingle();
+  return;
+ }
 
-    if(error){
-        toast(error.message);
-        return;
-    }
+ currentUser=user;
 
-    currentProfile=profile;
+ const {
+  data:profile,
+  error
+ }=
+ await supabaseClient
+ .from("profiles")
+ .select("*")
+ .eq("id",user.id)
+ .maybeSingle();
 
-    if(!profile){
+ if(error){
 
-        const name =
-            user.user_metadata?.display_name ||
-            "User";
+  toast(error.message);
 
-        const username =
-            user.user_metadata?.username ||
-            "user"+Date.now();
+  return;
+ }
 
-        const {
-            data:created,
-            error:createError
-        } =
-            await supabaseClient
-            .from("profiles")
-            .insert({
-                id:user.id,
-                username,
-                display_name:name,
-                bio:"",
-                avatar_url:""
-            })
-            .select()
-            .single();
+ currentProfile=profile;
 
-        if(createError){
-            toast(createError.message);
-            return;
-        }
+ if(!profile){
 
-        currentProfile=created;
-    }
+  const username=
+  user.user_metadata?.username||
+  "user"+Date.now();
 
-    showApp();
+  const name=
+  user.user_metadata?.display_name||
+  "User";
 
-    updateSideUser();
+  const {
+   data:created,
+   error:createError
+  }=
+  await supabaseClient
+  .from("profiles")
+  .insert({
 
-    showFeed();
+   id:user.id,
+   username,
+   display_name:name,
+   bio:"",
+   avatar_url:""
+
+  })
+  .select()
+  .single();
+
+  if(createError){
+
+   toast(createError.message);
+
+   return;
+  }
+
+  currentProfile=created;
+ }
+
+ showApp();
+
+ updateSideUser();
+
+ showFeed();
 }
 
 
-/* =========================================
-   SIDE USER
-========================================= */
+/* ================================
+SIDE USER
+================================ */
 
 function updateSideUser(){
 
-    if(!currentProfile)return;
+ if(!currentProfile)
+  return;
 
-    $("sideUser").innerHTML=`
+ $("sideUser").innerHTML=`
 
-    ${avatarHTML(currentProfile,"small")}
+ ${avatarHTML(
+  currentProfile,
+  "small"
+ )}
 
-    <div style="min-width:0">
+ <div>
 
-        <div style="
-            font-weight:800;
-            overflow:hidden;
-            text-overflow:ellipsis;
-        ">
-            ${escapeHTML(currentProfile.display_name)}
-        </div>
+  <b>
+   ${escapeHTML(
+    currentProfile.display_name
+   )}
+  </b>
 
-        <div style="
-            color:var(--muted);
-            font-size:12px;
-        ">
-            @${escapeHTML(currentProfile.username)}
-        </div>
+  <div style="
+   color:var(--muted);
+   font-size:12px">
 
-    </div>
-    `;
+   @${escapeHTML(
+    currentProfile.username
+   )}
+
+  </div>
+
+ </div>
+ `;
 }
 
 
-/* =========================================
-   LOGOUT
-========================================= */
+/* ================================
+LOGOUT
+================================ */
 
 async function logout(){
 
-    await supabaseClient.auth.signOut();
+ await supabaseClient.auth.signOut();
 
-    currentUser=null;
-    currentProfile=null;
-    chatUser=null;
+ currentUser=null;
+ currentProfile=null;
+ chatUser=null;
 
-    showAuth();
-    showLogin();
+ showAuth();
+ showLogin();
 }
 
 
-/* =========================================
-   FEED
-========================================= */
+/* ================================
+FEED
+================================ */
 
 function showFeed(){
 
-    $("content").innerHTML=`
+ $("content").innerHTML=`
 
-    <div class="create-card">
+ <!-- STORIES -->
 
-        <div class="create-top">
+ <div class="stories-section">
 
-            ${avatarHTML(currentProfile)}
+  <div class="stories-title">
 
-            <textarea
-                id="postText"
-                class="create-text"
-                placeholder="Что нового?"
-                maxlength="1000"></textarea>
+   <b>Stories</b>
 
-        </div>
+   <label class="add-story">
 
-        <div id="imagePreview"
-             class="preview hidden">
-        </div>
+    <span>＋</span>
 
-        <div class="create-bottom">
+    <small>Добавить</small>
 
-            <label class="photo-label">
+    <input
+     id="storyUpload"
+     type="file"
+     accept="image/*"
+     hidden
+     onchange="uploadStory(event)">
 
-                📷 Фото
+   </label>
 
-                <input
-                    id="postImage"
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onchange="previewImage(event)">
+  </div>
 
-            </label>
+  <div
+   id="storiesList"
+   class="stories-list">
 
-            <button
-                class="publish-btn"
-                onclick="createPost()">
-                Опубликовать
-            </button>
+   <div class="stories-loading">
+    Загрузка Stories...
+   </div>
 
-        </div>
-    </div>
+  </div>
 
-    <div id="feed">
-        <div class="loading">
-            Загрузка Nurlink...
-        </div>
-    </div>
+ </div>
 
-    `;
 
-    loadPosts();
+ <!-- CREATE POST -->
+
+ <div class="create-card">
+
+  <div class="create-top">
+
+   ${avatarHTML(currentProfile)}
+
+   <textarea
+    id="postText"
+    class="create-text"
+    placeholder="Что нового?"
+    maxlength="1000">
+   </textarea>
+
+  </div>
+
+  <div
+   id="imagePreview"
+   class="preview hidden">
+  </div>
+
+  <div class="create-bottom">
+
+   <label class="photo-label">
+
+    📷 Фото
+
+    <input
+     id="postImage"
+     type="file"
+     accept="image/*"
+     hidden
+     onchange="previewImage(event)">
+
+   </label>
+
+   <button
+    class="publish-btn"
+    onclick="createPost()">
+
+    Опубликовать
+
+   </button>
+
+  </div>
+
+ </div>
+
+
+ <div id="feed">
+
+  <div class="loading">
+   Загрузка Nurlink...
+  </div>
+
+ </div>
+ `;
+
+ loadStories();
+ loadPosts();
 }
 
 
-/* =========================================
-   IMAGE
-========================================= */
+/* ================================
+STORIES LOAD
+================================ */
+
+async function loadStories(){
+
+ const box=$("storiesList");
+
+ if(!box)
+  return;
+
+ const expire=
+ new Date(
+  Date.now()-24*60*60*1000
+ ).toISOString();
+
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("stories")
+ .select(`
+  *,
+  profiles(
+   id,
+   username,
+   display_name,
+   avatar_url
+  )
+ `)
+ .gte("created_at",expire)
+ .order("created_at",{ascending:false});
+
+ if(error){
+
+  console.error(error);
+
+  box.innerHTML=`
+   <div class="stories-loading">
+    Ошибка загрузки Stories
+   </div>`;
+
+  return;
+ }
+
+ if(!data?.length){
+
+  box.innerHTML=`
+   <div class="stories-loading">
+    Пока нет Stories 👀
+   </div>`;
+
+  return;
+ }
+
+ box.innerHTML="";
+
+ const groups=new Map();
+
+ data.forEach(story=>{
+
+  if(!groups.has(story.user_id))
+   groups.set(story.user_id,[]);
+
+  groups
+  .get(story.user_id)
+  .push(story);
+ });
+
+
+ groups.forEach(userStories=>{
+
+  const story=userStories[0];
+
+  const profile=story.profiles||{};
+
+  const div=
+  document.createElement("div");
+
+  div.className="story";
+
+  div.innerHTML=`
+
+   <img
+    src="${escapeHTML(story.image_url)}">
+
+   <div class="story-name">
+
+    ${escapeHTML(
+     profile.display_name||
+     profile.username||
+     "User"
+    )}
+
+   </div>
+  `;
+
+  div.onclick=()=>{
+
+   openStoryViewer(userStories);
+
+  };
+
+  box.appendChild(div);
+ });
+}
+
+
+/* ================================
+UPLOAD STORY
+================================ */
+
+async function uploadStory(event){
+
+ const file=event.target.files[0];
+
+ if(!file)
+  return;
+
+ if(!file.type.startsWith("image/")){
+
+  toast("Можно загрузить только фото");
+
+  event.target.value="";
+
+  return;
+ }
+
+ if(file.size>10*1024*1024){
+
+  toast("Фото должно быть меньше 10 МБ");
+
+  event.target.value="";
+
+  return;
+ }
+
+ try{
+
+  toast("Загружаю Story...");
+
+  const extension=
+  file.name
+  .split(".")
+  .pop()
+  .toLowerCase();
+
+  const fileName=
+  currentUser.id+
+  "/"+
+  crypto.randomUUID()+
+  "."+
+  extension;
+
+  const {
+   error:uploadError
+  }=
+  await supabaseClient
+  .storage
+  .from("stories")
+  .upload(
+   fileName,
+   file,
+   {
+    cacheControl:"3600",
+    upsert:false
+   }
+  );
+
+  if(uploadError)
+   throw uploadError;
+
+  const {
+   data:urlData
+  }=
+  supabaseClient
+  .storage
+  .from("stories")
+  .getPublicUrl(fileName);
+
+  const {
+   error:storyError
+  }=
+  await supabaseClient
+  .from("stories")
+  .insert({
+
+   user_id:currentUser.id,
+   image_url:urlData.publicUrl
+
+  });
+
+  if(storyError)
+   throw storyError;
+
+  event.target.value="";
+
+  toast("Story опубликована 🔥");
+
+  await loadStories();
+
+ }catch(error){
+
+  console.error(error);
+
+  toast(
+   "Ошибка: "+error.message
+  );
+ }
+}
+
+
+/* ================================
+STORY VIEWER
+================================ */
+
+function openStoryViewer(stories){
+
+ storyItems=stories;
+ currentStoryIndex=0;
+
+ renderStoryViewer();
+}
+
+
+function renderStoryViewer(){
+
+ if(!storyItems.length)
+  return;
+
+ const story=
+ storyItems[currentStoryIndex];
+
+ const modal=
+ document.createElement("div");
+
+ modal.className="story-modal";
+
+ const mine=
+ story.user_id===
+ currentUser.id;
+
+ modal.innerHTML=`
+
+ <div class="story-viewer">
+
+  <button
+   class="story-close"
+   onclick="closeStoryViewer()">
+
+   ×
+
+  </button>
+
+  ${
+   storyItems.length>1
+   ?
+   `
+
+   <button
+    class="story-arrow story-prev"
+    onclick="previousStory()">
+
+    ‹
+
+   </button>
+
+   <button
+    class="story-arrow story-next"
+    onclick="nextStory()">
+
+    ›
+
+   </button>
+
+   `
+   :
+   ""
+  }
+
+  <div class="story-counter">
+
+   ${currentStoryIndex+1}
+   /
+   ${storyItems.length}
+
+  </div>
+
+  <img
+   src="${escapeHTML(
+    story.image_url
+   )}">
+
+  ${
+   mine
+   ?
+   `
+   <button
+    class="story-delete"
+    onclick="deleteStory(${story.id})">
+
+    🗑️ Удалить
+
+   </button>
+   `
+   :
+   ""
+  }
+
+ </div>
+ `;
+
+ modal.id="storyViewer";
+
+ modal.onclick=e=>{
+
+  if(e.target===modal)
+   closeStoryViewer();
+ };
+
+ document.body.appendChild(modal);
+}
+
+
+function closeStoryViewer(){
+
+ const modal=$("storyViewer");
+
+ if(modal)
+  modal.remove();
+}
+
+
+function previousStory(){
+
+ if(currentStoryIndex>0){
+
+  currentStoryIndex--;
+
+  closeStoryViewer();
+
+  renderStoryViewer();
+ }
+}
+
+
+function nextStory(){
+
+ if(
+  currentStoryIndex<
+  storyItems.length-1
+ ){
+
+  currentStoryIndex++;
+
+  closeStoryViewer();
+
+  renderStoryViewer();
+ }
+}
+
+
+/* ================================
+DELETE STORY
+================================ */
+
+async function deleteStory(id){
+
+ const story=
+ storyItems.find(x=>x.id===id);
+
+ if(!story)
+  return;
+
+ if(
+  story.user_id!==
+  currentUser.id
+ ){
+
+  toast("Это не твоя Story");
+
+  return;
+ }
+
+ if(!confirm("Удалить Story?"))
+  return;
+
+ const {
+  error
+ }=
+ await supabaseClient
+ .from("stories")
+ .delete()
+ .eq("id",id)
+ .eq("user_id",currentUser.id);
+
+ if(error){
+
+  toast(error.message);
+
+  return;
+ }
+
+ storyItems=
+ storyItems.filter(x=>x.id!==id);
+
+ if(!storyItems.length){
+
+  closeStoryViewer();
+
+ }else{
+
+  if(
+   currentStoryIndex>=
+   storyItems.length
+  )
+   currentStoryIndex=
+   storyItems.length-1;
+
+  closeStoryViewer();
+
+  renderStoryViewer();
+ }
+
+ await loadStories();
+
+ toast("Story удалена");
+}
+
+
+/* ================================
+POST IMAGE PREVIEW
+================================ */
 
 function previewImage(event){
 
-    const file =
-        event.target.files[0];
+ const file=event.target.files[0];
 
-    if(!file)return;
+ if(!file)
+  return;
 
-    if(file.size>8*1024*1024){
+ if(file.size>8*1024*1024){
 
-        toast("Фото должно быть меньше 8 МБ");
+  toast("Фото должно быть меньше 8 МБ");
 
-        event.target.value="";
+  event.target.value="";
 
-        return;
-    }
+  return;
+ }
 
-    selectedImage=file;
+ selectedImage=file;
 
-    const reader=new FileReader();
+ const reader=
+ new FileReader();
 
-    reader.onload=e=>{
+ reader.onload=e=>{
 
-        $("imagePreview").innerHTML =
-            `<img src="${e.target.result}">`;
+  $("imagePreview").innerHTML=
+  `<img src="${e.target.result}">`;
 
-        $("imagePreview")
-            .classList
-            .remove("hidden");
-    };
+  $("imagePreview")
+  .classList
+  .remove("hidden");
+ };
 
-    reader.readAsDataURL(file);
+ reader.readAsDataURL(file);
 }
 
 
-async function uploadImage(file){
+/* ================================
+UPLOAD POST IMAGE
+================================ */
 
-    const extension =
-        file.name
-        .split(".")
-        .pop()
-        .toLowerCase();
+async function uploadPostImage(file){
 
-    const fileName =
-        currentUser.id+
-        "/"+
-        crypto.randomUUID()+
-        "."+
-        extension;
+ const extension=
+ file.name
+ .split(".")
+ .pop()
+ .toLowerCase();
 
-    const {error} =
-        await supabaseClient.storage
-        .from("nurlink")
-        .upload(
-            fileName,
-            file,
-            {
-                cacheControl:"3600",
-                upsert:false
-            }
-        );
+ const path=
+ currentUser.id+
+ "/"+
+ crypto.randomUUID()+
+ "."+
+ extension;
 
-    if(error)throw error;
+ const {
+  error
+ }=
+ await supabaseClient
+ .storage
+ .from("nurlink")
+ .upload(
+  path,
+  file,
+  {
+   cacheControl:"3600",
+   upsert:false
+  }
+ );
 
-    const {data} =
-        supabaseClient.storage
-        .from("nurlink")
-        .getPublicUrl(fileName);
+ if(error)
+  throw error;
 
-    return data.publicUrl;
+ const {
+  data
+ }=
+ supabaseClient
+ .storage
+ .from("nurlink")
+ .getPublicUrl(path);
+
+ return data.publicUrl;
 }
 
 
-/* =========================================
-   CREATE POST
-========================================= */
+/* ================================
+CREATE POST
+================================ */
 
 async function createPost(){
 
-    const text =
-        $("postText").value.trim();
+ const text=
+ $("postText")
+ .value
+ .trim();
 
-    if(!text&&!selectedImage){
+ if(!text&&!selectedImage){
 
-        toast("Добавь текст или фото");
+  toast(
+   "Добавь текст или фото"
+  );
 
-        return;
-    }
+  return;
+ }
 
-    let imageUrl="";
+ try{
 
-    try{
+  let imageUrl="";
 
-        if(selectedImage){
+  if(selectedImage){
 
-            toast("Загружаю фото...");
+   toast("Загружаю фото...");
 
-            imageUrl =
-                await uploadImage(selectedImage);
-        }
+   imageUrl=
+   await uploadPostImage(
+    selectedImage
+   );
+  }
 
-        const {error} =
-            await supabaseClient
-            .from("posts")
-            .insert({
-                user_id:currentUser.id,
-                content:text||"📷 Фото",
-                image_url:imageUrl
-            });
+  const {
+   error
+  }=
+  await supabaseClient
+  .from("posts")
+  .insert({
 
-        if(error)throw error;
+   user_id:currentUser.id,
+   content:text||"📷 Фото",
+   image_url:imageUrl
 
-        $("postText").value="";
-        $("postImage").value="";
+  });
 
-        selectedImage=null;
+  if(error)
+   throw error;
 
-        $("imagePreview")
-            .classList
-            .add("hidden");
+  $("postText").value="";
+  $("postImage").value="";
 
-        toast("Пост опубликован 🚀");
+  selectedImage=null;
 
-        await loadPosts();
+  $("imagePreview")
+  .classList
+  .add("hidden");
 
-    }catch(error){
+  toast("Пост опубликован 🚀");
 
-        console.error(error);
+  loadPosts();
 
-        toast(error.message);
-    }
+ }catch(error){
+
+  console.error(error);
+
+  toast(error.message);
+ }
 }
 
 
-/* =========================================
-   POSTS
-========================================= */
+/* ================================
+LOAD POSTS
+================================ */
 
 async function loadPosts(){
 
-    const feed=$("feed");
+ const feed=$("feed");
 
-    if(!feed)return;
+ if(!feed)
+  return;
 
-    const result =
-        await supabaseClient
-        .from("posts")
-        .select(`
-            *,
-            profiles(
-                id,
-                username,
-                display_name,
-                avatar_url
-            )
-        `)
-        .order(
-            "created_at",
-            {ascending:false}
-        );
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("posts")
+ .select(`
+  *,
+  profiles(
+   id,
+   username,
+   display_name,
+   avatar_url
+  )
+ `)
+ .order("created_at",{ascending:false});
 
-    if(result.error){
+ if(error){
 
-        feed.innerHTML=`
-        <div class="post">
+  feed.innerHTML=`
+  <div class="post">
 
-            <b>Ошибка загрузки</b>
+   <b>Ошибка загрузки</b>
 
-            <p style="
-                color:var(--muted);
-                margin-top:8px
-            ">
-                ${escapeHTML(result.error.message)}
-            </p>
+   <p style="color:var(--muted)">
+    ${escapeHTML(error.message)}
+   </p>
 
-        </div>
-        `;
+  </div>`;
 
-        return;
-    }
+  return;
+ }
 
-    const posts=result.data||[];
+ if(!data?.length){
 
-    if(!posts.length){
+  feed.innerHTML=`
+  <div class="post">
 
-        feed.innerHTML=`
-        <div class="post">
+   <h3>
+    Здесь пока пусто 👀
+   </h3>
 
-            <h3>
-                Здесь пока пусто 👀
-            </h3>
+   <p style="color:var(--muted)">
+    Создай первый пост Nurlink!
+   </p>
 
-            <p style="
-                color:var(--muted);
-                margin-top:8px
-            ">
-                Создай первый пост Nurlink!
-            </p>
+  </div>`;
 
-        </div>
-        `;
+  return;
+ }
 
-        return;
-    }
+ feed.innerHTML="";
 
-    feed.innerHTML="";
+ for(const post of data){
 
-    for(const post of posts){
+  const likes=
+  await getLikes(post.id);
 
-        const likes =
-            await getLikes(post.id);
+  const comments=
+  await getComments(post.id);
 
-        const comments =
-            await getComments(post.id);
+  const liked=
+  likes.some(
+   x=>x.user_id===currentUser.id
+  );
 
-        const liked =
-            likes.some(
-                x=>x.user_id===currentUser.id
-            );
+  const profile=
+  post.profiles||{};
 
-        const profile=post.profiles;
+  const el=
+  document.createElement("article");
 
-        const element =
-            document.createElement("article");
+  el.className="post";
 
-        element.className="post";
+  el.innerHTML=`
 
-        element.innerHTML=`
+  <div class="post-header">
 
-        <div class="post-header">
+   ${avatarHTML(profile)}
 
-            ${avatarHTML(profile)}
+   <div>
 
-            <div>
+    <div class="post-author">
 
-                <div class="post-author">
-                    ${escapeHTML(
-                        profile?.display_name||
-                        profile?.username||
-                        "User"
-                    )}
-                </div>
+     ${escapeHTML(
+      profile.display_name||
+      profile.username||
+      "User"
+     )}
 
-                <div class="post-username">
-                    @${escapeHTML(
-                        profile?.username||""
-                    )}
-                </div>
+    </div>
 
-                <div class="post-date">
-                    ${timeAgo(post.created_at)}
-                </div>
+    <div class="post-username">
 
-            </div>
-        </div>
+     @${escapeHTML(
+      profile.username||""
+     )}
 
-        <div class="post-content">
-            ${escapeHTML(post.content)}
-        </div>
+    </div>
 
-        ${
-            post.image_url
-            ?
-            `<img
-                class="post-image"
-                src="${escapeHTML(post.image_url)}"
-                loading="lazy">`
-            :
-            ""
-        }
+    <div class="post-date">
 
-        <div class="post-actions">
+     ${timeAgo(post.created_at)}
 
-            <button
-                class="action ${liked?"liked":""}"
-                onclick="toggleLike(${post.id},${liked})">
+    </div>
 
-                ❤️ ${likes.length}
+   </div>
 
-            </button>
+  </div>
 
-            <button
-                class="action"
-                onclick="toggleComments(${post.id})">
+  <div class="post-content">
 
-                💬 ${comments.length}
+   ${escapeHTML(post.content)}
 
-            </button>
+  </div>
 
-            ${
-                post.user_id===currentUser.id
-                ?
-                `<button
-                    class="action delete"
-                    onclick="deletePost(${post.id})">
+  ${
+   post.image_url
+   ?
+   `
+   <img
+    class="post-image"
+    src="${escapeHTML(post.image_url)}">
+   `
+   :
+   ""
+  }
 
-                    🗑️
+  <div class="post-actions">
 
-                </button>`
-                :
-                ""
-            }
+   <button
+    class="action ${liked?"liked":""}"
+    onclick="
+     toggleLike(
+      ${post.id},
+      ${liked}
+     )
+    ">
 
-        </div>
+    ❤️ ${likes.length}
 
-        <div
-            id="comments-${post.id}"
-            class="comments hidden">
+   </button>
 
-            <div id="comment-list-${post.id}">
-                ${renderComments(comments)}
-            </div>
+   <button
+    class="action"
+    onclick="
+     toggleComments(${post.id})
+    ">
 
-            <div class="comment-input-row">
+    💬 ${comments.length}
 
-                <input
-                    id="comment-input-${post.id}"
-                    class="comment-input"
-                    placeholder="Написать комментарий..."
-                    maxlength="300">
+   </button>
 
-                <button
-                    class="comment-send"
-                    onclick="addComment(${post.id})">
+   ${
+    post.user_id===
+    currentUser.id
+    ?
+    `
+    <button
+     class="action delete"
+     onclick="
+      deletePost(${post.id})
+     ">
 
-                    ➤
+     🗑️
 
-                </button>
+    </button>
+    `
+    :
+    ""
+   }
 
-            </div>
+  </div>
 
-        </div>
+  <div
+   id="comments-${post.id}"
+   class="comments hidden">
 
-        `;
+   <div id="comment-list-${post.id}">
 
-        feed.appendChild(element);
-    }
+    ${renderComments(comments)}
+
+   </div>
+
+   <div class="comment-input-row">
+
+    <input
+     id="comment-input-${post.id}"
+     class="comment-input"
+     placeholder="Написать комментарий..."
+     maxlength="300">
+
+    <button
+     class="comment-send"
+     onclick="
+      addComment(${post.id})
+     ">
+
+     ➤
+
+    </button>
+
+   </div>
+
+  </div>
+  `;
+
+  feed.appendChild(el);
+ }
 }
 
 
-/* =========================================
-   LIKES
-========================================= */
+/* ================================
+LIKES
+================================ */
 
 async function getLikes(postId){
 
-    const {data,error} =
-        await supabaseClient
-        .from("likes")
-        .select("user_id")
-        .eq("post_id",postId);
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("likes")
+ .select("user_id")
+ .eq("post_id",postId);
 
-    if(error){
+ if(error){
 
-        console.error(error);
+  console.error(error);
 
-        return [];
-    }
+  return [];
+ }
 
-    return data||[];
+ return data||[];
 }
 
 
 async function toggleLike(postId,liked){
 
-    if(liked){
+ if(liked){
 
-        await supabaseClient
-            .from("likes")
-            .delete()
-            .eq("post_id",postId)
-            .eq("user_id",currentUser.id);
+  await supabaseClient
+  .from("likes")
+  .delete()
+  .eq("post_id",postId)
+  .eq("user_id",currentUser.id);
 
-    }else{
+ }else{
 
-        const {error} =
-            await supabaseClient
-            .from("likes")
-            .insert({
-                post_id:postId,
-                user_id:currentUser.id
-            });
+  const {
+   error
+  }=
+  await supabaseClient
+  .from("likes")
+  .insert({
 
-        if(error){
+   post_id:postId,
+   user_id:currentUser.id
 
-            toast(error.message);
+  });
 
-            return;
-        }
-    }
+  if(error){
 
-    await loadPosts();
+   toast(error.message);
+
+   return;
+  }
+ }
+
+ loadPosts();
 }
 
 
-/* =========================================
-   COMMENTS
-========================================= */
+/* ================================
+COMMENTS
+================================ */
 
 async function getComments(postId){
 
-    const {data,error} =
-        await supabaseClient
-        .from("comments")
-        .select(`
-            *,
-            profiles(
-                username,
-                display_name,
-                avatar_url
-            )
-        `)
-        .eq("post_id",postId)
-        .order(
-            "created_at",
-            {ascending:true}
-        );
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("comments")
+ .select(`
+  *,
+  profiles(
+   id,
+   username,
+   display_name,
+   avatar_url
+  )
+ `)
+ .eq("post_id",postId)
+ .order("created_at",{ascending:true});
 
-    if(error){
+ if(error){
 
-        console.error(error);
+  console.error(error);
 
-        return [];
-    }
+  return [];
+ }
 
-    return data||[];
+ return data||[];
 }
 
 
 function renderComments(comments){
 
-    if(!comments.length){
+ if(!comments.length)
+  return `
+   <div style="
+    color:var(--muted);
+    font-size:13px;
+    padding:5px">
 
-        return `
-        <div style="
-            color:var(--muted);
-            padding:8px 0">
+    Пока нет комментариев
 
-            Пока нет комментариев.
+   </div>
+  `;
 
-        </div>
-        `;
-    }
+ return comments.map(comment=>`
 
-    return comments.map(comment=>`
+  <div class="comment">
 
-        <div class="comment">
+   ${avatarHTML(
+    comment.profiles,
+    "small"
+   )}
 
-            ${avatarHTML(
-                comment.profiles,
-                "small"
-            )}
+   <div class="comment-content">
 
-            <div class="comment-content">
+    <div class="comment-name">
 
-                <div class="comment-name">
+     ${escapeHTML(
+      comment.profiles?.display_name||
+      comment.profiles?.username||
+      "User"
+     )}
 
-                    ${escapeHTML(
-                        comment.profiles?.display_name||
-                        comment.profiles?.username||
-                        "User"
-                    )}
+    </div>
 
-                </div>
+    ${escapeHTML(
+     comment.content
+    )}
 
-                <div>
-                    ${escapeHTML(
-                        comment.content
-                    )}
-                </div>
+   </div>
 
-            </div>
+  </div>
 
-        </div>
-
-    `).join("");
+ `).join("");
 }
 
 
 function toggleComments(postId){
 
-    const box =
-        $("comments-"+postId);
+ const box=
+ $("comments-"+postId);
 
-    if(box)
-        box.classList.toggle("hidden");
+ if(box)
+  box.classList.toggle("hidden");
 }
 
 
 async function addComment(postId){
 
-    const input =
-        $("comment-input-"+postId);
+ const input=
+ $("comment-input-"+postId);
 
-    const text =
-        input.value.trim();
+ const text=
+ input.value.trim();
 
-    if(!text)return;
+ if(!text)
+  return;
 
-    const {error} =
-        await supabaseClient
-        .from("comments")
-        .insert({
-            post_id:postId,
-            user_id:currentUser.id,
-            content:text
-        });
+ const {
+  error
+ }=
+ await supabaseClient
+ .from("comments")
+ .insert({
 
-    if(error){
+  post_id:postId,
+  user_id:currentUser.id,
+  content:text
 
-        toast(error.message);
+ });
 
-        return;
-    }
+ if(error){
 
-    input.value="";
+  toast(error.message);
 
-    await loadPosts();
+  return;
+ }
+
+ input.value="";
+
+ loadPosts();
 }
 
 
-/* =========================================
-   DELETE POST
-========================================= */
+/* ================================
+DELETE POST
+================================ */
 
-async function deletePost(postId){
+async function deletePost(id){
 
-    if(!confirm("Удалить этот пост?"))
-        return;
+ if(!confirm("Удалить пост?"))
+  return;
 
-    const {error} =
-        await supabaseClient
-        .from("posts")
-        .delete()
-        .eq("id",postId)
-        .eq("user_id",currentUser.id);
+ const {
+  error
+ }=
+ await supabaseClient
+ .from("posts")
+ .delete()
+ .eq("id",id)
+ .eq("user_id",currentUser.id);
 
-    if(error){
+ if(error){
 
-        toast(error.message);
+  toast(error.message);
 
-        return;
-    }
+  return;
+ }
 
-    toast("Пост удалён");
+ toast("Пост удалён");
 
-    await loadPosts();
+ loadPosts();
 }
 
 
-/* =========================================
-   PROFILE
-========================================= */
+/* ================================
+PROFILE
+================================ */
 
-async function showProfile(){
+async function showProfile(userId=null){
 
-    await refreshProfile();
+ const id=
+ userId||currentUser.id;
 
-    const followers =
-        await countFollowers(
-            currentUser.id
-        );
+ const {
+  data:profile,
+  error
+ }=
+ await supabaseClient
+ .from("profiles")
+ .select("*")
+ .eq("id",id)
+ .single();
 
-    const following =
-        await countFollowing(
-            currentUser.id
-        );
+ if(error){
 
-    $("content").innerHTML=`
+  toast(error.message);
 
-    <div class="profile-card">
+  return;
+ }
 
-        ${avatarHTML(
-            currentProfile,
-            "large"
-        )}
+ const {
+  count:postsCount
+ }=
+ await supabaseClient
+ .from("posts")
+ .select("*",{count:"exact",head:true})
+ .eq("user_id",id);
 
-        <div class="profile-name">
+ const {
+  count:followers
+ }=
+ await supabaseClient
+ .from("follows")
+ .select("*",{count:"exact",head:true})
+ .eq("following_id",id);
 
-            ${escapeHTML(
-                currentProfile.display_name
-            )}
+ const {
+  count:following
+ }=
+ await supabaseClient
+ .from("follows")
+ .select("*",{count:"exact",head:true})
+ .eq("follower_id",id);
 
-        </div>
+ let isFollowing=false;
 
-        <div class="profile-username">
+ if(id!==currentUser.id){
 
-            @${escapeHTML(
-                currentProfile.username
-            )}
+  const {
+   data
+  }=
+  await supabaseClient
+  .from("follows")
+  .select("id")
+  .eq("follower_id",currentUser.id)
+  .eq("following_id",id)
+  .maybeSingle();
 
-        </div>
+  isFollowing=!!data;
+ }
 
-        <div class="bio">
+ $("content").innerHTML=`
 
-            ${
-                currentProfile.bio
-                ?
-                escapeHTML(
-                    currentProfile.bio
-                )
-                :
-                "Расскажи о себе 👋"
-            }
+ <div class="profile-card">
 
-        </div>
+  ${avatarHTML(profile,"large")}
 
-        <div class="stats">
+  <div class="profile-name">
 
-            <div class="stat">
+   ${escapeHTML(
+    profile.display_name
+   )}
 
-                <strong>
-                    ${followers}
-                </strong>
+  </div>
 
-                <span>
-                    Подписчики
-                </span>
+  <div class="profile-username">
 
-            </div>
+   @${escapeHTML(
+    profile.username
+   )}
 
-            <div class="stat">
+  </div>
 
-                <strong>
-                    ${following}
-                </strong>
+  <div class="bio">
 
-                <span>
-                    Подписки
-                </span>
+   ${escapeHTML(
+    profile.bio||""
+   )}
 
-            </div>
+  </div>
 
-        </div>
+  <div class="stats">
 
-        <button
-            class="outline"
-            onclick="openEdit()">
+   <div class="stat">
 
-            ✏️ Редактировать профиль
+    <strong>${postsCount||0}</strong>
+    <span>Постов</span>
 
-        </button>
+   </div>
+
+   <div class="stat">
+
+    <strong>${followers||0}</strong>
+    <span>Подписчиков</span>
+
+   </div>
+
+   <div class="stat">
+
+    <strong>${following||0}</strong>
+    <span>Подписок</span>
+
+   </div>
+
+  </div>
+
+  ${
+   id===currentUser.id
+   ?
+   `
+   <button
+    class="outline"
+    onclick="openEdit()">
+
+    ✏️ Редактировать
+
+   </button>
+   `
+   :
+   `
+   <button
+    class="outline"
+    onclick="
+     toggleFollow(
+      '${id}',
+      ${isFollowing}
+     )
+    ">
+
+    ${
+     isFollowing
+     ?
+     "Отписаться"
+     :
+     "Подписаться"
+    }
+
+   </button>
+
+   <button
+    class="outline"
+    onclick="
+     openChat(
+      '${id}'
+     )
+    "
+    style="margin-left:6px">
+
+    💬 Написать
+
+   </button>
+   `
+  }
+
+ </div>
+
+ <div id="profilePosts"></div>
+
+ `;
+
+ loadUserPosts(id);
+}
+
+
+/* ================================
+USER POSTS
+================================ */
+
+async function loadUserPosts(id){
+
+ const box=$("profilePosts");
+
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("posts")
+ .select(`
+  *,
+  profiles(
+   id,
+   username,
+   display_name,
+   avatar_url
+  )
+ `)
+ .eq("user_id",id)
+ .order("created_at",{ascending:false});
+
+ if(error){
+
+  box.innerHTML=
+  `<div class="post">
+   ${escapeHTML(error.message)}
+  </div>`;
+
+  return;
+ }
+
+ if(!data?.length){
+
+  box.innerHTML=`
+  <div class="post">
+   <p style="color:var(--muted)">
+    Постов пока нет.
+   </p>
+  </div>`;
+
+  return;
+ }
+
+ box.innerHTML="";
+
+ for(const post of data){
+
+  const likes=
+  await getLikes(post.id);
+
+  const el=
+  document.createElement("article");
+
+  el.className="post";
+
+  el.innerHTML=`
+
+  <div class="post-header">
+
+   ${avatarHTML(post.profiles)}
+
+   <div>
+
+    <b>
+     ${escapeHTML(
+      post.profiles?.display_name||
+      post.profiles?.username
+     )}
+    </b>
+
+    <div class="post-date">
+     ${timeAgo(post.created_at)}
+    </div>
+
+   </div>
+
+  </div>
+
+  <div class="post-content">
+
+   ${escapeHTML(post.content)}
+
+  </div>
+
+  ${
+   post.image_url
+   ?
+   `
+   <img
+    class="post-image"
+    src="${escapeHTML(post.image_url)}">
+   `
+   :
+   ""
+  }
+
+  <div class="post-actions">
+
+   <span class="action">
+    ❤️ ${likes.length}
+   </span>
+
+  </div>
+
+  `;
+
+  box.appendChild(el);
+ }
+}
+
+
+/* ================================
+FOLLOW
+================================ */
+
+async function toggleFollow(
+ userId,
+ following
+){
+
+ if(following){
+
+  await supabaseClient
+  .from("follows")
+  .delete()
+  .eq(
+   "follower_id",
+   currentUser.id
+  )
+  .eq(
+   "following_id",
+   userId
+  );
+
+ }else{
+
+  const {
+   error
+  }=
+  await supabaseClient
+  .from("follows")
+  .insert({
+
+   follower_id:currentUser.id,
+   following_id:userId
+
+  });
+
+  if(error){
+
+   toast(error.message);
+
+   return;
+  }
+ }
+
+ showProfile(userId);
+}
+
+
+/* ================================
+SEARCH
+================================ */
+
+function showSearch(){
+
+ $("content").innerHTML=`
+
+ <div class="search-card">
+
+  <h2>🔎 Найти людей</h2>
+
+  <input
+   id="searchInput"
+   class="search-input"
+   placeholder="Введите username или имя..."
+   oninput="searchUsers()">
+
+ </div>
+
+ <div id="searchResults"></div>
+
+ `;
+}
+
+
+async function searchUsers(){
+
+ const q=
+ $("searchInput")
+ .value
+ .trim();
+
+ const box=
+ $("searchResults");
+
+ if(!q){
+
+  box.innerHTML="";
+
+  return;
+ }
+
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("profiles")
+ .select("*")
+ .or(
+  `username.ilike.%${q}%,display_name.ilike.%${q}%`
+ )
+ .limit(20);
+
+ if(error){
+
+  box.innerHTML=
+  `<div class="post">
+   ${escapeHTML(error.message)}
+  </div>`;
+
+  return;
+ }
+
+ if(!data?.length){
+
+  box.innerHTML=`
+   <div class="post">
+    Никого не нашли 😕
+   </div>`;
+
+  return;
+ }
+
+ box.innerHTML=data.map(user=>`
+
+ <div class="user-result">
+
+  <div class="user-info">
+
+   ${avatarHTML(user)}
+
+   <div>
+
+    <div class="user-name">
+
+     ${escapeHTML(
+      user.display_name
+     )}
 
     </div>
 
-    <div id="profilePosts"></div>
+    <div class="user-handle">
 
-    `;
+     @${escapeHTML(
+      user.username
+     )}
 
-    await loadUserPosts(
-        currentUser.id,
-        "profilePosts"
-    );
+    </div>
+
+   </div>
+
+  </div>
+
+  <button
+   class="outline"
+   onclick="
+    showProfile(
+     '${user.id}'
+    )
+   ">
+
+   Открыть
+
+  </button>
+
+ </div>
+
+ `).join("");
 }
 
 
-/* =========================================
-   REFRESH PROFILE
-========================================= */
-
-async function refreshProfile(){
-
-    const {data,error} =
-        await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id",currentUser.id)
-        .single();
-
-    if(!error)
-        currentProfile=data;
-
-    updateSideUser();
-}
-
-
-/* =========================================
-   USER POSTS
-========================================= */
-
-async function loadUserPosts(
-    userId,
-    containerId
-){
-
-    const box=$(containerId);
-
-    if(!box)return;
-
-    const {data,error} =
-        await supabaseClient
-        .from("posts")
-        .select(`
-            *,
-            profiles(
-                id,
-                username,
-                display_name,
-                avatar_url
-            )
-        `)
-        .eq("user_id",userId)
-        .order(
-            "created_at",
-            {ascending:false}
-        );
-
-    if(error){
-
-        box.innerHTML=`
-        <div class="post">
-            ${escapeHTML(error.message)}
-        </div>
-        `;
-
-        return;
-    }
-
-    if(!data.length){
-
-        box.innerHTML=`
-        <div class="post">
-            Пока нет постов.
-        </div>
-        `;
-
-        return;
-    }
-
-    box.innerHTML=data.map(post=>`
-
-        <article class="post">
-
-            <div class="post-header">
-
-                ${avatarHTML(
-                    post.profiles
-                )}
-
-                <div>
-
-                    <div class="post-author">
-
-                        ${escapeHTML(
-                            post.profiles?.display_name||
-                            "User"
-                        )}
-
-                    </div>
-
-                    <div class="post-username">
-
-                        @${escapeHTML(
-                            post.profiles?.username||
-                            ""
-                        )}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="post-content">
-
-                ${escapeHTML(
-                    post.content
-                )}
-
-            </div>
-
-            ${
-                post.image_url
-                ?
-                `<img
-                    class="post-image"
-                    src="${escapeHTML(
-                        post.image_url
-                    )}">`
-                :
-                ""
-            }
-
-        </article>
-
-    `).join("");
-}
-
-
-/* =========================================
-   EDIT PROFILE
-========================================= */
+/* ================================
+EDIT PROFILE
+================================ */
 
 function openEdit(){
 
-    if(!currentProfile)return;
+ $("editName").value=
+ currentProfile?.display_name||"";
 
-    $("editName").value =
-        currentProfile.display_name||"";
+ $("editAvatar").value=
+ currentProfile?.avatar_url||"";
 
-    $("editAvatar").value =
-        currentProfile.avatar_url||"";
+ $("editBio").value=
+ currentProfile?.bio||"";
 
-    $("editBio").value =
-        currentProfile.bio||"";
-
-    $("editModal")
-        .classList
-        .remove("hidden");
+ $("editModal")
+ .classList
+ .remove("hidden");
 }
 
 
 function closeEdit(){
 
-    $("editModal")
-        .classList
-        .add("hidden");
+ $("editModal")
+ .classList
+ .add("hidden");
 }
 
 
 async function saveProfile(){
 
-    const display_name =
-        $("editName").value.trim();
+ const name=
+ $("editName").value.trim();
 
-    const avatar_url =
-        $("editAvatar").value.trim();
+ const avatar=
+ $("editAvatar").value.trim();
 
-    const bio =
-        $("editBio").value.trim();
+ const bio=
+ $("editBio").value.trim();
 
-    if(!display_name){
+ if(!name){
 
-        toast("Имя не может быть пустым");
+  toast("Введите имя");
 
-        return;
-    }
+  return;
+ }
 
-    const {data,error} =
-        await supabaseClient
-        .from("profiles")
-        .update({
-            display_name,
-            avatar_url,
-            bio
-        })
-        .eq("id",currentUser.id)
-        .select()
-        .single();
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("profiles")
+ .update({
 
-    if(error){
+  display_name:name,
+  avatar_url:avatar,
+  bio:bio
 
-        toast(error.message);
+ })
+ .eq("id",currentUser.id)
+ .select()
+ .single();
 
-        return;
-    }
+ if(error){
 
-    currentProfile=data;
+  toast(error.message);
 
-    updateSideUser();
+  return;
+ }
 
-    closeEdit();
+ currentProfile=data;
 
-    toast("Профиль обновлён ✨");
+ updateSideUser();
 
-    await showProfile();
+ closeEdit();
+
+ toast("Профиль обновлён ✅");
+
+ showProfile();
 }
 
 
-/* =========================================
-   SEARCH
-========================================= */
-
-function showSearch(){
-
-    $("content").innerHTML=`
-
-    <div class="search-card">
-
-        <h2>
-            🔎 Найти людей
-        </h2>
-
-        <input
-            id="searchInput"
-            class="search-input"
-            placeholder="Имя или username..."
-            oninput="searchUsers()">
-
-    </div>
-
-    <div id="searchResults"></div>
-
-    `;
-}
-
-
-let searchTimeout;
-
-
-function searchUsers(){
-
-    clearTimeout(searchTimeout);
-
-    searchTimeout =
-        setTimeout(
-            performSearch,
-            300
-        );
-}
-
-
-async function performSearch(){
-
-    const input =
-        $("searchInput");
-
-    if(!input)return;
-
-    const query =
-        input.value
-        .trim()
-        .toLowerCase();
-
-    const results =
-        $("searchResults");
-
-    if(!query){
-
-        results.innerHTML="";
-
-        return;
-    }
-
-    const {data,error} =
-        await supabaseClient
-        .from("profiles")
-        .select("*")
-        .or(
-            `username.ilike.%${query}%,display_name.ilike.%${query}%`
-        )
-        .limit(20);
-
-    if(error){
-
-        results.innerHTML=`
-        <div class="post">
-            ${escapeHTML(error.message)}
-        </div>
-        `;
-
-        return;
-    }
-
-    const users =
-        (data||[]).filter(
-            user=>user.id!==currentUser.id
-        );
-
-    if(!users.length){
-
-        results.innerHTML=`
-        <div class="post">
-            Никого не нашли 😢
-        </div>
-        `;
-
-        return;
-    }
-
-    results.innerHTML =
-        users.map(user=>`
-
-        <div class="user-result">
-
-            <div class="user-info">
-
-                ${avatarHTML(user)}
-
-                <div>
-
-                    <div class="user-name">
-
-                        ${escapeHTML(
-                            user.display_name
-                        )}
-
-                    </div>
-
-                    <div class="user-handle">
-
-                        @${escapeHTML(
-                            user.username
-                        )}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <button
-                class="open-btn"
-                onclick="viewUser('${user.id}')">
-
-                Открыть
-
-            </button>
-
-        </div>
-
-    `).join("");
-}
-
-
-/* =========================================
-   VIEW USER
-========================================= */
-
-async function viewUser(userId){
-
-    const {data:user,error} =
-        await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id",userId)
-        .single();
-
-    if(error||!user){
-
-        toast("Пользователь не найден");
-
-        return;
-    }
-
-    const followers =
-        await countFollowers(userId);
-
-    const following =
-        await countFollowing(userId);
-
-    const {data:follow} =
-        await supabaseClient
-        .from("follows")
-        .select("*")
-        .eq(
-            "follower_id",
-            currentUser.id
-        )
-        .eq(
-            "following_id",
-            userId
-        )
-        .maybeSingle();
-
-    const isFollowing=!!follow;
-
-    $("content").innerHTML=`
-
-    <div class="profile-card">
-
-        ${avatarHTML(
-            user,
-            "large"
-        )}
-
-        <div class="profile-name">
-
-            ${escapeHTML(
-                user.display_name
-            )}
-
-        </div>
-
-        <div class="profile-username">
-
-            @${escapeHTML(
-                user.username
-            )}
-
-        </div>
-
-        <div class="bio">
-
-            ${
-                user.bio
-                ?
-                escapeHTML(user.bio)
-                :
-                "Нет информации о себе."
-            }
-
-        </div>
-
-        <div class="stats">
-
-            <div class="stat">
-
-                <strong>
-                    ${followers}
-                </strong>
-
-                <span>
-                    Подписчики
-                </span>
-
-            </div>
-
-            <div class="stat">
-
-                <strong>
-                    ${following}
-                </strong>
-
-                <span>
-                    Подписки
-                </span>
-
-            </div>
-
-        </div>
-
-        <div style="
-            display:flex;
-            justify-content:center;
-            gap:8px;
-            flex-wrap:wrap;
-        ">
-
-            <button
-                class="primary"
-                style="width:auto"
-                onclick="toggleFollow(
-                    '${user.id}',
-                    ${isFollowing}
-                )">
-
-                ${
-                    isFollowing
-                    ?
-                    "Отписаться"
-                    :
-                    "Подписаться"
-                }
-
-            </button>
-
-            <button
-                class="outline"
-                onclick="openChat(
-                    '${user.id}'
-                )">
-
-                💬 Написать
-
-            </button>
-
-        </div>
-
-    </div>
-
-    <div id="otherUserPosts"></div>
-
-    `;
-
-    await loadUserPosts(
-        userId,
-        "otherUserPosts"
-    );
-}
-
-
-/* =========================================
-   FOLLOW
-========================================= */
-
-async function countFollowers(userId){
-
-    const {count,error} =
-        await supabaseClient
-        .from("follows")
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "following_id",
-            userId
-        );
-
-    if(error)return 0;
-
-    return count||0;
-}
-
-
-async function countFollowing(userId){
-
-    const {count,error} =
-        await supabaseClient
-        .from("follows")
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "follower_id",
-            userId
-        );
-
-    if(error)return 0;
-
-    return count||0;
-}
-
-
-async function toggleFollow(
-    userId,
-    following
-){
-
-    if(following){
-
-        const {error} =
-            await supabaseClient
-            .from("follows")
-            .delete()
-            .eq(
-                "follower_id",
-                currentUser.id
-            )
-            .eq(
-                "following_id",
-                userId
-            );
-
-        if(error){
-
-            toast(error.message);
-
-            return;
-        }
-
-        toast("Ты отписался");
-
-    }else{
-
-        const {error} =
-            await supabaseClient
-            .from("follows")
-            .insert({
-                follower_id:currentUser.id,
-                following_id:userId
-            });
-
-        if(error){
-
-            toast(error.message);
-
-            return;
-        }
-
-        toast("Ты подписался 🎉");
-    }
-
-    await viewUser(userId);
-}
-
-
-/* =========================================
-   CHAT
-========================================= */
+/* ================================
+CHAT
+================================ */
 
 async function openChat(userId){
 
-    const {data:user,error} =
-        await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id",userId)
-        .single();
+ const {
+  data:user,
+  error
+ }=
+ await supabaseClient
+ .from("profiles")
+ .select("*")
+ .eq("id",userId)
+ .single();
 
-    if(error||!user){
+ if(error){
 
-        toast("Пользователь не найден");
+  toast(error.message);
 
-        return;
-    }
+  return;
+ }
 
-    chatUser=user;
+ chatUser=user;
 
-    $("content").innerHTML=`
+ $("content").innerHTML=`
 
-    <div class="chat-card">
+ <div class="chat-card">
 
-        <div class="chat-header">
+  <div class="chat-header">
 
-            ${avatarHTML(
-                user,
-                "small"
-            )}
+   ${avatarHTML(user,"small")}
 
-            <div style="flex:1">
+   <div>
 
-                <div style="
-                    font-weight:800
-                ">
+    <b>
+     ${escapeHTML(
+      user.display_name
+     )}
+    </b>
 
-                    ${escapeHTML(
-                        user.display_name
-                    )}
+    <div style="
+     color:var(--muted);
+     font-size:12px">
 
-                </div>
-
-                <div style="
-                    color:var(--muted);
-                    font-size:13px
-                ">
-
-                    @${escapeHTML(
-                        user.username
-                    )}
-
-                </div>
-
-            </div>
-
-            <button
-                class="outline"
-                onclick="viewUser(
-                    '${user.id}'
-                )">
-
-                Профиль
-
-            </button>
-
-        </div>
-
-        <div
-            id="chatMessages"
-            class="chat-messages">
-
-            <div class="loading">
-                Загрузка...
-            </div>
-
-        </div>
-
-        <div class="chat-input-row">
-
-            <input
-                id="chatInput"
-                class="chat-input"
-                placeholder="Написать сообщение..."
-                maxlength="1000"
-                onkeydown="
-                    if(event.key==='Enter'){
-                        event.preventDefault();
-                        sendMessage();
-                    }
-                ">
-
-            <button
-                class="chat-send"
-                onclick="sendMessage()">
-
-                ➤
-
-            </button>
-
-        </div>
+     @${escapeHTML(
+      user.username
+     )}
 
     </div>
 
-    `;
+   </div>
 
-    await loadChat();
+  </div>
+
+  <div
+   id="chatMessages"
+   class="chat-messages">
+
+   Загрузка...
+
+  </div>
+
+  <div class="chat-input-row">
+
+   <input
+    id="chatInput"
+    class="chat-input"
+    placeholder="Написать сообщение..."
+    onkeydown="
+     if(event.key==='Enter')
+      sendMessage()
+    ">
+
+   <button
+    class="chat-send"
+    onclick="sendMessage()">
+
+    ➤
+
+   </button>
+
+  </div>
+
+ </div>
+
+ `;
+
+ loadChat();
 }
 
 
 async function loadChat(){
 
-    const box =
-        $("chatMessages");
+ if(!chatUser)
+  return;
 
-    if(!box||!chatUser)return;
+ const {
+  data,
+  error
+ }=
+ await supabaseClient
+ .from("messages")
+ .select("*")
+ .or(
+  `and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatUser.id}),and(sender_id.eq.${chatUser.id},receiver_id.eq.${currentUser.id})`
+ )
+ .order(
+  "created_at",
+  {ascending:true}
+ );
 
-    const {data,error} =
-        await supabaseClient
-        .from("messages")
-        .select("*")
-        .or(
-            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${chatUser.id}),and(sender_id.eq.${chatUser.id},receiver_id.eq.${currentUser.id})`
-        )
-        .order(
-            "created_at",
-            {
-                ascending:true
-            }
-        );
+ const box=$("chatMessages");
 
-    if(error){
+ if(error){
 
-        box.innerHTML=`
-        <div style="
-            color:var(--danger)">
+  box.innerHTML=
+  `<div>${escapeHTML(error.message)}</div>`;
 
-            ${escapeHTML(
-                error.message
-            )}
+  return;
+ }
 
-        </div>
-        `;
+ if(!data?.length){
 
-        return;
-    }
+  box.innerHTML=`
+   <div style="
+    color:var(--muted);
+    text-align:center">
 
-    const messages=data||[];
+    Начните общение 👋
 
-    if(!messages.length){
+   </div>`;
 
-        box.innerHTML=`
-        <div style="
-            color:var(--muted);
-            text-align:center;
-            margin:auto">
+  return;
+ }
 
-            Пока нет сообщений 👋
-            <br>
-            Напиши первым!
+ box.innerHTML=data.map(message=>`
 
-        </div>
-        `;
+  <div class="
+   chat-message
+   ${
+    message.sender_id===
+    currentUser.id
+    ?
+    "mine"
+    :
+    "theirs"
+   }">
 
-        return;
-    }
+   ${escapeHTML(
+    message.content
+   )}
 
-    box.innerHTML =
-        messages.map(message=>{
+  </div>
 
-            const mine =
-                message.sender_id===
-                currentUser.id;
+ `).join("");
 
-            return `
-
-            <div class="
-                chat-message
-                ${mine?"mine":"theirs"}
-            ">
-
-                ${escapeHTML(
-                    message.content
-                )}
-
-            </div>
-
-            `;
-
-        }).join("");
-
-    box.scrollTop =
-        box.scrollHeight;
+ box.scrollTop=box.scrollHeight;
 }
 
 
 async function sendMessage(){
 
-    if(!chatUser)return;
+ const input=$("chatInput");
 
-    const input =
-        $("chatInput");
+ const text=
+ input.value.trim();
 
-    const content =
-        input.value.trim();
+ if(!text||!chatUser)
+  return;
 
-    if(!content)return;
+ const {
+  error
+ }=
+ await supabaseClient
+ .from("messages")
+ .insert({
 
-    const {error} =
-        await supabaseClient
-        .from("messages")
-        .insert({
-            sender_id:currentUser.id,
-            receiver_id:chatUser.id,
-            content:content
-        });
+  sender_id:currentUser.id,
+  receiver_id:chatUser.id,
+  content:text
 
-    if(error){
+ });
 
-        toast(error.message);
+ if(error){
 
-        console.error(error);
+  toast(error.message);
 
-        return;
-    }
+  return;
+ }
 
-    input.value="";
+ input.value="";
 
-    await loadChat();
+ loadChat();
 }
 
 
-/* =========================================
-   AUTH STATE
-========================================= */
+/* ================================
+DARK MODE
+================================ */
+
+function toggleDark(){
+
+ document.body.classList.toggle("dark");
+
+ localStorage.setItem(
+  "nurlink_dark",
+  document.body.classList.contains("dark")
+ );
+}
+
+if(
+ localStorage.getItem("nurlink_dark")==="true"
+){
+
+ document.body.classList.add("dark");
+
+}
+
+
+/* ================================
+AUTH STATE
+================================ */
 
 supabaseClient.auth.onAuthStateChange(
-    async(event,session)=>{
+ async(event,session)=>{
 
-        if(session){
+  if(session){
 
-            currentUser=session.user;
+   currentUser=session.user;
 
-            await loadApp();
+   await loadApp();
 
-        }
-    }
+  }else{
+
+   showAuth();
+
+  }
+
+ }
 );
 
 
-/* =========================================
-   START
-========================================= */
+/* ================================
+START
+================================ */
 
 (async function(){
 
-    const {
-        data:{session}
-    } =
-        await supabaseClient
-        .auth
-        .getSession();
+ const {
+  data:{session}
+ }=
+ await supabaseClient.auth.getSession();
 
-    if(session){
+ if(session){
 
-        currentUser=session.user;
+  currentUser=session.user;
 
-        await loadApp();
+  await loadApp();
 
-    }else{
+ }else{
 
-        showAuth();
-    }
+  showAuth();
+
+ }
 
 })();
 
