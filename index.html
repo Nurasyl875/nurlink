@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Nurlink</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,19 +16,22 @@
 
 :root{
     --bg:#f5f6fa;
-    --card:#fff;
+    --card:#ffffff;
+    --card2:#fafafa;
     --text:#15151a;
     --muted:#777b87;
     --border:#e5e7eb;
     --primary:#6d4aff;
     --primary2:#8c63ff;
     --danger:#e5484d;
+    --success:#22a06b;
     --shadow:0 8px 30px rgba(0,0,0,.07);
 }
 
 body.dark{
     --bg:#0c0d12;
     --card:#15161d;
+    --card2:#111218;
     --text:#f4f4f5;
     --muted:#979aa5;
     --border:#292b34;
@@ -51,11 +53,26 @@ button{
     cursor:pointer;
 }
 
+button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
 .hidden{
     display:none!important;
 }
 
-/* TOP */
+svg{
+    width:20px;
+    height:20px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+/* TOPBAR */
 
 .topbar{
     position:fixed;
@@ -77,11 +94,12 @@ button{
     font-weight:800;
     color:var(--primary);
     cursor:pointer;
+    letter-spacing:-.5px;
 }
 
 .top-actions{
     display:flex;
-    gap:10px;
+    gap:8px;
 }
 
 .icon-btn{
@@ -91,6 +109,9 @@ button{
     background:var(--card);
     color:var(--text);
     border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .icon-btn:hover{
@@ -136,7 +157,9 @@ button{
 
 .nav-icon{
     width:22px;
-    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 /* MAIN */
@@ -159,6 +182,7 @@ button{
 
 .page-title{
     font-size:28px;
+    font-weight:800;
     margin-bottom:20px;
 }
 
@@ -217,7 +241,7 @@ button{
     border:0;
     border-radius:12px;
     padding:13px 16px;
-    color:white;
+    color:#fff;
     background:var(--primary);
     font-weight:700;
 }
@@ -226,17 +250,16 @@ button{
     background:var(--primary2);
 }
 
-.primary-btn:disabled{
-    opacity:.6;
-    cursor:not-allowed;
-}
-
 .secondary-btn{
     border:1px solid var(--border);
     background:var(--card);
     color:var(--text);
     border-radius:12px;
     padding:11px 15px;
+}
+
+.secondary-btn:hover{
+    background:var(--bg);
 }
 
 .auth-switch{
@@ -251,7 +274,19 @@ button{
     font-weight:700;
 }
 
-/* CREATE */
+/* HOME */
+
+.home-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.home-title{
+    font-size:28px;
+    font-weight:800;
+}
 
 .create-box{
     background:var(--card);
@@ -339,9 +374,14 @@ button{
 
 .stories{
     display:flex;
-    gap:12px;
+    gap:13px;
     overflow-x:auto;
-    padding:4px 2px 18px;
+    padding:3px 2px 18px;
+    scrollbar-width:none;
+}
+
+.stories::-webkit-scrollbar{
+    display:none;
 }
 
 .story{
@@ -393,6 +433,7 @@ button{
 
 .post-user{
     flex:1;
+    cursor:pointer;
 }
 
 .post-name{
@@ -443,6 +484,9 @@ button{
     color:var(--muted);
     padding:8px 10px;
     border-radius:9px;
+    display:flex;
+    align-items:center;
+    gap:5px;
 }
 
 .post-action:hover{
@@ -516,6 +560,7 @@ button{
 
 .user-info{
     flex:1;
+    cursor:pointer;
 }
 
 .user-name{
@@ -527,29 +572,55 @@ button{
     font-size:13px;
 }
 
-/* PROFILE */
+/* PUBLIC PROFILE */
 
-.profile-header{
+.public-profile{
     background:var(--card);
     border:1px solid var(--border);
     border-radius:20px;
-    padding:25px;
-    text-align:center;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.profile-cover{
+    height:150px;
+    background:linear-gradient(
+        135deg,
+        #6d4aff,
+        #9a67ff,
+        #d05cff
+    );
+}
+
+.profile-main{
+    padding:0 24px 24px;
+}
+
+.profile-avatar-wrap{
+    margin-top:-52px;
+    position:relative;
+    margin-bottom:12px;
 }
 
 .profile-avatar{
-    width:100px;
-    height:100px;
+    width:104px;
+    height:104px;
     border-radius:50%;
     object-fit:cover;
-    margin:auto;
-    display:block;
+    border:5px solid var(--card);
+    background:var(--card);
+}
+
+.profile-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:15px;
 }
 
 .profile-name{
-    font-size:23px;
+    font-size:24px;
     font-weight:800;
-    margin-top:12px;
 }
 
 .profile-username{
@@ -560,11 +631,11 @@ button{
 .profile-bio{
     margin-top:12px;
     line-height:1.5;
+    max-width:600px;
 }
 
 .profile-stats{
     display:flex;
-    justify-content:center;
     gap:35px;
     margin-top:20px;
 }
@@ -577,6 +648,62 @@ button{
 .stat span{
     color:var(--muted);
     font-size:12px;
+}
+
+.profile-tabs{
+    display:flex;
+    border-top:1px solid var(--border);
+    margin-top:22px;
+}
+
+.profile-tab{
+    flex:1;
+    padding:13px;
+    border:0;
+    background:transparent;
+    color:var(--muted);
+}
+
+.profile-tab.active{
+    color:var(--primary);
+    font-weight:700;
+    border-bottom:2px solid var(--primary);
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:3px;
+    margin-top:12px;
+}
+
+.profile-grid-item{
+    aspect-ratio:1/1;
+    overflow:hidden;
+    background:var(--bg);
+    cursor:pointer;
+}
+
+.profile-grid-item img,
+.profile-grid-item video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.profile-grid-video{
+    position:relative;
+}
+
+.profile-grid-video span{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:rgba(0,0,0,.65);
+    color:#fff;
+    border-radius:7px;
+    padding:4px 7px;
+    font-size:10px;
 }
 
 /* MESSAGES */
@@ -661,7 +788,7 @@ button{
 /* SHORTS */
 
 .shorts-page{
-    max-width:550px;
+    max-width:560px;
 }
 
 .shorts-header{
@@ -694,11 +821,12 @@ button{
 
 .short-card{
     position:relative;
+    width:100%;
     height:calc(100vh - 125px);
     min-height:500px;
     scroll-snap-align:start;
     background:#000;
-    border-radius:18px;
+    border-radius:20px;
     overflow:hidden;
     margin-bottom:12px;
 }
@@ -718,16 +846,16 @@ button{
     background:
         linear-gradient(
             to top,
-            rgba(0,0,0,.82),
-            transparent 45%,
-            rgba(0,0,0,.1)
+            rgba(0,0,0,.88),
+            transparent 48%,
+            rgba(0,0,0,.12)
         );
 }
 
 .short-info{
     position:absolute;
     left:18px;
-    right:80px;
+    right:85px;
     bottom:22px;
     color:#fff;
 }
@@ -754,15 +882,16 @@ button{
 
 .short-action{
     width:48px;
-    height:48px;
+    min-height:48px;
     border:0;
     border-radius:50%;
-    background:rgba(0,0,0,.55);
+    background:rgba(0,0,0,.58);
     color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:12px;
+    font-size:10px;
+    padding:6px;
 }
 
 .short-action.liked{
@@ -773,6 +902,9 @@ button{
     position:absolute;
     top:15px;
     right:15px;
+    border-radius:12px;
+    width:auto;
+    padding:0 13px;
 }
 
 .video-badge{
@@ -784,6 +916,35 @@ button{
     color:#fff;
     border-radius:8px;
     font-size:12px;
+}
+
+.short-comments{
+    position:absolute;
+    left:15px;
+    right:70px;
+    bottom:15px;
+    max-height:55%;
+    overflow:auto;
+    background:rgba(0,0,0,.88);
+    border-radius:15px;
+    padding:14px;
+    color:#fff;
+    z-index:4;
+}
+
+.short-comment{
+    padding:8px 0;
+    border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.short-comment-form{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
+}
+
+.short-comment-form input{
+    flex:1;
 }
 
 /* ROOMS */
@@ -917,6 +1078,7 @@ button{
     width:42px;
     height:42px;
     border-radius:50%;
+    z-index:2;
 }
 
 /* MOBILE */
@@ -930,6 +1092,28 @@ button{
     text-align:center;
     color:var(--muted);
     padding:30px 10px;
+}
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:1000;
+    background:var(--card);
+    color:var(--text);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    padding:13px 17px;
+    border-radius:12px;
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
 }
 
 @media(max-width:850px){
@@ -963,7 +1147,7 @@ button{
 
     .mobile-item{
         color:var(--muted);
-        font-size:12px;
+        font-size:11px;
         text-align:center;
         cursor:pointer;
     }
@@ -973,8 +1157,16 @@ button{
     }
 
     .mobile-icon{
-        font-size:20px;
+        height:24px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
         margin-bottom:2px;
+    }
+
+    .mobile-icon svg{
+        width:19px;
+        height:19px;
     }
 
     .messages-layout{
@@ -1007,6 +1199,14 @@ button{
     .shorts-header-actions{
         flex-direction:column;
     }
+
+    .profile-top{
+        flex-direction:column;
+    }
+
+    .profile-grid{
+        gap:2px;
+    }
 }
 </style>
 </head>
@@ -1019,9 +1219,7 @@ button{
 
     <div class="auth-box">
 
-        <div class="auth-logo">
-            Nurlink
-        </div>
+        <div class="auth-logo">Nurlink</div>
 
         <div class="auth-subtitle">
             Общайся. Создавай. Находи людей.
@@ -1029,79 +1227,56 @@ button{
 
         <div id="loginForm">
 
-            <input
-                id="loginEmail"
-                class="input"
-                type="email"
-                placeholder="Email"
-            >
+            <input id="loginEmail"
+                   class="input"
+                   type="email"
+                   placeholder="Email">
 
-            <input
-                id="loginPassword"
-                class="input"
-                type="password"
-                placeholder="Пароль"
-            >
+            <input id="loginPassword"
+                   class="input"
+                   type="password"
+                   placeholder="Пароль">
 
-            <button
-                class="primary-btn"
-                onclick="login()"
-            >
+            <button class="primary-btn"
+                    onclick="login()">
                 Войти
             </button>
 
             <div class="auth-switch">
                 Нет аккаунта?
-                <span onclick="showRegister()">
-                    Создать
-                </span>
+                <span onclick="showRegister()">Создать</span>
             </div>
 
         </div>
 
-        <div
-            id="registerForm"
-            class="hidden"
-        >
+        <div id="registerForm" class="hidden">
 
-            <input
-                id="registerUsername"
-                class="input"
-                placeholder="Username"
-            >
+            <input id="registerUsername"
+                   class="input"
+                   placeholder="Username">
 
-            <input
-                id="registerName"
-                class="input"
-                placeholder="Имя"
-            >
+            <input id="registerName"
+                   class="input"
+                   placeholder="Имя">
 
-            <input
-                id="registerEmail"
-                class="input"
-                type="email"
-                placeholder="Email"
-            >
+            <input id="registerEmail"
+                   class="input"
+                   type="email"
+                   placeholder="Email">
 
-            <input
-                id="registerPassword"
-                class="input"
-                type="password"
-                placeholder="Пароль"
-            >
+            <input id="registerPassword"
+                   class="input"
+                   type="password"
+                   placeholder="Пароль">
 
-            <button
-                class="primary-btn"
-                onclick="register()"
-            >
+            <button class="primary-btn"
+                    onclick="register()">
                 Создать аккаунт
             </button>
 
             <div class="auth-switch">
                 Уже есть аккаунт?
-                <span onclick="showLogin()">
-                    Войти
-                </span>
+                <span onclick="showLogin()">Войти</span>
             </div>
 
         </div>
@@ -1115,574 +1290,534 @@ button{
 
 <div id="app" class="hidden">
 
-    <header class="topbar">
+<header class="topbar">
 
-        <div
-            class="logo"
-            onclick="showPage('home')"
-        >
-            Nurlink
-        </div>
+    <div class="logo"
+         onclick="showPage('home')">
+        Nurlink
+    </div>
 
-        <div class="top-actions">
+    <div class="top-actions">
 
-            <button
-                class="icon-btn"
+        <button class="icon-btn"
                 onclick="toggleTheme()"
-            >
-                ◐
-            </button>
+                title="Тема">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+            </svg>
+        </button>
 
-            <button
-                class="icon-btn"
+        <button class="icon-btn"
                 onclick="showPage('notifications')"
-            >
-                ♢
-            </button>
+                title="Уведомления">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path d="M13.7 21a2 2 0 0 1-3.4 0"></path>
+            </svg>
+        </button>
 
-            <button
-                class="icon-btn"
+        <button class="icon-btn"
                 onclick="logout()"
-            >
-                ×
+                title="Выйти">
+            <svg viewBox="0 0 24 24">
+                <path d="M10 17l5-5-5-5"></path>
+                <path d="M15 12H3"></path>
+                <path d="M21 19V5a2 2 0 0 0-2-2h-7"></path>
+            </svg>
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="nav-item active"
+         data-page="home"
+         onclick="showPage('home')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path>
+            </svg>
+        </span>
+
+        Главная
+    </div>
+
+    <div class="nav-item"
+         data-page="explore"
+         onclick="showPage('explore')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-4-4"></path>
+            </svg>
+        </span>
+
+        Обзор
+    </div>
+
+    <div class="nav-item"
+         data-page="shorts"
+         onclick="showPage('shorts')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                <path d="m10 9 5 3-5 3z"></path>
+            </svg>
+        </span>
+
+        Shorts
+    </div>
+
+    <div class="nav-item"
+         data-page="notifications"
+         onclick="showPage('notifications')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path d="M13.7 21a2 2 0 0 1-3.4 0"></path>
+            </svg>
+        </span>
+
+        Уведомления
+    </div>
+
+    <div class="nav-item"
+         data-page="messages"
+         onclick="showPage('messages')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.8 9.8 0 0 1-4-.8L3 21l1.8-4A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"></path>
+            </svg>
+        </span>
+
+        Сообщения
+    </div>
+
+    <div class="nav-item"
+         data-page="rooms"
+         onclick="showPage('rooms')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                <path d="M8 9h8"></path>
+                <path d="M8 13h5"></path>
+            </svg>
+        </span>
+
+        Rooms
+    </div>
+
+    <div class="nav-item"
+         data-page="profile"
+         onclick="showPage('profile')">
+
+        <span class="nav-icon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+            </svg>
+        </span>
+
+        Профиль
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+    <div class="home-header">
+        <div class="home-title">Главная</div>
+    </div>
+
+    <div id="stories" class="stories"></div>
+
+    <div class="create-box">
+
+        <div class="create-row">
+
+            <img id="createAvatar"
+                 class="avatar"
+                 src="">
+
+            <div class="create-text">
+
+                <textarea id="postContent"
+                          placeholder="Что нового?"></textarea>
+
+            </div>
+
+        </div>
+
+        <div id="postPreview" class="preview"></div>
+
+        <div class="create-bottom">
+
+            <label class="file-label">
+
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                    <circle cx="8.5" cy="9" r="1.5"></circle>
+                    <path d="m21 15-5-5L5 21"></path>
+                </svg>
+
+                Фото / видео
+
+                <input id="postImage"
+                       type="file"
+                       accept="image/*,video/*"
+                       onchange="previewPostFile()">
+
+            </label>
+
+            <button class="publish-btn"
+                    onclick="createPost()">
+                Опубликовать
             </button>
 
         </div>
 
-    </header>
+    </div>
+
+    <div id="feed">
+        <div class="loading">Загрузка...</div>
+    </div>
+
+</section>
 
 
-    <!-- SIDEBAR -->
+<!-- EXPLORE -->
 
-    <aside class="sidebar">
+<section id="explore" class="page">
 
-        <div
-            class="nav-item active"
-            data-page="home"
-            onclick="showPage('home')"
-        >
-            <span class="nav-icon">⌂</span>
-            Главная
-        </div>
+    <div class="page-title">Обзор</div>
 
-        <div
-            class="nav-item"
-            data-page="explore"
-            onclick="showPage('explore')"
-        >
-            <span class="nav-icon">⌕</span>
-            Обзор
-        </div>
+    <div class="search-box">
 
-        <div
-            class="nav-item"
-            data-page="shorts"
-            onclick="showPage('shorts')"
-        >
-            <span class="nav-icon">▶</span>
-            Shorts
-        </div>
+        <input id="searchInput"
+               class="input"
+               placeholder="Найти людей..."
+               onkeydown="if(event.key==='Enter')searchUsers()">
 
-        <div
-            class="nav-item"
-            data-page="notifications"
-            onclick="showPage('notifications')"
-        >
-            <span class="nav-icon">♢</span>
-            Уведомления
-        </div>
+        <button class="primary-btn"
+                style="width:auto"
+                onclick="searchUsers()">
+            Найти
+        </button>
 
-        <div
-            class="nav-item"
-            data-page="messages"
-            onclick="showPage('messages')"
-        >
-            <span class="nav-icon">□</span>
-            Сообщения
-        </div>
+    </div>
 
-        <div
-            class="nav-item"
-            data-page="rooms"
-            onclick="showPage('rooms')"
-        >
-            <span class="nav-icon">◫</span>
-            Rooms
-        </div>
+    <div id="searchResults"></div>
 
-        <div
-            class="nav-item"
-            data-page="profile"
-            onclick="showPage('profile')"
-        >
-            <span class="nav-icon">○</span>
-            Профиль
-        </div>
-
-    </aside>
+</section>
 
 
-    <main class="main">
+<!-- SHORTS -->
 
-        <!-- HOME -->
+<section id="shorts"
+         class="page shorts-page">
 
-        <section
-            id="home"
-            class="page active"
-        >
+    <div class="shorts-header">
 
-            <div class="page-title">
-                Главная
-            </div>
+        <h1>Shorts</h1>
 
-            <div
-                id="stories"
-                class="stories"
-            ></div>
+        <div class="shorts-header-actions">
 
-            <div class="create-box">
-
-                <div class="create-row">
-
-                    <img
-                        id="createAvatar"
-                        class="avatar"
-                        src=""
-                    >
-
-                    <div class="create-text">
-
-                        <textarea
-                            id="postContent"
-                            placeholder="Что нового?"
-                        ></textarea>
-
-                    </div>
-
-                </div>
-
-                <div
-                    id="postPreview"
-                    class="preview"
-                ></div>
-
-                <div class="create-bottom">
-
-                    <label class="file-label">
-
-                        <span>
-                            Фото / видео
-                        </span>
-
-                        <input
-                            id="postImage"
-                            type="file"
-                            accept="image/*,video/*"
-                            onchange="previewPostFile()"
-                        >
-
-                    </label>
-
-                    <button
-                        class="publish-btn"
-                        onclick="createPost()"
-                    >
-                        Опубликовать
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div id="feed">
-                <div class="loading">
-                    Загрузка...
-                </div>
-            </div>
-
-        </section>
-
-
-        <!-- EXPLORE -->
-
-        <section
-            id="explore"
-            class="page"
-        >
-
-            <div class="page-title">
-                Обзор
-            </div>
-
-            <div class="search-box">
-
-                <input
-                    id="searchInput"
-                    class="input"
-                    placeholder="Найти людей..."
-                    onkeydown="
-                        if(event.key==='Enter')
-                        searchUsers()
-                    "
-                >
-
-                <button
-                    class="primary-btn"
+            <button class="primary-btn"
                     style="width:auto"
-                    onclick="searchUsers()"
-                >
-                    Найти
+                    onclick="openModal('shortModal')">
+                Создать Shorts
+            </button>
+
+            <button class="secondary-btn"
+                    onclick="loadShorts()">
+                Обновить
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="shortsFeed"
+         class="shorts-feed">
+
+        <div class="empty">
+            Здесь будут короткие видео.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- NOTIFICATIONS -->
+
+<section id="notifications" class="page">
+
+    <div class="page-title">
+        Уведомления
+    </div>
+
+    <div id="notificationsList"></div>
+
+</section>
+
+
+<!-- MESSAGES -->
+
+<section id="messages" class="page">
+
+    <div class="page-title">
+        Сообщения
+    </div>
+
+    <div class="messages-layout">
+
+        <div id="chatUsers"
+             class="chat-users"></div>
+
+        <div class="chat-window">
+
+            <div id="chatHeader"
+                 class="chat-header">
+                Выберите пользователя
+            </div>
+
+            <div id="chatMessages"
+                 class="chat-messages">
+
+                <div class="empty">
+                    Выберите чат
+                </div>
+
+            </div>
+
+            <div class="chat-input">
+
+                <input id="messageInput"
+                       class="input"
+                       placeholder="Написать сообщение..."
+                       onkeydown="if(event.key==='Enter')sendMessage()">
+
+                <button class="primary-btn"
+                        style="width:auto"
+                        onclick="sendMessage()">
+                    Отправить
                 </button>
 
             </div>
 
-            <div id="searchResults"></div>
+        </div>
 
-        </section>
+    </div>
 
-
-        <!-- SHORTS -->
-
-        <section
-            id="shorts"
-            class="page shorts-page"
-        >
-
-            <div class="shorts-header">
-
-                <h1>
-                    Shorts
-                </h1>
-
-                <div class="shorts-header-actions">
-
-                    <button
-                        class="primary-btn"
-                        style="width:auto"
-                        onclick="openModal('shortModal')"
-                    >
-                        Создать Shorts
-                    </button>
-
-                    <button
-                        class="secondary-btn"
-                        onclick="loadShorts()"
-                    >
-                        Обновить
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div
-                id="shortsFeed"
-                class="shorts-feed"
-            >
-
-                <div class="empty">
-                    Здесь будут короткие видео.
-                </div>
-
-            </div>
-
-        </section>
+</section>
 
 
-        <!-- NOTIFICATIONS -->
+<!-- ROOMS -->
 
-        <section
-            id="notifications"
-            class="page"
-        >
+<section id="rooms" class="page">
 
-            <div class="page-title">
-                Уведомления
-            </div>
+    <div class="page-title">Rooms</div>
 
-            <div id="notificationsList"></div>
+    <button class="primary-btn"
+            style="width:auto;margin-bottom:18px"
+            onclick="openModal('roomModal')">
+        Создать Room
+    </button>
 
-        </section>
+    <div id="roomsList"
+         class="room-list"></div>
 
+    <div id="roomChat"
+         class="hidden"
+         style="
+            margin-top:20px;
+            background:var(--card);
+            border:1px solid var(--border);
+            border-radius:18px;
+            overflow:hidden;
+         ">
 
-        <!-- MESSAGES -->
+        <div id="roomChatHeader"
+             style="
+                padding:15px;
+                border-bottom:1px solid var(--border);
+                font-weight:700;
+             ">
+        </div>
 
-        <section
-            id="messages"
-            class="page"
-        >
+        <div id="roomMessages"
+             style="
+                height:400px;
+                overflow:auto;
+                padding:15px;
+             ">
+        </div>
 
-            <div class="page-title">
-                Сообщения
-            </div>
+        <div style="
+            display:flex;
+            gap:8px;
+            padding:12px;
+            border-top:1px solid var(--border);
+        ">
 
-            <div class="messages-layout">
+            <input id="roomMessageInput"
+                   class="input"
+                   placeholder="Сообщение..."
+                   onkeydown="if(event.key==='Enter')sendRoomMessage()">
 
-                <div
-                    id="chatUsers"
-                    class="chat-users"
-                ></div>
-
-                <div class="chat-window">
-
-                    <div
-                        id="chatHeader"
-                        class="chat-header"
-                    >
-                        Выберите пользователя
-                    </div>
-
-                    <div
-                        id="chatMessages"
-                        class="chat-messages"
-                    >
-                        <div class="empty">
-                            Выберите чат
-                        </div>
-                    </div>
-
-                    <div class="chat-input">
-
-                        <input
-                            id="messageInput"
-                            class="input"
-                            placeholder="Написать сообщение..."
-                            onkeydown="
-                                if(event.key==='Enter')
-                                sendMessage()
-                            "
-                        >
-
-                        <button
-                            class="primary-btn"
-                            style="width:auto"
-                            onclick="sendMessage()"
-                        >
-                            Отправить
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ROOMS -->
-
-        <section
-            id="rooms"
-            class="page"
-        >
-
-            <div class="page-title">
-                Rooms
-            </div>
-
-            <button
-                class="primary-btn"
-                style="width:auto;margin-bottom:18px"
-                onclick="openModal('roomModal')"
-            >
-                Создать Room
+            <button class="primary-btn"
+                    style="width:auto"
+                    onclick="sendRoomMessage()">
+                Отправить
             </button>
 
-            <div
-                id="roomsList"
-                class="room-list"
-            ></div>
-
-            <div
-                id="roomChat"
-                class="hidden"
-                style="
-                    margin-top:20px;
-                    background:var(--card);
-                    border:1px solid var(--border);
-                    border-radius:18px;
-                    overflow:hidden;
-                "
-            >
-
-                <div
-                    id="roomChatHeader"
-                    style="
-                        padding:15px;
-                        border-bottom:1px solid var(--border);
-                        font-weight:700;
-                    "
-                ></div>
-
-                <div
-                    id="roomMessages"
-                    style="
-                        height:400px;
-                        overflow:auto;
-                        padding:15px;
-                    "
-                ></div>
-
-                <div
-                    style="
-                        display:flex;
-                        gap:8px;
-                        padding:12px;
-                        border-top:1px solid var(--border);
-                    "
-                >
-
-                    <input
-                        id="roomMessageInput"
-                        class="input"
-                        placeholder="Сообщение..."
-                        onkeydown="
-                            if(event.key==='Enter')
-                            sendRoomMessage()
-                        "
-                    >
-
-                    <button
-                        class="primary-btn"
-                        style="width:auto"
-                        onclick="sendRoomMessage()"
-                    >
-                        Отправить
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- PROFILE -->
-
-        <section
-            id="profile"
-            class="page"
-        >
-
-            <div class="page-title">
-                Профиль
-            </div>
-
-            <div
-                id="profileContent"
-                class="profile-header"
-            ></div>
-
-        </section>
-
-    </main>
-
-
-    <!-- MOBILE NAV -->
-
-    <nav class="mobile-nav">
-
-        <div
-            class="mobile-item active"
-            data-page="home"
-            onclick="showPage('home')"
-        >
-            <div class="mobile-icon">
-                ⌂
-            </div>
-            Главная
         </div>
 
-        <div
-            class="mobile-item"
-            data-page="explore"
-            onclick="showPage('explore')"
-        >
-            <div class="mobile-icon">
-                ⌕
-            </div>
-            Обзор
+    </div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="page">
+
+    <div class="page-title">Профиль</div>
+
+    <div id="profileContent"></div>
+
+</section>
+
+</main>
+
+
+<!-- MOBILE NAV -->
+
+<nav class="mobile-nav">
+
+    <div class="mobile-item active"
+         data-page="home"
+         onclick="showPage('home')">
+
+        <div class="mobile-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path>
+            </svg>
         </div>
 
-        <div
-            class="mobile-item"
-            data-page="shorts"
-            onclick="showPage('shorts')"
-        >
-            <div class="mobile-icon">
-                ▶
-            </div>
-            Shorts
+        Главная
+    </div>
+
+    <div class="mobile-item"
+         data-page="explore"
+         onclick="showPage('explore')">
+
+        <div class="mobile-icon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-4-4"></path>
+            </svg>
         </div>
 
-        <div
-            class="mobile-item"
-            data-page="messages"
-            onclick="showPage('messages')"
-        >
-            <div class="mobile-icon">
-                □
-            </div>
-            Чаты
+        Обзор
+    </div>
+
+    <div class="mobile-item"
+         data-page="shorts"
+         onclick="showPage('shorts')">
+
+        <div class="mobile-icon">
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                <path d="m10 9 5 3-5 3z"></path>
+            </svg>
         </div>
 
-        <div
-            class="mobile-item"
-            data-page="profile"
-            onclick="showPage('profile')"
-        >
-            <div class="mobile-icon">
-                ○
-            </div>
-            Профиль
+        Shorts
+    </div>
+
+    <div class="mobile-item"
+         data-page="messages"
+         onclick="showPage('messages')">
+
+        <div class="mobile-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.8 9.8 0 0 1-4-.8L3 21l1.8-4A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"></path>
+            </svg>
         </div>
 
-    </nav>
+        Чаты
+    </div>
+
+    <div class="mobile-item"
+         data-page="profile"
+         onclick="showPage('profile')">
+
+        <div class="mobile-icon">
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+            </svg>
+        </div>
+
+        Профиль
+    </div>
+
+</nav>
 
 </div>
 
 
 <!-- ROOM MODAL -->
 
-<div
-    id="roomModal"
-    class="modal"
->
+<div id="roomModal" class="modal">
 
     <div class="modal-box">
 
         <div class="modal-head">
 
-            <h2>
-                Создать Room
-            </h2>
+            <h2>Создать Room</h2>
 
-            <button
-                class="modal-close"
-                onclick="closeModal('roomModal')"
-            >
+            <button class="modal-close"
+                    onclick="closeModal('roomModal')">
                 ×
             </button>
 
         </div>
 
-        <input
-            id="roomName"
-            class="input"
-            placeholder="Название"
-        >
+        <input id="roomName"
+               class="input"
+               placeholder="Название">
 
-        <textarea
-            id="roomDescription"
-            class="input"
-            placeholder="Описание"
-        ></textarea>
+        <textarea id="roomDescription"
+                  class="input"
+                  placeholder="Описание"></textarea>
 
-        <button
-            class="primary-btn"
-            onclick="createRoom()"
-        >
+        <button class="primary-btn"
+                onclick="createRoom()">
             Создать
         </button>
 
@@ -1691,80 +1826,66 @@ button{
 </div>
 
 
-<!-- SHORTS MODAL -->
+<!-- SHORT MODAL -->
 
-<div
-    id="shortModal"
-    class="modal"
->
+<div id="shortModal" class="modal">
 
     <div class="modal-box">
 
         <div class="modal-head">
 
-            <h2>
-                Создать Shorts
-            </h2>
+            <h2>Создать Shorts</h2>
 
-            <button
-                class="modal-close"
-                onclick="closeModal('shortModal')"
-            >
+            <button class="modal-close"
+                    onclick="closeModal('shortModal')">
                 ×
             </button>
 
         </div>
 
-        <textarea
-            id="shortContent"
-            class="input"
-            placeholder="Описание ролика..."
-            style="min-height:80px"
-        ></textarea>
+        <textarea id="shortContent"
+                  class="input"
+                  placeholder="Описание ролика..."
+                  style="min-height:80px"></textarea>
 
-        <label
-            class="file-label"
-            style="
-                display:flex;
-                padding:14px;
-                border:1px dashed var(--border);
-                border-radius:12px;
-                margin-bottom:12px;
-            "
-        >
+        <label class="file-label"
+               style="
+                    display:flex;
+                    padding:14px;
+                    border:1px dashed var(--border);
+                    border-radius:12px;
+                    margin-bottom:12px;
+               ">
+
+            <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                <path d="m10 9 5 3-5 3z"></path>
+            </svg>
 
             Выбрать видео
 
-            <input
-                id="shortFile"
-                type="file"
-                accept="video/*"
-                onchange="previewShort()"
-            >
+            <input id="shortFile"
+                   type="file"
+                   accept="video/*"
+                   onchange="previewShort()">
 
         </label>
 
-        <div
-            id="shortPreview"
-            class="preview"
-        ></div>
+        <div id="shortPreview"
+             class="preview"></div>
 
-        <div
-            style="
-                color:var(--muted);
-                font-size:13px;
-                margin-bottom:15px;
-            "
-        >
+        <div style="
+            color:var(--muted);
+            font-size:13px;
+            margin-bottom:15px;
+        ">
             Максимум 60 секунд и 100 MB.
-            Лучше вертикальный формат 9:16.
+            Рекомендуемый формат 9:16.
         </div>
 
-        <button
-            id="publishShortButton"
-            class="primary-btn"
-            onclick="publishShort()"
-        >
+        <button id="publishShortButton"
+                class="primary-btn"
+                onclick="publishShort()">
             Опубликовать Shorts
         </button>
 
@@ -1775,56 +1896,39 @@ button{
 
 <!-- PROFILE MODAL -->
 
-<div
-    id="profileModal"
-    class="modal"
->
+<div id="profileModal" class="modal">
 
     <div class="modal-box">
 
         <div class="modal-head">
 
-            <h2>
-                Редактировать профиль
-            </h2>
+            <h2>Редактировать профиль</h2>
 
-            <button
-                class="modal-close"
-                onclick="closeModal('profileModal')"
-            >
+            <button class="modal-close"
+                    onclick="closeModal('profileModal')">
                 ×
             </button>
 
         </div>
 
-        <input
-            id="editUsername"
-            class="input"
-            placeholder="Username"
-        >
+        <input id="editUsername"
+               class="input"
+               placeholder="Username">
 
-        <input
-            id="editDisplayName"
-            class="input"
-            placeholder="Имя"
-        >
+        <input id="editDisplayName"
+               class="input"
+               placeholder="Имя">
 
-        <input
-            id="editAvatar"
-            class="input"
-            placeholder="URL аватарки"
-        >
+        <input id="editAvatar"
+               class="input"
+               placeholder="URL аватарки">
 
-        <textarea
-            id="editBio"
-            class="input"
-            placeholder="О себе"
-        ></textarea>
+        <textarea id="editBio"
+                  class="input"
+                  placeholder="О себе"></textarea>
 
-        <button
-            class="primary-btn"
-            onclick="saveProfile()"
-        >
+        <button class="primary-btn"
+                onclick="saveProfile()">
             Сохранить
         </button>
 
@@ -1835,24 +1939,23 @@ button{
 
 <!-- STORY VIEWER -->
 
-<div
-    id="storyViewer"
-    class="story-viewer"
->
+<div id="storyViewer"
+     class="story-viewer">
 
-    <button
-        class="story-close"
-        onclick="closeStory()"
-    >
+    <button class="story-close"
+            onclick="closeStory()">
         ×
     </button>
 
-    <img
-        id="storyViewerImage"
-        src=""
-    >
+    <img id="storyViewerImage"
+         src="">
 
 </div>
+
+
+<!-- TOAST -->
+
+<div id="toast" class="toast"></div>
 
 
 <script>
@@ -1895,10 +1998,7 @@ let shortsObserver = null;
 
 function escapeHTML(value){
 
-    if(
-        value === null ||
-        value === undefined
-    ){
+    if(value === null || value === undefined){
         return "";
     }
 
@@ -1970,8 +2070,7 @@ function isVideoUrl(url){
         return false;
     }
 
-    return /\.(mp4|webm|mov|m4v|ogg)(\?|#|$)/i
-        .test(url);
+    return /\.(mp4|webm|mov|m4v|ogg)(\?|#|$)/i.test(url);
 }
 
 
@@ -1990,6 +2089,20 @@ function closeModal(id){
         .getElementById(id)
         .classList
         .remove("show");
+}
+
+
+function toast(message){
+
+    const box =
+        document.getElementById("toast");
+
+    box.textContent = message;
+    box.classList.add("show");
+
+    setTimeout(() => {
+        box.classList.remove("show");
+    },2200);
 }
 
 
@@ -2028,14 +2141,11 @@ function showRegister(){
 async function login(){
 
     const email =
-        document
-        .getElementById("loginEmail")
-        .value
-        .trim();
+        document.getElementById("loginEmail")
+        .value.trim();
 
     const password =
-        document
-        .getElementById("loginPassword")
+        document.getElementById("loginPassword")
         .value;
 
     if(!email || !password){
@@ -2060,37 +2170,34 @@ async function login(){
 async function register(){
 
     const username =
-        document
-        .getElementById("registerUsername")
-        .value
-        .trim()
+        document.getElementById("registerUsername")
+        .value.trim()
         .toLowerCase();
 
     const displayName =
-        document
-        .getElementById("registerName")
-        .value
-        .trim();
+        document.getElementById("registerName")
+        .value.trim();
 
     const email =
-        document
-        .getElementById("registerEmail")
-        .value
-        .trim();
+        document.getElementById("registerEmail")
+        .value.trim();
 
     const password =
-        document
-        .getElementById("registerPassword")
+        document.getElementById("registerPassword")
         .value;
 
-    if(
-        !username ||
-        !displayName ||
-        !email ||
-        !password
-    ){
+    if(!username || !displayName || !email || !password){
 
         alert("Заполни все поля.");
+        return;
+    }
+
+    if(!/^[a-z0-9_.-]+$/i.test(username)){
+
+        alert(
+            "Username может содержать только буквы, цифры, точку, _ и -."
+        );
+
         return;
     }
 
@@ -2148,6 +2255,14 @@ async function register(){
 
 async function logout(){
 
+    if(messageChannel){
+        await supabaseClient.removeChannel(messageChannel);
+    }
+
+    if(roomChannel){
+        await supabaseClient.removeChannel(roomChannel);
+    }
+
     await supabaseClient.auth.signOut();
 
     location.reload();
@@ -2155,7 +2270,7 @@ async function logout(){
 
 
 /* =========================
-   START APP
+   START
 ========================= */
 
 async function startApp(user){
@@ -2178,6 +2293,32 @@ async function startApp(user){
 
     currentProfile = data;
 
+    if(!currentProfile){
+
+        const fallback = {
+            id:user.id,
+            username:user.email?.split("@")[0] || "user",
+            display_name:"User",
+            bio:"",
+            avatar_url:""
+        };
+
+        const {data:newProfile,error:newError} =
+            await supabaseClient
+            .from("profiles")
+            .insert(fallback)
+            .select("*")
+            .single();
+
+        if(newError){
+
+            alert(newError.message);
+            return;
+        }
+
+        currentProfile = newProfile;
+    }
+
     document
         .getElementById("authScreen")
         .classList
@@ -2190,18 +2331,16 @@ async function startApp(user){
 
     loadTheme();
 
-    await loadFeed();
-    await loadStories();
-    await loadNotifications();
-    await loadChatUsers();
-    await loadProfile();
+    document.getElementById("createAvatar").src =
+        avatar(currentProfile?.avatar_url);
 
-    document
-        .getElementById("createAvatar")
-        .src =
-        avatar(
-            currentProfile?.avatar_url
-        );
+    await Promise.all([
+        loadFeed(),
+        loadStories(),
+        loadNotifications(),
+        loadChatUsers(),
+        loadProfile()
+    ]);
 }
 
 
@@ -2214,9 +2353,7 @@ function showPage(page){
     document
         .querySelectorAll(".page")
         .forEach(el => {
-
             el.classList.remove("active");
-
         });
 
     const target =
@@ -2267,6 +2404,11 @@ function showPage(page){
     if(page === "shorts"){
         loadShorts();
     }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 }
 
 
@@ -2277,9 +2419,7 @@ function showPage(page){
 function loadTheme(){
 
     const saved =
-        localStorage.getItem(
-            "nurlink_theme"
-        );
+        localStorage.getItem("nurlink_theme");
 
     if(saved === "dark"){
         document.body.classList.add("dark");
@@ -2296,14 +2436,14 @@ function toggleTheme(){
     localStorage.setItem(
         "nurlink_theme",
         document.body.classList.contains("dark")
-            ? "dark"
-            : "light"
+        ? "dark"
+        : "light"
     );
 }
 
 
 /* =========================
-   VIDEO HELPERS
+   VIDEO
 ========================= */
 
 function getVideoDuration(file){
@@ -2333,9 +2473,7 @@ function getVideoDuration(file){
             URL.revokeObjectURL(url);
 
             reject(
-                new Error(
-                    "Не удалось прочитать видео."
-                )
+                new Error("Не удалось прочитать видео.")
             );
         };
 
@@ -2345,7 +2483,7 @@ function getVideoDuration(file){
 
 
 /* =========================
-   NORMAL POST PREVIEW
+   POST PREVIEW
 ========================= */
 
 function previewPostFile(){
@@ -2358,27 +2496,20 @@ function previewPostFile(){
 
     preview.innerHTML = "";
 
-    const file =
-        input.files[0];
+    const file = input.files[0];
 
     if(!file){
         return;
     }
 
+    if(file.size > 100 * 1024 * 1024){
+
+        alert("Максимальный размер файла — 100 MB.");
+        input.value = "";
+        return;
+    }
+
     if(file.type.startsWith("video/")){
-
-        if(
-            file.size >
-            100 * 1024 * 1024
-        ){
-
-            alert(
-                "Видео слишком большое. Максимум 100 MB."
-            );
-
-            input.value = "";
-            return;
-        }
 
         const video =
             document.createElement("video");
@@ -2400,9 +2531,7 @@ function previewPostFile(){
 
                 input.value = "";
                 preview.innerHTML = "";
-
                 URL.revokeObjectURL(url);
-
                 return;
             }
 
@@ -2423,7 +2552,7 @@ function previewPostFile(){
 
 
 /* =========================
-   CREATE NORMAL POST
+   CREATE POST
 ========================= */
 
 async function createPost(){
@@ -2433,22 +2562,16 @@ async function createPost(){
     }
 
     const content =
-        document
-        .getElementById("postContent")
-        .value
-        .trim();
+        document.getElementById("postContent")
+        .value.trim();
 
     const file =
-        document
-        .getElementById("postImage")
+        document.getElementById("postImage")
         .files[0];
 
     if(!content && !file){
 
-        alert(
-            "Добавь текст, фото или видео."
-        );
-
+        alert("Добавь текст, фото или видео.");
         return;
     }
 
@@ -2456,51 +2579,32 @@ async function createPost(){
 
     if(file){
 
-        if(
-            file.type.startsWith("video/")
-        ){
+        if(file.size > 100 * 1024 * 1024){
 
-            if(
-                file.size >
-                100 * 1024 * 1024
-            ){
+            alert("Максимальный размер файла — 100 MB.");
+            return;
+        }
 
-                alert(
-                    "Видео слишком большое. Максимум 100 MB."
-                );
-
-                return;
-            }
+        if(file.type.startsWith("video/")){
 
             let duration;
 
             try{
-
-                duration =
-                    await getVideoDuration(file);
-
+                duration = await getVideoDuration(file);
             }catch{
-
-                alert(
-                    "Не удалось проверить видео."
-                );
-
+                alert("Не удалось проверить видео.");
                 return;
             }
 
             if(duration > 60){
 
-                alert(
-                    "Видео не должно быть длиннее 60 секунд."
-                );
-
+                alert("Видео не должно быть длиннее 60 секунд.");
                 return;
             }
         }
 
         const safeName =
-            file.name
-            .replace(
+            file.name.replace(
                 /[^a-zA-Z0-9._-]/g,
                 "_"
             );
@@ -2537,8 +2641,7 @@ async function createPost(){
             .from("nurlink")
             .getPublicUrl(path);
 
-        imageUrl =
-            urlData.publicUrl;
+        imageUrl = urlData.publicUrl;
     }
 
     const {error} =
@@ -2556,19 +2659,14 @@ async function createPost(){
         return;
     }
 
-    document
-        .getElementById("postContent")
-        .value = "";
+    document.getElementById("postContent").value = "";
+    document.getElementById("postImage").value = "";
+    document.getElementById("postPreview").innerHTML = "";
 
-    document
-        .getElementById("postImage")
-        .value = "";
-
-    document
-        .getElementById("postPreview")
-        .innerHTML = "";
+    toast("Публикация создана");
 
     await loadFeed();
+    await loadProfile();
 }
 
 
@@ -2579,18 +2677,13 @@ async function createPost(){
 async function loadStories(){
 
     const container =
-        document.getElementById(
-            "stories"
-        );
+        document.getElementById("stories");
 
     const {data,error} =
         await supabaseClient
         .from("stories")
         .select("*")
-        .order(
-            "created_at",
-            {ascending:false}
-        )
+        .order("created_at",{ascending:false})
         .limit(30);
 
     if(error){
@@ -2606,13 +2699,7 @@ async function loadStories(){
     }
 
     const ids =
-        [
-            ...new Set(
-                data.map(
-                    x => x.user_id
-                )
-            )
-        ];
+        [...new Set(data.map(x => x.user_id))];
 
     const {data:profiles} =
         await supabaseClient
@@ -2623,18 +2710,14 @@ async function loadStories(){
     const profileMap =
         new Map(
             (profiles || [])
-            .map(
-                p => [p.id,p]
-            )
+            .map(p => [p.id,p])
         );
 
     container.innerHTML =
         data.map(story => {
 
             const profile =
-                profileMap.get(
-                    story.user_id
-                );
+                profileMap.get(story.user_id);
 
             const url =
                 encodeURIComponent(
@@ -2642,17 +2725,12 @@ async function loadStories(){
                 );
 
             return `
-
-                <div
-                    class="story"
-                    onclick="viewStory(decodeURIComponent('${url}'))"
-                >
+                <div class="story"
+                     onclick="viewStory(decodeURIComponent('${url}'))">
 
                     <div class="story-avatar">
 
-                        <img
-                            src="${avatar(profile?.avatar_url)}"
-                        >
+                        <img src="${avatar(profile?.avatar_url)}">
 
                     </div>
 
@@ -2673,29 +2751,21 @@ async function loadStories(){
 
 function viewStory(url){
 
-    document
-        .getElementById(
-            "storyViewerImage"
-        )
-        .src = url;
+    document.getElementById(
+        "storyViewerImage"
+    ).src = url;
 
-    document
-        .getElementById(
-            "storyViewer"
-        )
-        .classList
-        .add("show");
+    document.getElementById(
+        "storyViewer"
+    ).classList.add("show");
 }
 
 
 function closeStory(){
 
-    document
-        .getElementById(
-            "storyViewer"
-        )
-        .classList
-        .remove("show");
+    document.getElementById(
+        "storyViewer"
+    ).classList.remove("show");
 }
 
 
@@ -2706,9 +2776,7 @@ function closeStory(){
 async function loadFeed(){
 
     const container =
-        document.getElementById(
-            "feed"
-        );
+        document.getElementById("feed");
 
     if(!container){
         return;
@@ -2729,15 +2797,10 @@ async function loadFeed(){
                 avatar_url
             )
         `)
-        .order(
-            "created_at",
-            {ascending:false}
-        )
+        .order("created_at",{ascending:false})
         .limit(50);
 
     if(error){
-
-        console.error(error);
 
         container.innerHTML =
             `<div class="empty">
@@ -2758,9 +2821,7 @@ async function loadFeed(){
     }
 
     container.innerHTML =
-        data
-        .map(post => renderPost(post))
-        .join("");
+        data.map(post => renderPost(post)).join("");
 
     for(const post of data){
         await loadPostActions(post.id);
@@ -2774,23 +2835,17 @@ function renderPost(post){
         isVideoUrl(post.image_url);
 
     return `
-
-        <article
-            class="post"
-            id="post-${post.id}"
-            data-user-id="${escapeHTML(post.user_id)}"
-        >
+        <article class="post"
+                 id="post-${post.id}"
+                 data-user-id="${escapeHTML(post.user_id)}">
 
             <div class="post-head">
 
-                <img
-                    class="avatar"
-                    src="${avatar(
-                        post.profiles?.avatar_url
-                    )}"
-                >
+                <img class="avatar"
+                     src="${avatar(post.profiles?.avatar_url)}">
 
-                <div class="post-user">
+                <div class="post-user"
+                     onclick="openProfileById('${post.user_id}')">
 
                     <div class="post-name">
                         ${escapeHTML(
@@ -2802,8 +2857,7 @@ function renderPost(post){
 
                     <div class="post-username">
                         @${escapeHTML(
-                            post.profiles?.username ||
-                            "user"
+                            post.profiles?.username || "user"
                         )}
                     </div>
 
@@ -2818,11 +2872,9 @@ function renderPost(post){
             ${
                 post.content
                 ?
-                `
-                <div class="post-content">
+                `<div class="post-content">
                     ${escapeHTML(post.content)}
-                </div>
-                `
+                 </div>`
                 :
                 ""
             }
@@ -2832,37 +2884,26 @@ function renderPost(post){
                 ?
                 video
                 ?
-                `
-                <video
-                    class="post-video"
-                    src="${escapeHTML(post.image_url)}"
-                    controls
-                    playsinline
-                    preload="metadata"
-                ></video>
-                `
+                `<video class="post-video"
+                        src="${escapeHTML(post.image_url)}"
+                        controls
+                        playsinline
+                        preload="metadata"></video>`
                 :
-                `
-                <img
-                    class="post-image"
-                    src="${escapeHTML(post.image_url)}"
-                >
-                `
+                `<img class="post-image"
+                      src="${escapeHTML(post.image_url)}"
+                      loading="lazy">`
                 :
                 ""
             }
 
-            <div
-                class="post-actions"
-                id="actions-${post.id}"
-            >
+            <div class="post-actions"
+                 id="actions-${post.id}">
                 Загрузка...
             </div>
 
-            <div
-                id="comments-${post.id}"
-                class="comments hidden"
-            ></div>
+            <div id="comments-${post.id}"
+                 class="comments hidden"></div>
 
         </article>
     `;
@@ -2876,9 +2917,7 @@ function renderPost(post){
 async function loadPostActions(postId){
 
     const box =
-        document.getElementById(
-            `actions-${postId}`
-        );
+        document.getElementById(`actions-${postId}`);
 
     if(!box){
         return;
@@ -2887,7 +2926,7 @@ async function loadPostActions(postId){
     const {data:likes} =
         await supabaseClient
         .from("likes")
-        .select("*")
+        .select("id,user_id")
         .eq("post_id",postId);
 
     const likeCount =
@@ -2895,57 +2934,61 @@ async function loadPostActions(postId){
 
     const liked =
         likes?.some(
-            x =>
-            x.user_id ===
-            currentUser.id
+            x => x.user_id === currentUser.id
         );
 
     const post =
-        document.getElementById(
-            `post-${postId}`
-        );
+        document.getElementById(`post-${postId}`);
 
     const isOwner =
-        post?.dataset.userId ===
-        currentUser.id;
+        post?.dataset.userId === currentUser.id;
 
     box.innerHTML = `
 
-        <button
-            class="post-action ${
-                liked ? "liked" : ""
-            }"
-            onclick="toggleLike(${postId})"
-        >
-            ${liked ? "Нравится" : "Лайк"}
+        <button class="post-action ${liked ? "liked" : ""}"
+                onclick="toggleLike(${postId})">
+
+            <svg viewBox="0 0 24 24">
+                <path d="M20.8 8.6c0 5.4-8.8 10.2-8.8 10.2S3.2 14 3.2 8.6A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8.8 2.6z"></path>
+            </svg>
+
             ${likeCount}
+
         </button>
 
-        <button
-            class="post-action"
-            onclick="toggleComments(${postId})"
-        >
+        <button class="post-action"
+                onclick="toggleComments(${postId})">
+
+            <svg viewBox="0 0 24 24">
+                <path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.8 9.8 0 0 1-4-.8L3 21l1.8-4A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"></path>
+            </svg>
+
             Комментарии
+
         </button>
 
-        <button
-            class="post-action"
-            onclick="sharePost(${postId})"
-        >
+        <button class="post-action"
+                onclick="sharePost(${postId})">
+
+            <svg viewBox="0 0 24 24">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <path d="m8.6 13.5 6.8 4"></path>
+                <path d="m15.4 6.5-6.8 4"></path>
+            </svg>
+
             Поделиться
+
         </button>
 
         ${
             isOwner
             ?
-            `
-            <button
-                class="post-action"
-                onclick="deletePost(${postId})"
-            >
+            `<button class="post-action"
+                     onclick="deletePost(${postId})">
                 Удалить
-            </button>
-            `
+             </button>`
             :
             ""
         }
@@ -2960,14 +3003,8 @@ async function toggleLike(postId){
         await supabaseClient
         .from("likes")
         .select("id")
-        .eq(
-            "post_id",
-            postId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        )
+        .eq("post_id",postId)
+        .eq("user_id",currentUser.id)
         .maybeSingle();
 
     if(existing){
@@ -3005,7 +3042,6 @@ async function toggleComments(postId){
     if(box.classList.contains("hidden")){
 
         box.classList.remove("hidden");
-
         await loadComments(postId);
 
     }else{
@@ -3026,14 +3062,8 @@ async function loadComments(postId){
         await supabaseClient
         .from("comments")
         .select("*")
-        .eq(
-            "post_id",
-            postId
-        )
-        .order(
-            "created_at",
-            {ascending:true}
-        );
+        .eq("post_id",postId)
+        .order("created_at",{ascending:true});
 
     if(error){
 
@@ -3046,14 +3076,9 @@ async function loadComments(postId){
     }
 
     const ids =
-        [
-            ...new Set(
-                (data || [])
-                .map(
-                    x => x.user_id
-                )
-            )
-        ];
+        [...new Set(
+            (data || []).map(x => x.user_id)
+        )];
 
     let profiles = [];
 
@@ -3065,8 +3090,7 @@ async function loadComments(postId){
             .select("*")
             .in("id",ids);
 
-        profiles =
-            result.data || [];
+        profiles = result.data || [];
     }
 
     const map =
@@ -3079,28 +3103,17 @@ async function loadComments(postId){
     box.innerHTML = `
 
         ${
-            (data || [])
-            .map(comment => {
+            (data || []).map(comment => {
 
                 const p =
-                    map.get(
-                        comment.user_id
-                    );
+                    map.get(comment.user_id);
 
                 return `
-
                     <div class="comment">
 
-                        <img
-                            class="avatar"
-                            style="
-                                width:32px;
-                                height:32px;
-                            "
-                            src="${avatar(
-                                p?.avatar_url
-                            )}"
-                        >
+                        <img class="avatar"
+                             style="width:32px;height:32px"
+                             src="${avatar(p?.avatar_url)}">
 
                         <div class="comment-content">
 
@@ -3113,9 +3126,7 @@ async function loadComments(postId){
                             </div>
 
                             <div class="comment-text">
-                                ${escapeHTML(
-                                    comment.content
-                                )}
+                                ${escapeHTML(comment.content)}
                             </div>
 
                         </div>
@@ -3128,20 +3139,13 @@ async function loadComments(postId){
 
         <div class="comment-form">
 
-            <input
-                id="comment-input-${postId}"
-                class="input"
-                placeholder="Написать комментарий..."
-                onkeydown="
-                    if(event.key==='Enter')
-                    addComment(${postId})
-                "
-            >
+            <input id="comment-input-${postId}"
+                   class="input"
+                   placeholder="Написать комментарий..."
+                   onkeydown="if(event.key==='Enter')addComment(${postId})">
 
-            <button
-                class="secondary-btn"
-                onclick="addComment(${postId})"
-            >
+            <button class="secondary-btn"
+                    onclick="addComment(${postId})">
                 Отправить
             </button>
 
@@ -3210,10 +3214,9 @@ async function sharePost(postId){
 
         try{
 
-            await navigator.clipboard
-                .writeText(url);
+            await navigator.clipboard.writeText(url);
 
-            alert("Ссылка скопирована.");
+            toast("Ссылка скопирована");
 
         }catch{
 
@@ -3226,9 +3229,7 @@ async function sharePost(postId){
 
 async function deletePost(postId){
 
-    if(!confirm(
-        "Удалить публикацию?"
-    )){
+    if(!confirm("Удалить публикацию?")){
         return;
     }
 
@@ -3236,14 +3237,8 @@ async function deletePost(postId){
         await supabaseClient
         .from("posts")
         .delete()
-        .eq(
-            "id",
-            postId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        );
+        .eq("id",postId)
+        .eq("user_id",currentUser.id);
 
     if(error){
 
@@ -3253,6 +3248,9 @@ async function deletePost(postId){
 
     await loadFeed();
     await loadShorts();
+    await loadProfile();
+
+    toast("Публикация удалена");
 }
 
 
@@ -3263,45 +3261,29 @@ async function deletePost(postId){
 function previewShort(){
 
     const input =
-        document.getElementById(
-            "shortFile"
-        );
+        document.getElementById("shortFile");
 
     const preview =
-        document.getElementById(
-            "shortPreview"
-        );
+        document.getElementById("shortPreview");
 
     preview.innerHTML = "";
 
-    const file =
-        input.files[0];
+    const file = input.files[0];
 
     if(!file){
         return;
     }
 
-    if(
-        !file.type.startsWith("video/")
-    ){
+    if(!file.type.startsWith("video/")){
 
-        alert(
-            "Выбери видео."
-        );
-
+        alert("Выбери видео.");
         input.value = "";
         return;
     }
 
-    if(
-        file.size >
-        100 * 1024 * 1024
-    ){
+    if(file.size > 100 * 1024 * 1024){
 
-        alert(
-            "Видео слишком большое. Максимум 100 MB."
-        );
-
+        alert("Видео слишком большое. Максимум 100 MB.");
         input.value = "";
         return;
     }
@@ -3325,31 +3307,16 @@ function previewShort(){
 
         if(video.duration > 60){
 
-            alert(
-                "Shorts должен быть не длиннее 60 секунд."
-            );
+            alert("Shorts должен быть не длиннее 60 секунд.");
 
             input.value = "";
             preview.innerHTML = "";
 
             URL.revokeObjectURL(url);
-
             return;
         }
 
         preview.appendChild(video);
-    };
-
-    video.onerror = () => {
-
-        alert(
-            "Не удалось прочитать видео."
-        );
-
-        input.value = "";
-        preview.innerHTML = "";
-
-        URL.revokeObjectURL(url);
     };
 }
 
@@ -3361,90 +3328,56 @@ async function publishShort(){
     }
 
     const input =
-        document.getElementById(
-            "shortFile"
-        );
+        document.getElementById("shortFile");
 
     const content =
-        document
-        .getElementById(
-            "shortContent"
-        )
-        .value
-        .trim();
+        document.getElementById("shortContent")
+        .value.trim();
 
-    const file =
-        input.files[0];
+    const file = input.files[0];
 
     if(!file){
 
-        alert(
-            "Выбери видео."
-        );
-
+        alert("Выбери видео.");
         return;
     }
 
-    if(
-        !file.type.startsWith("video/")
-    ){
+    if(!file.type.startsWith("video/")){
 
-        alert(
-            "Можно загрузить только видео."
-        );
-
+        alert("Можно загрузить только видео.");
         return;
     }
 
-    if(
-        file.size >
-        100 * 1024 * 1024
-    ){
+    if(file.size > 100 * 1024 * 1024){
 
-        alert(
-            "Видео слишком большое. Максимум 100 MB."
-        );
-
+        alert("Видео слишком большое. Максимум 100 MB.");
         return;
     }
 
     let duration;
 
     try{
-
-        duration =
-            await getVideoDuration(file);
-
+        duration = await getVideoDuration(file);
     }catch{
 
-        alert(
-            "Не удалось проверить видео."
-        );
-
+        alert("Не удалось проверить видео.");
         return;
     }
 
     if(duration > 60){
 
-        alert(
-            "Shorts должен быть не длиннее 60 секунд."
-        );
-
+        alert("Shorts должен быть не длиннее 60 секунд.");
         return;
     }
 
     if(duration <= 0){
 
-        alert(
-            "Не удалось определить длительность видео."
-        );
-
+        alert("Не удалось определить длительность видео.");
         return;
     }
 
     const safeName =
-        file.name
-        .replace(
+        file.name.replace(
             /[^a-zA-Z0-9._-]/g,
             "_"
         );
@@ -3458,8 +3391,7 @@ async function publishShort(){
         );
 
     button.disabled = true;
-    button.textContent =
-        "Загрузка...";
+    button.textContent = "Загрузка...";
 
     const {error:uploadError} =
         await supabaseClient
@@ -3477,8 +3409,7 @@ async function publishShort(){
     if(uploadError){
 
         button.disabled = false;
-        button.textContent =
-            "Опубликовать Shorts";
+        button.textContent = "Опубликовать Shorts";
 
         alert(
             "Ошибка загрузки: " +
@@ -3494,23 +3425,19 @@ async function publishShort(){
         .from("nurlink")
         .getPublicUrl(path);
 
-    const videoUrl =
-        urlData.publicUrl;
-
     const {error:postError} =
         await supabaseClient
         .from("posts")
         .insert({
             user_id:currentUser.id,
-            content:content,
-            image_url:videoUrl
+            content,
+            image_url:urlData.publicUrl
         });
 
     if(postError){
 
         button.disabled = false;
-        button.textContent =
-            "Опубликовать Shorts";
+        button.textContent = "Опубликовать Shorts";
 
         alert(
             "Видео загрузилось, но публикация не создалась: " +
@@ -3520,36 +3447,20 @@ async function publishShort(){
         return;
     }
 
-    document
-        .getElementById(
-            "shortContent"
-        )
-        .value = "";
-
-    document
-        .getElementById(
-            "shortFile"
-        )
-        .value = "";
-
-    document
-        .getElementById(
-            "shortPreview"
-        )
-        .innerHTML = "";
+    document.getElementById("shortContent").value = "";
+    document.getElementById("shortFile").value = "";
+    document.getElementById("shortPreview").innerHTML = "";
 
     button.disabled = false;
-    button.textContent =
-        "Опубликовать Shorts";
+    button.textContent = "Опубликовать Shorts";
 
     closeModal("shortModal");
 
     await loadShorts();
     await loadFeed();
+    await loadProfile();
 
-    alert(
-        "Shorts опубликован."
-    );
+    toast("Shorts опубликован");
 }
 
 
@@ -3560,18 +3471,14 @@ async function publishShort(){
 async function loadShorts(){
 
     const container =
-        document.getElementById(
-            "shortsFeed"
-        );
+        document.getElementById("shortsFeed");
 
     if(!container){
         return;
     }
 
     container.innerHTML =
-        `<div class="empty">
-            Загрузка Shorts...
-        </div>`;
+        `<div class="empty">Загрузка Shorts...</div>`;
 
     const {data,error} =
         await supabaseClient
@@ -3585,10 +3492,7 @@ async function loadShorts(){
                 avatar_url
             )
         `)
-        .order(
-            "created_at",
-            {ascending:false}
-        )
+        .order("created_at",{ascending:false})
         .limit(100);
 
     if(error){
@@ -3602,28 +3506,18 @@ async function loadShorts(){
     }
 
     const shorts =
-        (data || [])
-        .filter(
-            post =>
-            isVideoUrl(
-                post.image_url
-            )
+        (data || []).filter(
+            post => isVideoUrl(post.image_url)
         );
 
     if(!shorts.length){
 
         container.innerHTML = `
-
             <div class="empty">
-
                 Пока нет Shorts.
-
                 <br><br>
-
-                Нажми
-                <b>Создать Shorts</b>
-                и загрузи видео.
-
+                Нажми <b>Создать Shorts</b>
+                и загрузи первое видео.
             </div>
         `;
 
@@ -3631,18 +3525,10 @@ async function loadShorts(){
     }
 
     container.innerHTML =
-        shorts
-        .map(
-            post =>
-            renderShort(post)
-        )
-        .join("");
+        shorts.map(post => renderShort(post)).join("");
 
     for(const post of shorts){
-
-        await loadShortStats(
-            post.id
-        );
+        await loadShortStats(post.id);
     }
 
     setupShortsObserver();
@@ -3652,22 +3538,15 @@ async function loadShorts(){
 function renderShort(post){
 
     return `
+        <article class="short-card"
+                 id="short-${post.id}">
 
-        <article
-            class="short-card"
-            id="short-${post.id}"
-        >
-
-            <video
-                class="short-video"
-                src="${escapeHTML(
-                    post.image_url
-                )}"
-                playsinline
-                muted
-                loop
-                preload="metadata"
-            ></video>
+            <video class="short-video"
+                   src="${escapeHTML(post.image_url)}"
+                   playsinline
+                   muted
+                   loop
+                   preload="metadata"></video>
 
             <div class="short-gradient"></div>
 
@@ -3675,16 +3554,9 @@ function renderShort(post){
                 Nurlink Shorts
             </div>
 
-            <button
-                class="short-action short-mute"
-                onclick="
-                    toggleShortSound(
-                        event,
-                        ${post.id}
-                    )
-                "
-                id="mute-${post.id}"
-            >
+            <button class="short-action short-mute"
+                    id="mute-${post.id}"
+                    onclick="toggleShortSound(event,${post.id})">
                 Звук
             </button>
 
@@ -3692,89 +3564,50 @@ function renderShort(post){
 
                 <div class="short-author">
                     @${escapeHTML(
-                        post.profiles?.username ||
-                        "user"
+                        post.profiles?.username || "user"
                     )}
                 </div>
 
                 <div class="short-description">
-                    ${escapeHTML(
-                        post.content || ""
-                    )}
+                    ${escapeHTML(post.content || "")}
                 </div>
 
             </div>
 
             <div class="short-actions">
 
-                <button
-                    id="short-like-${post.id}"
-                    class="short-action"
-                    onclick="
-                        shortLike(${post.id})
-                    "
-                >
+                <button id="short-like-${post.id}"
+                        class="short-action"
+                        onclick="shortLike(${post.id})">
                     Лайк
                 </button>
 
-                <button
-                    class="short-action"
-                    onclick="
-                        toggleShortComments(
-                            ${post.id}
-                        )
-                    "
-                >
+                <button class="short-action"
+                        onclick="toggleShortComments(${post.id})">
                     Комм.
                 </button>
 
-                <button
-                    class="short-action"
-                    onclick="
-                        sharePost(${post.id})
-                    "
-                >
+                <button class="short-action"
+                        onclick="sharePost(${post.id})">
                     Поделиться
                 </button>
 
                 ${
-                    post.user_id ===
-                    currentUser.id
+                    post.user_id === currentUser.id
                     ?
-                    `
-                    <button
-                        class="short-action"
-                        onclick="
-                            deletePost(
-                                ${post.id}
-                            )
-                        "
-                    >
+                    `<button class="short-action"
+                             onclick="deletePost(${post.id})">
                         Удалить
-                    </button>
-                    `
+                     </button>`
                     :
                     ""
                 }
 
             </div>
 
-            <div
-                id="short-comments-${post.id}"
-                class="hidden"
-                style="
-                    position:absolute;
-                    left:15px;
-                    right:15px;
-                    bottom:85px;
-                    max-height:45%;
-                    overflow:auto;
-                    background:rgba(0,0,0,.86);
-                    border-radius:14px;
-                    padding:12px;
-                    color:#fff;
-                "
-            ></div>
+            <div id="short-comments-${post.id}"
+                 class="short-comments hidden">
+            </div>
 
         </article>
     `;
@@ -3784,14 +3617,11 @@ function renderShort(post){
 function setupShortsObserver(){
 
     if(shortsObserver){
-
         shortsObserver.disconnect();
     }
 
     const videos =
-        document.querySelectorAll(
-            ".short-video"
-        );
+        document.querySelectorAll(".short-video");
 
     shortsObserver =
         new IntersectionObserver(
@@ -3802,28 +3632,17 @@ function setupShortsObserver(){
                     const video =
                         entry.target;
 
-                    if(
-                        entry.isIntersecting
-                    ){
+                    if(entry.isIntersecting){
 
-                        videos.forEach(
-                            other => {
+                        videos.forEach(other => {
 
-                                if(
-                                    other !==
-                                    video
-                                ){
-
-                                    other.pause();
-                                }
-
+                            if(other !== video){
+                                other.pause();
                             }
-                        );
 
-                        video.play()
-                            .catch(
-                                () => {}
-                            );
+                        });
+
+                        video.play().catch(()=>{});
 
                     }else{
 
@@ -3840,37 +3659,22 @@ function setupShortsObserver(){
 
     videos.forEach(video => {
 
-        shortsObserver.observe(
-            video
-        );
+        shortsObserver.observe(video);
 
-        video.addEventListener(
-            "click",
-            () => {
+        video.addEventListener("click",() => {
 
-                if(video.paused){
-
-                    video.play()
-                        .catch(
-                            () => {}
-                        );
-
-                }else{
-
-                    video.pause();
-                }
-
+            if(video.paused){
+                video.play().catch(()=>{});
+            }else{
+                video.pause();
             }
-        );
 
+        });
     });
 }
 
 
-function toggleShortSound(
-    event,
-    postId
-){
+function toggleShortSound(event,postId){
 
     event.stopPropagation();
 
@@ -3879,22 +3683,19 @@ function toggleShortSound(
             `short-${postId}`
         );
 
-    if(!card){
-        return;
-    }
-
     const video =
-        card.querySelector(
-            ".short-video"
-        );
+        card?.querySelector(".short-video");
 
     const button =
         document.getElementById(
             `mute-${postId}`
         );
 
-    video.muted =
-        !video.muted;
+    if(!video || !button){
+        return;
+    }
+
+    video.muted = !video.muted;
 
     button.textContent =
         video.muted
@@ -3903,9 +3704,7 @@ function toggleShortSound(
 }
 
 
-async function loadShortStats(
-    postId
-){
+async function loadShortStats(postId){
 
     const button =
         document.getElementById(
@@ -3920,19 +3719,13 @@ async function loadShortStats(
         await supabaseClient
         .from("likes")
         .select("id,user_id")
-        .eq(
-            "post_id",
-            postId
-        );
+        .eq("post_id",postId);
 
-    const likes =
-        data || [];
+    const likes = data || [];
 
     const liked =
         likes.some(
-            x =>
-            x.user_id ===
-            currentUser.id
+            x => x.user_id === currentUser.id
         );
 
     button.textContent =
@@ -3947,22 +3740,14 @@ async function loadShortStats(
 }
 
 
-async function shortLike(
-    postId
-){
+async function shortLike(postId){
 
     const {data:existing} =
         await supabaseClient
         .from("likes")
         .select("id")
-        .eq(
-            "post_id",
-            postId
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        )
+        .eq("post_id",postId)
+        .eq("user_id",currentUser.id)
         .maybeSingle();
 
     if(existing){
@@ -3970,10 +3755,7 @@ async function shortLike(
         await supabaseClient
             .from("likes")
             .delete()
-            .eq(
-                "id",
-                existing.id
-            );
+            .eq("id",existing.id);
 
     }else{
 
@@ -3985,15 +3767,11 @@ async function shortLike(
             });
     }
 
-    await loadShortStats(
-        postId
-    );
+    await loadShortStats(postId);
 }
 
 
-async function toggleShortComments(
-    postId
-){
+async function toggleShortComments(postId){
 
     const box =
         document.getElementById(
@@ -4004,32 +3782,20 @@ async function toggleShortComments(
         return;
     }
 
-    if(
-        box.classList.contains(
-            "hidden"
-        )
-    ){
+    if(box.classList.contains("hidden")){
 
-        box.classList.remove(
-            "hidden"
-        );
+        box.classList.remove("hidden");
 
-        await loadShortComments(
-            postId
-        );
+        await loadShortComments(postId);
 
     }else{
 
-        box.classList.add(
-            "hidden"
-        );
+        box.classList.add("hidden");
     }
 }
 
 
-async function loadShortComments(
-    postId
-){
+async function loadShortComments(postId){
 
     const box =
         document.getElementById(
@@ -4040,34 +3806,21 @@ async function loadShortComments(
         await supabaseClient
         .from("comments")
         .select("*")
-        .eq(
-            "post_id",
-            postId
-        )
-        .order(
-            "created_at",
-            {ascending:true}
-        );
+        .eq("post_id",postId)
+        .order("created_at",{ascending:true});
 
     if(error){
 
         box.innerHTML =
-            escapeHTML(
-                error.message
-            );
+            escapeHTML(error.message);
 
         return;
     }
 
     const ids =
-        [
-            ...new Set(
-                (data || [])
-                .map(
-                    x => x.user_id
-                )
-            )
-        ];
+        [...new Set(
+            (data || []).map(x => x.user_id)
+        )];
 
     let profiles = [];
 
@@ -4079,8 +3832,7 @@ async function loadShortComments(
             .select("*")
             .in("id",ids);
 
-        profiles =
-            result.data || [];
+        profiles = result.data || [];
     }
 
     const map =
@@ -4092,46 +3844,27 @@ async function loadShortComments(
 
     box.innerHTML = `
 
-        <div
-            style="
-                margin-bottom:10px;
-                font-weight:700;
-            "
-        >
+        <div style="font-weight:700;margin-bottom:8px">
             Комментарии
         </div>
 
         ${
-            (data || [])
-            .map(comment => {
+            (data || []).map(comment => {
 
                 const p =
-                    map.get(
-                        comment.user_id
-                    );
+                    map.get(comment.user_id);
 
                 return `
-
-                    <div
-                        style="
-                            padding:7px 0;
-                            border-bottom:
-                                1px solid
-                                rgba(255,255,255,.1);
-                        "
-                    >
+                    <div class="short-comment">
 
                         <strong>
                             ${escapeHTML(
-                                p?.username ||
-                                "user"
+                                p?.username || "user"
                             )}
                         </strong>
 
                         <div>
-                            ${escapeHTML(
-                                comment.content
-                            )}
+                            ${escapeHTML(comment.content)}
                         </div>
 
                     </div>
@@ -4140,38 +3873,15 @@ async function loadShortComments(
             }).join("")
         }
 
-        <div
-            style="
-                display:flex;
-                gap:6px;
-                margin-top:10px;
-            "
-        >
+        <div class="short-comment-form">
 
-            <input
-                id="short-comment-input-${postId}"
-                class="input"
-                style="
-                    color:#111;
-                    background:#fff;
-                "
-                placeholder="Комментарий..."
-                onkeydown="
-                    if(event.key==='Enter')
-                    addShortComment(
-                        ${postId}
-                    )
-                "
-            >
+            <input id="short-comment-input-${postId}"
+                   class="input"
+                   placeholder="Комментарий..."
+                   onkeydown="if(event.key==='Enter')addShortComment(${postId})">
 
-            <button
-                class="secondary-btn"
-                onclick="
-                    addShortComment(
-                        ${postId}
-                    )
-                "
-            >
+            <button class="secondary-btn"
+                    onclick="addShortComment(${postId})">
                 Отправить
             </button>
 
@@ -4180,9 +3890,7 @@ async function loadShortComments(
 }
 
 
-async function addShortComment(
-    postId
-){
+async function addShortComment(postId){
 
     const input =
         document.getElementById(
@@ -4217,9 +3925,7 @@ async function addShortComment(
 
     input.value = "";
 
-    await loadShortComments(
-        postId
-    );
+    await loadShortComments(postId);
 }
 
 
@@ -4230,19 +3936,13 @@ async function addShortComment(
 async function searchUsers(){
 
     const input =
-        document.getElementById(
-            "searchInput"
-        );
+        document.getElementById("searchInput");
 
     const q =
-        input.value
-        .trim()
-        .toLowerCase();
+        input.value.trim().toLowerCase();
 
     const container =
-        document.getElementById(
-            "searchResults"
-        );
+        document.getElementById("searchResults");
 
     if(!q){
 
@@ -4287,19 +3987,15 @@ async function searchUsers(){
     }
 
     container.innerHTML =
-        data
-        .map(profile => `
+        data.map(profile => `
 
             <div class="user-card">
 
-                <img
-                    class="avatar"
-                    src="${avatar(
-                        profile.avatar_url
-                    )}"
-                >
+                <img class="avatar"
+                     src="${avatar(profile.avatar_url)}">
 
-                <div class="user-info">
+                <div class="user-info"
+                     onclick="openProfileById('${profile.id}')">
 
                     <div class="user-name">
                         ${escapeHTML(
@@ -4309,42 +4005,33 @@ async function searchUsers(){
                     </div>
 
                     <div class="user-username">
-                        @${escapeHTML(
-                            profile.username
-                        )}
+                        @${escapeHTML(profile.username)}
                     </div>
 
                 </div>
 
                 ${
-                    profile.id !==
-                    currentUser.id
+                    profile.id !== currentUser.id
                     ?
-                    `
-                    <button
-                        class="secondary-btn"
-                        onclick="
-                            openProfileById(
-                                '${profile.id}'
-                            )
-                        "
-                    >
+                    `<button class="secondary-btn"
+                             onclick="openProfileById('${profile.id}')">
                         Профиль
-                    </button>
-                    `
+                     </button>`
                     :
                     ""
                 }
 
             </div>
-        `)
-        .join("");
+
+        `).join("");
 }
 
 
-async function openProfileById(
-    id
-){
+/* =========================
+   PUBLIC PROFILE
+========================= */
+
+async function openProfileById(id){
 
     const {data,error} =
         await supabaseClient
@@ -4363,11 +4050,296 @@ async function openProfileById(
         return;
     }
 
-    alert(
-        `${data.display_name || data.username}\n\n` +
-        `@${data.username}\n\n` +
-        `${data.bio || "Нет описания"}`
-    );
+    showPage("profile");
+
+    await renderPublicProfile(data);
+}
+
+
+async function renderPublicProfile(profile){
+
+    const container =
+        document.getElementById(
+            "profileContent"
+        );
+
+    const isOwn =
+        profile.id === currentUser.id;
+
+    const {count:postsCount} =
+        await supabaseClient
+        .from("posts")
+        .select("*",{count:"exact",head:true})
+        .eq("user_id",profile.id);
+
+    const {count:followersCount} =
+        await supabaseClient
+        .from("follows")
+        .select("*",{count:"exact",head:true})
+        .eq("following_id",profile.id);
+
+    const {count:followingCount} =
+        await supabaseClient
+        .from("follows")
+        .select("*",{count:"exact",head:true})
+        .eq("follower_id",profile.id);
+
+    let isFollowing = false;
+
+    if(!isOwn){
+
+        const {data:follow} =
+            await supabaseClient
+            .from("follows")
+            .select("id")
+            .eq("follower_id",currentUser.id)
+            .eq("following_id",profile.id)
+            .maybeSingle();
+
+        isFollowing = !!follow;
+    }
+
+    const {data:posts} =
+        await supabaseClient
+        .from("posts")
+        .select("*")
+        .eq("user_id",profile.id)
+        .order("created_at",{ascending:false})
+        .limit(30);
+
+    container.innerHTML = `
+
+        <div class="public-profile">
+
+            <div class="profile-cover"></div>
+
+            <div class="profile-main">
+
+                <div class="profile-avatar-wrap">
+
+                    <img class="profile-avatar"
+                         src="${avatar(profile.avatar_url)}">
+
+                </div>
+
+                <div class="profile-top">
+
+                    <div>
+
+                        <div class="profile-name">
+                            ${escapeHTML(
+                                profile.display_name ||
+                                profile.username ||
+                                "User"
+                            )}
+                        </div>
+
+                        <div class="profile-username">
+                            @${escapeHTML(profile.username)}
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        ${
+                            isOwn
+                            ?
+                            `<button class="secondary-btn"
+                                     onclick="openProfileEditor()">
+                                Редактировать
+                             </button>`
+                            :
+                            `<button id="follow-btn"
+                                     class="primary-btn"
+                                     style="width:auto"
+                                     onclick="toggleFollow('${profile.id}')">
+                                ${isFollowing ? "Отписаться" : "Подписаться"}
+                             </button>`
+                        }
+
+                    </div>
+
+                </div>
+
+                <div class="profile-bio">
+                    ${escapeHTML(
+                        profile.bio ||
+                        "Пока нет описания."
+                    )}
+                </div>
+
+                <div class="profile-stats">
+
+                    <div class="stat">
+                        <strong>${postsCount || 0}</strong>
+                        <span>Публикации</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>${followersCount || 0}</strong>
+                        <span>Подписчики</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>${followingCount || 0}</strong>
+                        <span>Подписки</span>
+                    </div>
+
+                </div>
+
+                <div class="profile-tabs">
+
+                    <button class="profile-tab active">
+                        Публикации
+                    </button>
+
+                    <button class="profile-tab">
+                        Shorts
+                    </button>
+
+                </div>
+
+                <div class="profile-grid">
+
+                    ${
+                        (posts || []).map(post => {
+
+                            if(isVideoUrl(post.image_url)){
+
+                                return `
+                                    <div class="profile-grid-item profile-grid-video"
+                                         onclick="openPostFromProfile(${post.id})">
+
+                                        <video
+                                            src="${escapeHTML(post.image_url)}"
+                                            muted
+                                            preload="metadata">
+                                        </video>
+
+                                        <span>VIDEO</span>
+
+                                    </div>
+                                `;
+
+                            }
+
+                            if(post.image_url){
+
+                                return `
+                                    <div class="profile-grid-item"
+                                         onclick="openPostFromProfile(${post.id})">
+
+                                        <img
+                                            src="${escapeHTML(post.image_url)}"
+                                            loading="lazy">
+
+                                    </div>
+                                `;
+                            }
+
+                            return `
+                                <div class="profile-grid-item"
+                                     onclick="openPostFromProfile(${post.id})"
+                                     style="
+                                        padding:15px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        text-align:center;
+                                     ">
+                                    ${escapeHTML(
+                                        (post.content || "").slice(0,80)
+                                    )}
+                                </div>
+                            `;
+
+                        }).join("")
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+async function toggleFollow(profileId){
+
+    const {data:existing} =
+        await supabaseClient
+        .from("follows")
+        .select("id")
+        .eq("follower_id",currentUser.id)
+        .eq("following_id",profileId)
+        .maybeSingle();
+
+    if(existing){
+
+        await supabaseClient
+            .from("follows")
+            .delete()
+            .eq("id",existing.id);
+
+        toast("Вы отписались");
+
+    }else{
+
+        const {error} =
+            await supabaseClient
+            .from("follows")
+            .insert({
+                follower_id:currentUser.id,
+                following_id:profileId
+            });
+
+        if(error){
+
+            alert(error.message);
+            return;
+        }
+
+        toast("Вы подписались");
+    }
+
+    const {data:profile} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id",profileId)
+        .single();
+
+    if(profile){
+        await renderPublicProfile(profile);
+    }
+}
+
+
+async function openPostFromProfile(postId){
+
+    showPage("home");
+
+    await loadFeed();
+
+    setTimeout(() => {
+
+        const element =
+            document.getElementById(
+                `post-${postId}`
+            );
+
+        if(element){
+
+            element.scrollIntoView({
+                behavior:"smooth",
+                block:"center"
+            });
+
+        }
+
+    },200);
 }
 
 
@@ -4390,14 +4362,8 @@ async function loadNotifications(){
         await supabaseClient
         .from("notifications")
         .select("*")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .order(
-            "created_at",
-            {ascending:false}
-        )
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false})
         .limit(50);
 
     if(error){
@@ -4421,13 +4387,9 @@ async function loadNotifications(){
     }
 
     const actorIds =
-        [
-            ...new Set(
-                data.map(
-                    x => x.actor_id
-                )
-            )
-        ];
+        [...new Set(
+            data.map(x => x.actor_id)
+        )];
 
     let profiles = [];
 
@@ -4437,13 +4399,9 @@ async function loadNotifications(){
             await supabaseClient
             .from("profiles")
             .select("*")
-            .in(
-                "id",
-                actorIds
-            );
+            .in("id",actorIds);
 
-        profiles =
-            result.data || [];
+        profiles = result.data || [];
     }
 
     const map =
@@ -4457,37 +4415,27 @@ async function loadNotifications(){
         data.map(n => {
 
             const actor =
-                map.get(
-                    n.actor_id
-                );
+                map.get(n.actor_id);
 
             let text =
                 "Новое уведомление";
 
             if(n.type === "like"){
-                text =
-                    "поставил лайк вашей публикации";
+                text = "поставил лайк вашей публикации";
             }
 
             if(n.type === "comment"){
-                text =
-                    "прокомментировал вашу публикацию";
+                text = "прокомментировал вашу публикацию";
             }
 
             if(n.type === "follow"){
-                text =
-                    "подписался на вас";
+                text = "подписался на вас";
             }
 
             return `
-
-                <div
-                    class="notification ${
-                        n.read
-                        ? ""
-                        : "unread"
-                    }"
-                >
+                <div class="notification ${
+                    n.read ? "" : "unread"
+                }">
 
                     <strong>
                         ${escapeHTML(
@@ -4499,16 +4447,12 @@ async function loadNotifications(){
 
                     ${text}
 
-                    <div
-                        style="
-                            color:var(--muted);
-                            font-size:12px;
-                            margin-top:4px;
-                        "
-                    >
-                        ${timeAgo(
-                            n.created_at
-                        )}
+                    <div style="
+                        color:var(--muted);
+                        font-size:12px;
+                        margin-top:4px;
+                    ">
+                        ${timeAgo(n.created_at)}
                     </div>
 
                 </div>
@@ -4525,9 +4469,7 @@ async function loadNotifications(){
 async function loadChatUsers(){
 
     const container =
-        document.getElementById(
-            "chatUsers"
-        );
+        document.getElementById("chatUsers");
 
     if(!container || !currentUser){
         return;
@@ -4537,10 +4479,7 @@ async function loadChatUsers(){
         await supabaseClient
         .from("profiles")
         .select("*")
-        .neq(
-            "id",
-            currentUser.id
-        )
+        .neq("id",currentUser.id)
         .order("username")
         .limit(100);
 
@@ -4551,58 +4490,36 @@ async function loadChatUsers(){
     }
 
     container.innerHTML =
-        (data || [])
-        .map(profile => `
+        (data || []).map(profile => `
 
-            <div
-                class="chat-user"
-                onclick="
-                    openChatById(
-                        '${profile.id}'
-                    )
-                "
-            >
+            <div class="chat-user"
+                 onclick="openChatById('${profile.id}')">
 
-                <img
-                    class="avatar"
-                    style="
-                        width:38px;
-                        height:38px;
-                    "
-                    src="${avatar(
-                        profile.avatar_url
-                    )}"
-                >
+                <img class="avatar"
+                     style="width:38px;height:38px"
+                     src="${avatar(profile.avatar_url)}">
 
                 <div>
 
-                    <div
-                        style="
-                            font-weight:700;
-                        "
-                    >
+                    <div style="font-weight:700">
                         ${escapeHTML(
                             profile.display_name ||
                             profile.username
                         )}
                     </div>
 
-                    <div
-                        style="
-                            color:var(--muted);
-                            font-size:11px;
-                        "
-                    >
-                        @${escapeHTML(
-                            profile.username
-                        )}
+                    <div style="
+                        color:var(--muted);
+                        font-size:11px;
+                    ">
+                        @${escapeHTML(profile.username)}
                     </div>
 
                 </div>
 
             </div>
-        `)
-        .join("");
+
+        `).join("");
 }
 
 
@@ -4631,14 +4548,11 @@ async function openChatById(id){
 
 async function openChat(profile){
 
-    currentChatUser =
-        profile;
+    currentChatUser = profile;
 
-    document
-        .getElementById(
-            "chatHeader"
-        )
-        .textContent =
+    document.getElementById(
+        "chatHeader"
+    ).textContent =
         profile.display_name ||
         profile.username ||
         "Чат";
@@ -4648,18 +4562,13 @@ async function openChat(profile){
     if(messageChannel){
 
         await supabaseClient
-            .removeChannel(
-                messageChannel
-            );
+            .removeChannel(messageChannel);
     }
 
     messageChannel =
         supabaseClient
         .channel(
-            "messages-" +
-            currentUser.id +
-            "-" +
-            profile.id
+            `messages-${currentUser.id}-${profile.id}`
         )
         .on(
             "postgres_changes",
@@ -4670,25 +4579,20 @@ async function openChat(profile){
             },
             payload => {
 
-                const msg =
-                    payload.new;
+                const msg = payload.new;
 
-                if(
+                const relevant =
                     (
-                        msg.sender_id ===
-                        currentUser.id &&
-                        msg.receiver_id ===
-                        profile.id
+                        msg.sender_id === currentUser.id &&
+                        msg.receiver_id === profile.id
                     )
                     ||
                     (
-                        msg.sender_id ===
-                        profile.id &&
-                        msg.receiver_id ===
-                        currentUser.id
-                    )
-                ){
+                        msg.sender_id === profile.id &&
+                        msg.receiver_id === currentUser.id
+                    );
 
+                if(relevant){
                     loadMessages();
                 }
 
@@ -4705,21 +4609,17 @@ async function loadMessages(){
     }
 
     const container =
-        document.getElementById(
-            "chatMessages"
-        );
+        document.getElementById("chatMessages");
+
+    const filter =
+        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`;
 
     const {data,error} =
         await supabaseClient
         .from("messages")
         .select("*")
-        .or(
-            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
-        )
-        .order(
-            "created_at",
-            {ascending:true}
-        );
+        .or(filter)
+        .order("created_at",{ascending:true});
 
     if(error){
 
@@ -4732,27 +4632,21 @@ async function loadMessages(){
     }
 
     container.innerHTML =
-        (data || [])
-        .map(message => `
+        (data || []).map(message => `
 
-            <div
-                class="message ${
-                    message.sender_id ===
-                    currentUser.id
-                    ? "mine"
-                    : ""
-                }"
-            >
+            <div class="message ${
+                message.sender_id === currentUser.id
+                ? "mine"
+                : ""
+            }">
 
                 <div class="message-bubble">
-                    ${escapeHTML(
-                        message.content
-                    )}
+                    ${escapeHTML(message.content)}
                 </div>
 
             </div>
-        `)
-        .join("");
+
+        `).join("");
 
     container.scrollTop =
         container.scrollHeight;
@@ -4763,17 +4657,12 @@ async function sendMessage(){
 
     if(!currentChatUser){
 
-        alert(
-            "Сначала выбери пользователя."
-        );
-
+        alert("Сначала выбери пользователя.");
         return;
     }
 
     const input =
-        document.getElementById(
-            "messageInput"
-        );
+        document.getElementById("messageInput");
 
     const content =
         input.value.trim();
@@ -4810,9 +4699,7 @@ async function sendMessage(){
 async function loadRooms(){
 
     const container =
-        document.getElementById(
-            "roomsList"
-        );
+        document.getElementById("roomsList");
 
     if(!container || !currentUser){
         return;
@@ -4822,10 +4709,7 @@ async function loadRooms(){
         await supabaseClient
         .from("rooms")
         .select("*")
-        .order(
-            "created_at",
-            {ascending:false}
-        );
+        .order("created_at",{ascending:false});
 
     if(error){
 
@@ -4837,8 +4721,7 @@ async function loadRooms(){
         return;
     }
 
-    const rooms =
-        data || [];
+    const rooms = data || [];
 
     if(!rooms.length){
 
@@ -4851,13 +4734,9 @@ async function loadRooms(){
     }
 
     const ownerIds =
-        [
-            ...new Set(
-                rooms.map(
-                    x => x.owner_id
-                )
-            )
-        ];
+        [...new Set(
+            rooms.map(x => x.owner_id)
+        )];
 
     let profiles = [];
 
@@ -4867,13 +4746,9 @@ async function loadRooms(){
             await supabaseClient
             .from("profiles")
             .select("*")
-            .in(
-                "id",
-                ownerIds
-            );
+            .in("id",ownerIds);
 
-        profiles =
-            result.data || [];
+        profiles = result.data || [];
     }
 
     const map =
@@ -4884,74 +4759,48 @@ async function loadRooms(){
         );
 
     container.innerHTML =
-        rooms
-        .map(room => {
+        rooms.map(room => {
 
             const owner =
-                map.get(
-                    room.owner_id
-                );
+                map.get(room.owner_id);
 
             return `
-
                 <div class="room-card">
 
                     <div class="room-title">
-                        ${escapeHTML(
-                            room.name
-                        )}
+                        ${escapeHTML(room.name)}
                     </div>
 
                     <div class="room-description">
-                        ${escapeHTML(
-                            room.description || ""
-                        )}
+                        ${escapeHTML(room.description || "")}
                     </div>
 
-                    <div
-                        style="
-                            color:var(--muted);
-                            font-size:12px;
-                            margin-bottom:12px;
-                        "
-                    >
+                    <div style="
+                        color:var(--muted);
+                        font-size:12px;
+                        margin-bottom:12px;
+                    ">
                         Создал:
                         @${escapeHTML(
-                            owner?.username ||
-                            "user"
+                            owner?.username || "user"
                         )}
                     </div>
 
                     <div class="room-actions">
 
-                        <button
-                            class="primary-btn"
-                            style="width:auto"
-                            onclick="
-                                openRoom(
-                                    ${room.id}
-                                )
-                            "
-                        >
+                        <button class="primary-btn"
+                                style="width:auto"
+                                onclick="openRoom(${room.id})">
                             Открыть
                         </button>
 
                         ${
-                            room.owner_id ===
-                            currentUser.id
+                            room.owner_id === currentUser.id
                             ?
-                            `
-                            <button
-                                class="secondary-btn"
-                                onclick="
-                                    deleteRoom(
-                                        ${room.id}
-                                    )
-                                "
-                            >
+                            `<button class="secondary-btn"
+                                     onclick="deleteRoom(${room.id})">
                                 Удалить
-                            </button>
-                            `
+                             </button>`
                             :
                             ""
                         }
@@ -4961,35 +4810,23 @@ async function loadRooms(){
                 </div>
             `;
 
-        })
-        .join("");
+        }).join("");
 }
 
 
 async function createRoom(){
 
     const name =
-        document
-        .getElementById(
-            "roomName"
-        )
-        .value
-        .trim();
+        document.getElementById("roomName")
+        .value.trim();
 
     const description =
-        document
-        .getElementById(
-            "roomDescription"
-        )
-        .value
-        .trim();
+        document.getElementById("roomDescription")
+        .value.trim();
 
     if(!name){
 
-        alert(
-            "Напиши название Room."
-        );
-
+        alert("Напиши название Room.");
         return;
     }
 
@@ -5017,23 +4854,14 @@ async function createRoom(){
             user_id:currentUser.id
         });
 
-    document
-        .getElementById(
-            "roomName"
-        )
-        .value = "";
+    document.getElementById("roomName").value = "";
+    document.getElementById("roomDescription").value = "";
 
-    document
-        .getElementById(
-            "roomDescription"
-        )
-        .value = "";
-
-    closeModal(
-        "roomModal"
-    );
+    closeModal("roomModal");
 
     await loadRooms();
+
+    toast("Room создан");
 }
 
 
@@ -5043,10 +4871,7 @@ async function openRoom(roomId){
         await supabaseClient
         .from("rooms")
         .select("*")
-        .eq(
-            "id",
-            roomId
-        )
+        .eq("id",roomId)
         .maybeSingle();
 
     if(error || !room){
@@ -5059,8 +4884,7 @@ async function openRoom(roomId){
         return;
     }
 
-    currentRoom =
-        room;
+    currentRoom = room;
 
     const {error:memberError} =
         await supabaseClient
@@ -5071,63 +4895,45 @@ async function openRoom(roomId){
                 user_id:currentUser.id
             },
             {
-                onConflict:
-                    "room_id,user_id"
+                onConflict:"room_id,user_id"
             }
         );
 
     if(memberError){
 
-        alert(
-            memberError.message
-        );
-
+        alert(memberError.message);
         return;
     }
 
-    document
-        .getElementById(
-            "roomChat"
-        )
-        .classList
-        .remove("hidden");
+    document.getElementById(
+        "roomChat"
+    ).classList.remove("hidden");
 
-    document
-        .getElementById(
-            "roomChatHeader"
-        )
-        .textContent =
-        room.name;
+    document.getElementById(
+        "roomChatHeader"
+    ).textContent = room.name;
 
     await loadRoomMessages();
 
     if(roomChannel){
 
         await supabaseClient
-            .removeChannel(
-                roomChannel
-            );
+            .removeChannel(roomChannel);
     }
 
     roomChannel =
         supabaseClient
-        .channel(
-            "room-" +
-            room.id
-        )
+        .channel(`room-${room.id}`)
         .on(
             "postgres_changes",
             {
                 event:"INSERT",
                 schema:"public",
                 table:"room_messages",
-                filter:
-                    `room_id=eq.${room.id}`
+                filter:`room_id=eq.${room.id}`
             },
             () => {
-
                 loadRoomMessages();
-
             }
         )
         .subscribe();
@@ -5141,22 +4947,14 @@ async function loadRoomMessages(){
     }
 
     const container =
-        document.getElementById(
-            "roomMessages"
-        );
+        document.getElementById("roomMessages");
 
     const {data,error} =
         await supabaseClient
         .from("room_messages")
         .select("*")
-        .eq(
-            "room_id",
-            currentRoom.id
-        )
-        .order(
-            "created_at",
-            {ascending:true}
-        );
+        .eq("room_id",currentRoom.id)
+        .order("created_at",{ascending:true});
 
     if(error){
 
@@ -5168,17 +4966,12 @@ async function loadRoomMessages(){
         return;
     }
 
-    const messages =
-        data || [];
+    const messages = data || [];
 
     const ids =
-        [
-            ...new Set(
-                messages.map(
-                    x => x.user_id
-                )
-            )
-        ];
+        [...new Set(
+            messages.map(x => x.user_id)
+        )];
 
     let profiles = [];
 
@@ -5188,13 +4981,9 @@ async function loadRoomMessages(){
             await supabaseClient
             .from("profiles")
             .select("*")
-            .in(
-                "id",
-                ids
-            );
+            .in("id",ids);
 
-        profiles =
-            result.data || [];
+        profiles = result.data || [];
     }
 
     const map =
@@ -5205,40 +4994,28 @@ async function loadRoomMessages(){
         );
 
     container.innerHTML =
-        messages
-        .map(message => {
+        messages.map(message => {
 
             const profile =
-                map.get(
-                    message.user_id
-                );
+                map.get(message.user_id);
 
             return `
-
-                <div
-                    style="
-                        margin-bottom:12px;
-                    "
-                >
+                <div style="margin-bottom:12px">
 
                     <strong>
                         ${escapeHTML(
-                            profile?.username ||
-                            "user"
+                            profile?.username || "user"
                         )}
                     </strong>
 
                     <div>
-                        ${escapeHTML(
-                            message.content
-                        )}
+                        ${escapeHTML(message.content)}
                     </div>
 
                 </div>
             `;
 
-        })
-        .join("");
+        }).join("");
 
     container.scrollTop =
         container.scrollHeight;
@@ -5252,9 +5029,7 @@ async function sendRoomMessage(){
     }
 
     const input =
-        document.getElementById(
-            "roomMessageInput"
-        );
+        document.getElementById("roomMessageInput");
 
     const content =
         input.value.trim();
@@ -5286,9 +5061,7 @@ async function sendRoomMessage(){
 
 async function deleteRoom(roomId){
 
-    if(!confirm(
-        "Удалить Room?"
-    )){
+    if(!confirm("Удалить Room?")){
         return;
     }
 
@@ -5296,14 +5069,8 @@ async function deleteRoom(roomId){
         await supabaseClient
         .from("rooms")
         .delete()
-        .eq(
-            "id",
-            roomId
-        )
-        .eq(
-            "owner_id",
-            currentUser.id
-        );
+        .eq("id",roomId)
+        .eq("owner_id",currentUser.id);
 
     if(error){
 
@@ -5311,22 +5078,18 @@ async function deleteRoom(roomId){
         return;
     }
 
-    if(
-        currentRoom &&
-        currentRoom.id === roomId
-    ){
+    if(currentRoom?.id === roomId){
 
         currentRoom = null;
 
-        document
-            .getElementById(
-                "roomChat"
-            )
-            .classList
-            .add("hidden");
+        document.getElementById(
+            "roomChat"
+        ).classList.add("hidden");
     }
 
     await loadRooms();
+
+    toast("Room удалён");
 }
 
 
@@ -5344,10 +5107,7 @@ async function loadProfile(){
         await supabaseClient
         .from("profiles")
         .select("*")
-        .eq(
-            "id",
-            currentUser.id
-        )
+        .eq("id",currentUser.id)
         .maybeSingle();
 
     if(error){
@@ -5360,213 +5120,65 @@ async function loadProfile(){
         currentProfile = data;
     }
 
-    const {count:postsCount} =
-        await supabaseClient
-        .from("posts")
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "user_id",
-            currentUser.id
-        );
-
-    const {count:followersCount} =
-        await supabaseClient
-        .from("follows")
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "following_id",
-            currentUser.id
-        );
-
-    const {count:followingCount} =
-        await supabaseClient
-        .from("follows")
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq(
-            "follower_id",
-            currentUser.id
-        );
-
-    const container =
-        document.getElementById(
-            "profileContent"
-        );
-
-    container.innerHTML = `
-
-        <img
-            class="profile-avatar"
-            src="${avatar(
-                currentProfile?.avatar_url
-            )}"
-        >
-
-        <div class="profile-name">
-            ${escapeHTML(
-                currentProfile?.display_name ||
-                currentProfile?.username ||
-                "User"
-            )}
-        </div>
-
-        <div class="profile-username">
-            @${escapeHTML(
-                currentProfile?.username ||
-                "user"
-            )}
-        </div>
-
-        <div class="profile-bio">
-            ${escapeHTML(
-                currentProfile?.bio ||
-                "Пока нет описания."
-            )}
-        </div>
-
-        <div class="profile-stats">
-
-            <div class="stat">
-
-                <strong>
-                    ${postsCount || 0}
-                </strong>
-
-                <span>
-                    Публикации
-                </span>
-
-            </div>
-
-            <div class="stat">
-
-                <strong>
-                    ${followersCount || 0}
-                </strong>
-
-                <span>
-                    Подписчики
-                </span>
-
-            </div>
-
-            <div class="stat">
-
-                <strong>
-                    ${followingCount || 0}
-                </strong>
-
-                <span>
-                    Подписки
-                </span>
-
-            </div>
-
-        </div>
-
-        <button
-            class="secondary-btn"
-            style="margin-top:20px"
-            onclick="openProfileEditor()"
-        >
-            Редактировать профиль
-        </button>
-    `;
+    await renderPublicProfile(currentProfile);
 }
 
 
 function openProfileEditor(){
 
-    document
-        .getElementById(
-            "editUsername"
-        )
-        .value =
+    document.getElementById(
+        "editUsername"
+    ).value =
         currentProfile?.username || "";
 
-    document
-        .getElementById(
-            "editDisplayName"
-        )
-        .value =
+    document.getElementById(
+        "editDisplayName"
+    ).value =
         currentProfile?.display_name || "";
 
-    document
-        .getElementById(
-            "editAvatar"
-        )
-        .value =
+    document.getElementById(
+        "editAvatar"
+    ).value =
         currentProfile?.avatar_url || "";
 
-    document
-        .getElementById(
-            "editBio"
-        )
-        .value =
+    document.getElementById(
+        "editBio"
+    ).value =
         currentProfile?.bio || "";
 
-    openModal(
-        "profileModal"
-    );
+    openModal("profileModal");
 }
 
 
 async function saveProfile(){
 
     const username =
-        document
-        .getElementById(
-            "editUsername"
-        )
-        .value
-        .trim()
+        document.getElementById("editUsername")
+        .value.trim()
         .toLowerCase();
 
     const displayName =
-        document
-        .getElementById(
-            "editDisplayName"
-        )
-        .value
-        .trim();
+        document.getElementById("editDisplayName")
+        .value.trim();
 
     const avatarUrl =
-        document
-        .getElementById(
-            "editAvatar"
-        )
-        .value
-        .trim();
+        document.getElementById("editAvatar")
+        .value.trim();
 
     const bio =
-        document
-        .getElementById(
-            "editBio"
-        )
-        .value
-        .trim();
+        document.getElementById("editBio")
+        .value.trim();
 
     if(!username){
 
+        alert("Username не может быть пустым.");
+        return;
+    }
+
+    if(!/^[a-z0-9_.-]+$/i.test(username)){
+
         alert(
-            "Username не может быть пустым."
+            "Username может содержать только буквы, цифры, точку, _ и -."
         );
 
         return;
@@ -5581,10 +5193,7 @@ async function saveProfile(){
             avatar_url:avatarUrl,
             bio
         })
-        .eq(
-            "id",
-            currentUser.id
-        )
+        .eq("id",currentUser.id)
         .select("*")
         .single();
 
@@ -5594,23 +5203,18 @@ async function saveProfile(){
         return;
     }
 
-    currentProfile =
-        data;
+    currentProfile = data;
 
-    closeModal(
-        "profileModal"
-    );
+    closeModal("profileModal");
+
+    document.getElementById(
+        "createAvatar"
+    ).src =
+        avatar(currentProfile.avatar_url);
 
     await loadProfile();
 
-    document
-        .getElementById(
-            "createAvatar"
-        )
-        .src =
-        avatar(
-            currentProfile.avatar_url
-        );
+    toast("Профиль обновлён");
 }
 
 
@@ -5663,13 +5267,9 @@ document
         "click",
         event => {
 
-            if(
-                event.target === modal
-            ){
+            if(event.target === modal){
 
-                modal.classList.remove(
-                    "show"
-                );
+                modal.classList.remove("show");
             }
 
         }
