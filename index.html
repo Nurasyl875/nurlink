@@ -2,845 +2,1011 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#0f172a">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Nurlink</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
 :root{
- --bg:#f5f7fb;
- --card:#fff;
- --text:#111827;
- --muted:#6b7280;
- --border:#e5e7eb;
- --primary:#111827;
- --soft:#f0f2f5;
- --danger:#ef4444;
+    --bg:#f5f6fa;
+    --card:#fff;
+    --text:#15151a;
+    --muted:#777b87;
+    --border:#e5e7eb;
+    --primary:#6d4aff;
+    --primary2:#8c63ff;
+    --danger:#e5484d;
+    --shadow:0 8px 30px rgba(0,0,0,.07);
 }
-*{box-sizing:border-box}
+
+body.dark{
+    --bg:#0c0d12;
+    --card:#15161d;
+    --text:#f4f4f5;
+    --muted:#979aa5;
+    --border:#292b34;
+    --shadow:0 8px 30px rgba(0,0,0,.25);
+}
+
 body{
- margin:0;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
- background:var(--bg);
- color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:.2s;
 }
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
+
+button,input,textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* TOP */
 
 .topbar{
- position:fixed;
- top:0;
- left:0;
- right:0;
- height:64px;
- background:var(--card);
- border-bottom:1px solid var(--border);
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:0 22px;
- z-index:100;
-}
-.logo{
- font-size:24px;
- font-weight:800;
- letter-spacing:-1px;
-}
-.top-actions{
- display:flex;
- align-items:center;
- gap:10px;
-}
-.icon-btn{
- width:42px;
- height:42px;
- border:0;
- background:var(--soft);
- border-radius:50%;
- display:flex;
- align-items:center;
- justify-content:center;
- color:var(--text);
-}
-.icon{
- width:21px;
- height:21px;
- display:inline-flex;
- align-items:center;
- justify-content:center;
-}
-.icon svg{
- width:100%;
- height:100%;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:64px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    z-index:100;
 }
 
-.layout{
- display:flex;
- max-width:1250px;
- margin:auto;
- padding-top:64px;
+.logo{
+    font-size:25px;
+    font-weight:800;
+    color:var(--primary);
+    cursor:pointer;
 }
+
+.top-actions{
+    display:flex;
+    gap:10px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:12px;
+}
+
+.icon-btn:hover{
+    background:var(--bg);
+}
+
+/* SIDEBAR */
+
 .sidebar{
- width:240px;
- position:fixed;
- top:64px;
- bottom:0;
- padding:22px 12px;
- border-right:1px solid var(--border);
- background:var(--card);
+    position:fixed;
+    top:64px;
+    left:0;
+    bottom:0;
+    width:235px;
+    background:var(--card);
+    border-right:1px solid var(--border);
+    padding:18px 12px;
+    z-index:50;
 }
-.sidebar button{
- width:100%;
- border:0;
- background:transparent;
- padding:13px 15px;
- margin-bottom:4px;
- border-radius:12px;
- display:flex;
- align-items:center;
- gap:13px;
- color:var(--text);
- font-size:15px;
- text-align:left;
+
+.nav-item{
+    width:100%;
+    padding:13px 15px;
+    margin-bottom:5px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:var(--muted);
+    cursor:pointer;
 }
-.sidebar button:hover,
-.sidebar button.active{
- background:var(--soft);
- font-weight:600;
+
+.nav-item:hover{
+    background:var(--bg);
+    color:var(--text);
 }
+
+.nav-item.active{
+    background:rgba(109,74,255,.12);
+    color:var(--primary);
+    font-weight:700;
+}
+
+.nav-icon{
+    width:22px;
+    text-align:center;
+}
+
+/* MAIN */
 
 .main{
- width:100%;
- margin-left:240px;
- max-width:720px;
- padding:25px;
+    margin-left:235px;
+    padding:90px 25px 100px;
+    min-height:100vh;
 }
 
-.page{display:none}
-.page.active{display:block}
-
-.page-head{
- display:flex;
- align-items:center;
- justify-content:space-between;
- margin-bottom:20px;
-}
-.page-head h2{
- margin:0;
- font-size:24px;
+.page{
+    display:none;
+    max-width:760px;
+    margin:auto;
 }
 
-.card{
- background:var(--card);
- border:1px solid var(--border);
- border-radius:18px;
- margin-bottom:16px;
- overflow:hidden;
+.page.active{
+    display:block;
 }
 
-.empty{
- padding:45px 20px;
- text-align:center;
- color:var(--muted);
-}
-.empty strong{
- display:block;
- color:var(--text);
- font-size:17px;
- margin-bottom:7px;
-}
-
-.primary{
- border:0;
- background:var(--primary);
- color:white;
- border-radius:11px;
- padding:11px 17px;
- font-weight:600;
-}
-.secondary{
- border:1px solid var(--border);
- background:var(--card);
- color:var(--text);
- border-radius:11px;
- padding:10px 15px;
-}
-.danger{
- color:var(--danger);
+.page-title{
+    font-size:28px;
+    margin-bottom:20px;
 }
 
 /* AUTH */
-.auth{
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:20px;
+
+.auth-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
 }
-.auth-card{
- width:100%;
- max-width:400px;
- background:var(--card);
- border:1px solid var(--border);
- border-radius:22px;
- padding:30px;
+
+.auth-box{
+    width:100%;
+    max-width:420px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:var(--shadow);
 }
+
 .auth-logo{
- font-size:32px;
- font-weight:800;
- text-align:center;
- margin-bottom:8px;
+    font-size:34px;
+    font-weight:800;
+    color:var(--primary);
+    margin-bottom:8px;
 }
-.auth-sub{
- text-align:center;
- color:var(--muted);
- margin-bottom:25px;
+
+.auth-subtitle{
+    color:var(--muted);
+    margin-bottom:25px;
 }
-.field{margin-bottom:15px}
-.field label{
- display:block;
- font-size:13px;
- font-weight:600;
- margin-bottom:7px;
+
+.auth-box input{
+    width:100%;
+    margin-bottom:12px;
 }
-.field input,
-.field textarea{
- width:100%;
- border:1px solid var(--border);
- background:var(--bg);
- color:var(--text);
- padding:12px;
- border-radius:11px;
- outline:none;
+
+.input{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:12px;
+    padding:13px 14px;
+    outline:none;
 }
-.field input:focus,
-.field textarea:focus{
- border-color:#9ca3af;
+
+.input:focus{
+    border-color:var(--primary);
 }
-.auth .primary{width:100%}
+
+.primary-btn{
+    width:100%;
+    border:0;
+    border-radius:12px;
+    padding:13px 16px;
+    color:white;
+    background:var(--primary);
+    font-weight:700;
+}
+
+.primary-btn:hover{
+    background:var(--primary2);
+}
+
+.primary-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.secondary-btn{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:12px;
+    padding:11px 15px;
+}
+
 .auth-switch{
- text-align:center;
- color:var(--muted);
- margin-top:18px;
- font-size:14px;
+    margin-top:18px;
+    text-align:center;
+    color:var(--muted);
 }
-.link{
- color:var(--text);
- font-weight:600;
- cursor:pointer;
+
+.auth-switch span{
+    color:var(--primary);
+    cursor:pointer;
+    font-weight:700;
+}
+
+/* CREATE */
+
+.create-box{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+}
+
+.create-row{
+    display:flex;
+    gap:12px;
+}
+
+.avatar{
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    object-fit:cover;
+    background:linear-gradient(135deg,var(--primary),#b18cff);
+    flex-shrink:0;
+}
+
+.create-text{
+    flex:1;
+}
+
+.create-text textarea{
+    width:100%;
+    min-height:75px;
+    resize:none;
+    border:0;
+    outline:none;
+    background:transparent;
+    color:var(--text);
+    padding:5px 0;
+}
+
+.create-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border-top:1px solid var(--border);
+    padding-top:12px;
+    margin-top:8px;
+}
+
+.file-label{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:var(--primary);
+    font-weight:700;
+    cursor:pointer;
+}
+
+.file-label input{
+    display:none;
+}
+
+.publish-btn{
+    border:0;
+    background:var(--primary);
+    color:#fff;
+    padding:9px 17px;
+    border-radius:10px;
+    font-weight:700;
+}
+
+.preview{
+    margin-top:12px;
+}
+
+.preview img,
+.preview video{
+    max-width:100%;
+    max-height:350px;
+    border-radius:14px;
+    display:block;
 }
 
 /* STORIES */
+
 .stories{
- display:flex;
- gap:13px;
- overflow-x:auto;
- padding-bottom:5px;
- margin-bottom:18px;
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding:4px 2px 18px;
 }
+
 .story{
- min-width:74px;
- text-align:center;
- cursor:pointer;
+    min-width:75px;
+    cursor:pointer;
+    text-align:center;
 }
+
 .story-avatar{
- width:64px;
- height:64px;
- border-radius:50%;
- padding:2px;
- background:linear-gradient(135deg,#111827,#9ca3af);
- margin:auto;
+    width:66px;
+    height:66px;
+    border-radius:50%;
+    padding:2px;
+    background:linear-gradient(135deg,#6d4aff,#d05cff);
 }
+
 .story-avatar img{
- width:100%;
- height:100%;
- border-radius:50%;
- object-fit:cover;
- border:3px solid var(--card);
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid var(--card);
 }
+
 .story-name{
- margin-top:5px;
- font-size:12px;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
-}
-.add-story{
- width:64px;
- height:64px;
- border-radius:50%;
- border:1px dashed var(--muted);
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:25px;
- margin:auto;
+    font-size:11px;
+    margin-top:5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-/* CREATE POST */
-.create-post{
- padding:15px;
-}
-.create-row{
- display:flex;
- gap:10px;
-}
-.create-row textarea{
- flex:1;
- resize:none;
- min-height:50px;
- border:0;
- background:var(--soft);
- color:var(--text);
- border-radius:15px;
- padding:13px;
- outline:none;
-}
-.create-bottom{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-top:10px;
-}
-.file-label{
- cursor:pointer;
- color:var(--muted);
-}
-.file-label input{display:none}
-.preview{
- max-width:100%;
- max-height:300px;
- border-radius:12px;
- margin-top:10px;
-}
+/* POSTS */
 
-/* POST */
 .post{
- padding:16px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    margin-bottom:18px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
 }
+
 .post-head{
- display:flex;
- align-items:center;
- gap:10px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:15px;
 }
-.avatar{
- width:42px;
- height:42px;
- border-radius:50%;
- object-fit:cover;
- background:var(--soft);
-}
+
 .post-user{
- flex:1;
+    flex:1;
 }
-.post-user strong{
- display:block;
- font-size:14px;
+
+.post-name{
+    font-weight:700;
 }
-.post-user span{
- color:var(--muted);
- font-size:12px;
+
+.post-username{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:2px;
 }
-.post-menu{
- background:none;
- border:0;
- color:var(--muted);
+
+.post-time{
+    color:var(--muted);
+    font-size:12px;
 }
+
 .post-content{
- margin:14px 0;
- white-space:pre-wrap;
- word-break:break-word;
+    padding:0 15px 14px;
+    white-space:pre-wrap;
+    line-height:1.5;
 }
-.post-image{
- width:100%;
- max-height:600px;
- object-fit:cover;
- border-radius:13px;
+
+.post-image,
+.post-video{
+    width:100%;
+    max-height:650px;
+    object-fit:cover;
+    display:block;
 }
+
+.post-video{
+    background:#000;
+}
+
 .post-actions{
- display:flex;
- gap:7px;
- border-top:1px solid var(--border);
- margin-top:14px;
- padding-top:10px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    padding:10px 12px;
+    border-top:1px solid var(--border);
+    flex-wrap:wrap;
 }
-.post-actions button{
- border:0;
- background:transparent;
- color:var(--muted);
- padding:8px 10px;
- border-radius:9px;
- display:flex;
- gap:6px;
- align-items:center;
+
+.post-action{
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    padding:8px 10px;
+    border-radius:9px;
 }
-.post-actions button:hover{
- background:var(--soft);
- color:var(--text);
+
+.post-action:hover{
+    background:var(--bg);
+    color:var(--text);
 }
+
+.post-action.liked{
+    color:var(--danger);
+}
+
 .comments{
- margin-top:10px;
+    border-top:1px solid var(--border);
+    padding:12px 15px;
 }
+
 .comment{
- display:flex;
- gap:8px;
- margin-top:9px;
+    display:flex;
+    gap:8px;
+    margin-bottom:9px;
 }
-.comment img{
- width:30px;
- height:30px;
- border-radius:50%;
- object-fit:cover;
+
+.comment-content{
+    background:var(--bg);
+    border-radius:10px;
+    padding:8px 10px;
+    flex:1;
 }
-.comment-body{
- background:var(--soft);
- border-radius:12px;
- padding:8px 11px;
- flex:1;
-}
+
 .comment-name{
- font-size:12px;
- font-weight:700;
+    font-weight:700;
+    font-size:13px;
 }
+
 .comment-text{
- font-size:13px;
- margin-top:2px;
+    margin-top:2px;
+    font-size:14px;
 }
+
 .comment-form{
- display:flex;
- gap:7px;
- margin-top:10px;
+    display:flex;
+    gap:8px;
 }
+
 .comment-form input{
- flex:1;
- border:1px solid var(--border);
- background:var(--bg);
- color:var(--text);
- border-radius:10px;
- padding:9px;
+    flex:1;
 }
 
 /* EXPLORE */
-.search{
- display:flex;
- gap:10px;
- margin-bottom:18px;
+
+.search-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
 }
-.search input{
- flex:1;
- padding:13px;
- border:1px solid var(--border);
- border-radius:12px;
- background:var(--card);
- color:var(--text);
+
+.search-box input{
+    flex:1;
 }
+
 .user-card{
- display:flex;
- align-items:center;
- gap:12px;
- padding:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
 }
-.user-card-info{
- flex:1;
+
+.user-info{
+    flex:1;
 }
-.user-card-info strong{display:block}
-.user-card-info span{
- color:var(--muted);
- font-size:13px;
+
+.user-name{
+    font-weight:700;
+}
+
+.user-username{
+    color:var(--muted);
+    font-size:13px;
 }
 
 /* PROFILE */
-.profile-head{
- background:var(--card);
- border:1px solid var(--border);
- border-radius:18px;
- padding:22px;
+
+.profile-header{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:25px;
+    text-align:center;
 }
-.profile-main{
- display:flex;
- gap:17px;
- align-items:center;
-}
+
 .profile-avatar{
- width:85px;
- height:85px;
- border-radius:50%;
- object-fit:cover;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    object-fit:cover;
+    margin:auto;
+    display:block;
 }
-.profile-info{
- flex:1;
+
+.profile-name{
+    font-size:23px;
+    font-weight:800;
+    margin-top:12px;
 }
-.profile-info h2{
- margin:0 0 3px;
+
+.profile-username{
+    color:var(--muted);
+    margin-top:3px;
 }
-.profile-info .username{
- color:var(--muted);
-}
+
 .profile-bio{
- margin-top:12px;
- white-space:pre-wrap;
+    margin-top:12px;
+    line-height:1.5;
 }
-.stats{
- display:flex;
- gap:28px;
- margin-top:18px;
+
+.profile-stats{
+    display:flex;
+    justify-content:center;
+    gap:35px;
+    margin-top:20px;
 }
+
 .stat strong{
- display:block;
- font-size:18px;
+    display:block;
+    font-size:20px;
 }
+
 .stat span{
- color:var(--muted);
- font-size:12px;
-}
-.profile-grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:3px;
- margin-top:15px;
-}
-.profile-grid img{
- width:100%;
- aspect-ratio:1;
- object-fit:cover;
- background:var(--soft);
+    color:var(--muted);
+    font-size:12px;
 }
 
 /* MESSAGES */
+
 .messages-layout{
- height:calc(100vh - 115px);
- min-height:500px;
- display:flex;
- background:var(--card);
- border:1px solid var(--border);
- border-radius:18px;
- overflow:hidden;
+    display:grid;
+    grid-template-columns:240px 1fr;
+    height:650px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
 }
+
 .chat-users{
- width:220px;
- border-right:1px solid var(--border);
- overflow-y:auto;
+    border-right:1px solid var(--border);
+    overflow:auto;
 }
+
 .chat-user{
- padding:12px;
- display:flex;
- gap:10px;
- align-items:center;
- cursor:pointer;
+    padding:13px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    cursor:pointer;
 }
+
 .chat-user:hover,
 .chat-user.active{
- background:var(--soft);
+    background:var(--bg);
 }
-.chat-user-info{
- min-width:0;
+
+.chat-window{
+    display:flex;
+    flex-direction:column;
 }
-.chat-user-info strong{
- display:block;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
+
+.chat-header{
+    padding:14px;
+    border-bottom:1px solid var(--border);
+    font-weight:700;
 }
-.chat-user-info span{
- color:var(--muted);
- font-size:12px;
-}
-.chat{
- flex:1;
- display:flex;
- flex-direction:column;
-}
-.chat-head{
- padding:13px 15px;
- border-bottom:1px solid var(--border);
- font-weight:700;
-}
+
 .chat-messages{
- flex:1;
- overflow-y:auto;
- padding:15px;
+    flex:1;
+    overflow:auto;
+    padding:15px;
 }
+
 .message{
- max-width:75%;
- margin-bottom:10px;
- padding:9px 12px;
- border-radius:14px;
- background:var(--soft);
+    display:flex;
+    margin-bottom:8px;
 }
+
 .message.mine{
- margin-left:auto;
- background:var(--primary);
- color:white;
+    justify-content:flex-end;
 }
-.message-time{
- font-size:10px;
- opacity:.6;
- margin-top:3px;
+
+.message-bubble{
+    max-width:70%;
+    padding:9px 12px;
+    border-radius:14px;
+    background:var(--bg);
 }
+
+.message.mine .message-bubble{
+    background:var(--primary);
+    color:#fff;
+}
+
 .chat-input{
- display:flex;
- gap:8px;
- padding:10px;
- border-top:1px solid var(--border);
+    display:flex;
+    gap:8px;
+    padding:12px;
+    border-top:1px solid var(--border);
 }
+
 .chat-input input{
- flex:1;
- border:1px solid var(--border);
- background:var(--bg);
- color:var(--text);
- border-radius:11px;
- padding:11px;
+    flex:1;
+}
+
+/* SHORTS */
+
+.shorts-page{
+    max-width:550px;
+}
+
+.shorts-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.shorts-header h1{
+    font-size:28px;
+}
+
+.shorts-header-actions{
+    display:flex;
+    gap:8px;
+}
+
+.shorts-feed{
+    height:calc(100vh - 125px);
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    scrollbar-width:none;
+}
+
+.shorts-feed::-webkit-scrollbar{
+    display:none;
+}
+
+.short-card{
+    position:relative;
+    height:calc(100vh - 125px);
+    min-height:500px;
+    scroll-snap-align:start;
+    background:#000;
+    border-radius:18px;
+    overflow:hidden;
+    margin-bottom:12px;
+}
+
+.short-video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    background:#000;
+}
+
+.short-gradient{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.82),
+            transparent 45%,
+            rgba(0,0,0,.1)
+        );
+}
+
+.short-info{
+    position:absolute;
+    left:18px;
+    right:80px;
+    bottom:22px;
+    color:#fff;
+}
+
+.short-author{
+    font-weight:800;
+    font-size:17px;
+    margin-bottom:8px;
+}
+
+.short-description{
+    line-height:1.4;
+    font-size:14px;
+}
+
+.short-actions{
+    position:absolute;
+    right:12px;
+    bottom:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.short-action{
+    width:48px;
+    height:48px;
+    border:0;
+    border-radius:50%;
+    background:rgba(0,0,0,.55);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+}
+
+.short-action.liked{
+    color:#ff5260;
+}
+
+.short-mute{
+    position:absolute;
+    top:15px;
+    right:15px;
+}
+
+.video-badge{
+    position:absolute;
+    top:15px;
+    left:15px;
+    padding:7px 10px;
+    background:rgba(0,0,0,.5);
+    color:#fff;
+    border-radius:8px;
+    font-size:12px;
 }
 
 /* ROOMS */
+
 .room-list{
- display:flex;
- flex-direction:column;
- gap:12px;
+    display:grid;
+    gap:12px;
 }
+
 .room-card{
- background:var(--card);
- border:1px solid var(--border);
- border-radius:18px;
- padding:16px;
- cursor:pointer;
- transition:.15s;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:17px;
 }
-.room-card:hover{
- transform:translateY(-1px);
- box-shadow:0 6px 20px rgba(0,0,0,.05);
+
+.room-title{
+    font-size:18px;
+    font-weight:800;
 }
-.room-top{
- display:flex;
- gap:13px;
- align-items:center;
-}
-.room-avatar{
- width:52px;
- height:52px;
- flex:none;
- border-radius:15px;
- background:var(--primary);
- color:white;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:21px;
- font-weight:800;
-}
-.room-info{
- flex:1;
- min-width:0;
-}
-.room-name{
- font-size:16px;
- font-weight:750;
-}
+
 .room-description{
- color:var(--muted);
- font-size:13px;
- margin-top:3px;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
+    color:var(--muted);
+    margin:6px 0 12px;
 }
-.room-meta{
- display:flex;
- gap:14px;
- color:var(--muted);
- font-size:11px;
- margin-top:13px;
+
+.room-actions{
+    display:flex;
+    gap:8px;
 }
-.room-join{
- border:1px solid var(--border);
- background:var(--card);
- color:var(--text);
- border-radius:10px;
- padding:8px 12px;
- font-size:12px;
+
+/* NOTIFICATIONS */
+
+.notification{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:9px;
 }
-.room-empty{
- padding:50px 20px;
-}
-.room-chat{
- height:calc(100vh - 115px);
- min-height:500px;
- display:flex;
- flex-direction:column;
- background:var(--card);
- border:1px solid var(--border);
- border-radius:18px;
- overflow:hidden;
-}
-.room-chat-head{
- padding:14px 16px;
- border-bottom:1px solid var(--border);
- display:flex;
- align-items:center;
- gap:10px;
-}
-.room-chat-head-info{
- flex:1;
-}
-.room-chat-head-info strong{
- display:block;
-}
-.room-chat-head-info span{
- color:var(--muted);
- font-size:12px;
-}
-.room-messages{
- flex:1;
- overflow-y:auto;
- padding:16px;
-}
-.room-message{
- display:flex;
- gap:9px;
- margin-bottom:14px;
-}
-.room-message-avatar{
- width:34px;
- height:34px;
- border-radius:50%;
- object-fit:cover;
- flex:none;
-}
-.room-message-body{
- min-width:0;
-}
-.room-message-name{
- font-size:12px;
- font-weight:700;
-}
-.room-message-text{
- margin-top:3px;
- font-size:14px;
- white-space:pre-wrap;
- word-break:break-word;
-}
-.room-message-time{
- margin-top:3px;
- color:var(--muted);
- font-size:10px;
-}
-.room-input{
- display:flex;
- gap:8px;
- padding:10px;
- border-top:1px solid var(--border);
-}
-.room-input input{
- flex:1;
- border:1px solid var(--border);
- background:var(--bg);
- color:var(--text);
- border-radius:11px;
- padding:11px;
+
+.notification.unread{
+    border-color:var(--primary);
 }
 
 /* MODALS */
+
 .modal{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.45);
- display:none;
- align-items:center;
- justify-content:center;
- padding:20px;
- z-index:300;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:500;
 }
-.modal.show{display:flex}
-.modal-card{
- width:100%;
- max-width:450px;
- background:var(--card);
- border-radius:20px;
- overflow:hidden;
+
+.modal.show{
+    display:flex;
 }
+
+.modal-box{
+    width:100%;
+    max-width:480px;
+    max-height:90vh;
+    overflow:auto;
+    background:var(--card);
+    border-radius:20px;
+    padding:22px;
+}
+
 .modal-head{
- padding:17px 20px;
- border-bottom:1px solid var(--border);
- display:flex;
- align-items:center;
- justify-content:space-between;
- font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
 }
-.close{
- background:none;
- border:0;
- font-size:25px;
- color:var(--muted);
+
+.modal-head h2{
+    font-size:21px;
 }
-.modal-body{padding:20px}
+
+.modal-close{
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    font-size:23px;
+}
+
+.modal-box input,
+.modal-box textarea{
+    width:100%;
+    margin-bottom:11px;
+}
+
+.modal-box textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+/* STORY VIEWER */
+
+.story-viewer{
+    position:fixed;
+    inset:0;
+    background:#000;
+    z-index:700;
+    display:none;
+    align-items:center;
+    justify-content:center;
+}
+
+.story-viewer.show{
+    display:flex;
+}
+
+.story-viewer img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+}
+
+.story-close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    color:#fff;
+    background:rgba(0,0,0,.5);
+    border:0;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+}
 
 /* MOBILE */
+
 .mobile-nav{
- display:none;
- position:fixed;
- bottom:0;
- left:0;
- right:0;
- height:65px;
- background:var(--card);
- border-top:1px solid var(--border);
- z-index:100;
-}
-.mobile-nav button{
- flex:1;
- border:0;
- background:transparent;
- color:var(--muted);
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- gap:3px;
- font-size:10px;
-}
-.mobile-nav button.active{
- color:var(--text);
- font-weight:700;
+    display:none;
 }
 
-@media(max-width:800px){
- .sidebar{display:none}
- .main{
-  margin-left:0;
-  max-width:none;
-  padding:18px 12px 85px;
- }
- .topbar{
-  padding:0 14px;
- }
- .mobile-nav{
-  display:flex;
- }
- .messages-layout{
-  height:calc(100vh - 145px);
- }
- .chat-users{
-  width:90px;
- }
- .chat-user-info{
-  display:none;
- }
- .chat-user{
-  justify-content:center;
- }
- .room-chat{
-  height:calc(100vh - 145px);
- }
- .profile-main{
-  align-items:flex-start;
- }
- .profile-avatar{
-  width:70px;
-  height:70px;
- }
+.loading,
+.empty{
+    text-align:center;
+    color:var(--muted);
+    padding:30px 10px;
+}
+
+@media(max-width:850px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        padding:80px 12px 85px;
+    }
+
+    .topbar{
+        padding:0 14px;
+    }
+
+    .mobile-nav{
+        position:fixed;
+        left:0;
+        right:0;
+        bottom:0;
+        height:65px;
+        background:var(--card);
+        border-top:1px solid var(--border);
+        display:flex;
+        align-items:center;
+        justify-content:space-around;
+        z-index:100;
+    }
+
+    .mobile-item{
+        color:var(--muted);
+        font-size:12px;
+        text-align:center;
+        cursor:pointer;
+    }
+
+    .mobile-item.active{
+        color:var(--primary);
+    }
+
+    .mobile-icon{
+        font-size:20px;
+        margin-bottom:2px;
+    }
+
+    .messages-layout{
+        grid-template-columns:1fr;
+        height:650px;
+    }
+
+    .chat-users{
+        display:none;
+    }
+
+    .shorts-page{
+        max-width:100%;
+    }
+
+    .shorts-feed,
+    .short-card{
+        height:calc(100vh - 140px);
+        min-height:500px;
+    }
+
+    .short-card{
+        border-radius:14px;
+    }
+
+    .shorts-header{
+        align-items:flex-start;
+    }
+
+    .shorts-header-actions{
+        flex-direction:column;
+    }
 }
 </style>
 </head>
@@ -848,2711 +1014,4668 @@ button{cursor:pointer}
 <body>
 
 <!-- AUTH -->
-<div id="authScreen" class="auth">
-<div class="auth-card">
 
-<div class="auth-logo">Nurlink</div>
-<div class="auth-sub">Connect. Share. Discover.</div>
+<div id="authScreen" class="auth-screen">
 
-<div id="loginForm">
+    <div class="auth-box">
 
-<div class="field">
-<label>Email</label>
-<input id="loginEmail" type="email" placeholder="you@example.com">
+        <div class="auth-logo">
+            Nurlink
+        </div>
+
+        <div class="auth-subtitle">
+            Общайся. Создавай. Находи людей.
+        </div>
+
+        <div id="loginForm">
+
+            <input
+                id="loginEmail"
+                class="input"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="loginPassword"
+                class="input"
+                type="password"
+                placeholder="Пароль"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="login()"
+            >
+                Войти
+            </button>
+
+            <div class="auth-switch">
+                Нет аккаунта?
+                <span onclick="showRegister()">
+                    Создать
+                </span>
+            </div>
+
+        </div>
+
+        <div
+            id="registerForm"
+            class="hidden"
+        >
+
+            <input
+                id="registerUsername"
+                class="input"
+                placeholder="Username"
+            >
+
+            <input
+                id="registerName"
+                class="input"
+                placeholder="Имя"
+            >
+
+            <input
+                id="registerEmail"
+                class="input"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="registerPassword"
+                class="input"
+                type="password"
+                placeholder="Пароль"
+            >
+
+            <button
+                class="primary-btn"
+                onclick="register()"
+            >
+                Создать аккаунт
+            </button>
+
+            <div class="auth-switch">
+                Уже есть аккаунт?
+                <span onclick="showLogin()">
+                    Войти
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="field">
-<label>Пароль</label>
-<input id="loginPassword" type="password" placeholder="••••••••">
-</div>
-
-<button class="primary" onclick="login()">Войти</button>
-
-<div class="auth-switch">
-Нет аккаунта?
-<span class="link" onclick="showRegister()">Создать</span>
-</div>
-
-</div>
-
-<div id="registerForm" class="hidden">
-
-<div class="field">
-<label>Username</label>
-<input id="registerUsername" maxlength="30" placeholder="nurasyl">
-</div>
-
-<div class="field">
-<label>Имя</label>
-<input id="registerName" maxlength="50" placeholder="Нурасыл">
-</div>
-
-<div class="field">
-<label>Email</label>
-<input id="registerEmail" type="email" placeholder="you@example.com">
-</div>
-
-<div class="field">
-<label>Пароль</label>
-<input id="registerPassword" type="password" placeholder="Минимум 6 символов">
-</div>
-
-<button class="primary" onclick="register()">Создать аккаунт</button>
-
-<div class="auth-switch">
-Уже есть аккаунт?
-<span class="link" onclick="showLogin()">Войти</span>
-</div>
-
-</div>
-
-</div>
-</div>
 
 <!-- APP -->
+
 <div id="app" class="hidden">
 
-<header class="topbar">
-<div class="logo">Nurlink</div>
+    <header class="topbar">
 
-<div class="top-actions">
-<button class="icon-btn" onclick="showPage('notifications')" title="Уведомления">
-<span class="icon" id="notificationIcon"></span>
-</button>
+        <div
+            class="logo"
+            onclick="showPage('home')"
+        >
+            Nurlink
+        </div>
 
-<button class="icon-btn" onclick="toggleTheme()" title="Тема">
-<span class="icon" id="themeIcon"></span>
-</button>
+        <div class="top-actions">
 
-<button class="icon-btn" onclick="logout()" title="Выйти">
-<span class="icon" id="logoutIcon"></span>
-</button>
+            <button
+                class="icon-btn"
+                onclick="toggleTheme()"
+            >
+                ◐
+            </button>
+
+            <button
+                class="icon-btn"
+                onclick="showPage('notifications')"
+            >
+                ♢
+            </button>
+
+            <button
+                class="icon-btn"
+                onclick="logout()"
+            >
+                ×
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div
+            class="nav-item active"
+            data-page="home"
+            onclick="showPage('home')"
+        >
+            <span class="nav-icon">⌂</span>
+            Главная
+        </div>
+
+        <div
+            class="nav-item"
+            data-page="explore"
+            onclick="showPage('explore')"
+        >
+            <span class="nav-icon">⌕</span>
+            Обзор
+        </div>
+
+        <div
+            class="nav-item"
+            data-page="shorts"
+            onclick="showPage('shorts')"
+        >
+            <span class="nav-icon">▶</span>
+            Shorts
+        </div>
+
+        <div
+            class="nav-item"
+            data-page="notifications"
+            onclick="showPage('notifications')"
+        >
+            <span class="nav-icon">♢</span>
+            Уведомления
+        </div>
+
+        <div
+            class="nav-item"
+            data-page="messages"
+            onclick="showPage('messages')"
+        >
+            <span class="nav-icon">□</span>
+            Сообщения
+        </div>
+
+        <div
+            class="nav-item"
+            data-page="rooms"
+            onclick="showPage('rooms')"
+        >
+            <span class="nav-icon">◫</span>
+            Rooms
+        </div>
+
+        <div
+            class="nav-item"
+            data-page="profile"
+            onclick="showPage('profile')"
+        >
+            <span class="nav-icon">○</span>
+            Профиль
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <!-- HOME -->
+
+        <section
+            id="home"
+            class="page active"
+        >
+
+            <div class="page-title">
+                Главная
+            </div>
+
+            <div
+                id="stories"
+                class="stories"
+            ></div>
+
+            <div class="create-box">
+
+                <div class="create-row">
+
+                    <img
+                        id="createAvatar"
+                        class="avatar"
+                        src=""
+                    >
+
+                    <div class="create-text">
+
+                        <textarea
+                            id="postContent"
+                            placeholder="Что нового?"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+                <div
+                    id="postPreview"
+                    class="preview"
+                ></div>
+
+                <div class="create-bottom">
+
+                    <label class="file-label">
+
+                        <span>
+                            Фото / видео
+                        </span>
+
+                        <input
+                            id="postImage"
+                            type="file"
+                            accept="image/*,video/*"
+                            onchange="previewPostFile()"
+                        >
+
+                    </label>
+
+                    <button
+                        class="publish-btn"
+                        onclick="createPost()"
+                    >
+                        Опубликовать
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div id="feed">
+                <div class="loading">
+                    Загрузка...
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- EXPLORE -->
+
+        <section
+            id="explore"
+            class="page"
+        >
+
+            <div class="page-title">
+                Обзор
+            </div>
+
+            <div class="search-box">
+
+                <input
+                    id="searchInput"
+                    class="input"
+                    placeholder="Найти людей..."
+                    onkeydown="
+                        if(event.key==='Enter')
+                        searchUsers()
+                    "
+                >
+
+                <button
+                    class="primary-btn"
+                    style="width:auto"
+                    onclick="searchUsers()"
+                >
+                    Найти
+                </button>
+
+            </div>
+
+            <div id="searchResults"></div>
+
+        </section>
+
+
+        <!-- SHORTS -->
+
+        <section
+            id="shorts"
+            class="page shorts-page"
+        >
+
+            <div class="shorts-header">
+
+                <h1>
+                    Shorts
+                </h1>
+
+                <div class="shorts-header-actions">
+
+                    <button
+                        class="primary-btn"
+                        style="width:auto"
+                        onclick="openModal('shortModal')"
+                    >
+                        Создать Shorts
+                    </button>
+
+                    <button
+                        class="secondary-btn"
+                        onclick="loadShorts()"
+                    >
+                        Обновить
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div
+                id="shortsFeed"
+                class="shorts-feed"
+            >
+
+                <div class="empty">
+                    Здесь будут короткие видео.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NOTIFICATIONS -->
+
+        <section
+            id="notifications"
+            class="page"
+        >
+
+            <div class="page-title">
+                Уведомления
+            </div>
+
+            <div id="notificationsList"></div>
+
+        </section>
+
+
+        <!-- MESSAGES -->
+
+        <section
+            id="messages"
+            class="page"
+        >
+
+            <div class="page-title">
+                Сообщения
+            </div>
+
+            <div class="messages-layout">
+
+                <div
+                    id="chatUsers"
+                    class="chat-users"
+                ></div>
+
+                <div class="chat-window">
+
+                    <div
+                        id="chatHeader"
+                        class="chat-header"
+                    >
+                        Выберите пользователя
+                    </div>
+
+                    <div
+                        id="chatMessages"
+                        class="chat-messages"
+                    >
+                        <div class="empty">
+                            Выберите чат
+                        </div>
+                    </div>
+
+                    <div class="chat-input">
+
+                        <input
+                            id="messageInput"
+                            class="input"
+                            placeholder="Написать сообщение..."
+                            onkeydown="
+                                if(event.key==='Enter')
+                                sendMessage()
+                            "
+                        >
+
+                        <button
+                            class="primary-btn"
+                            style="width:auto"
+                            onclick="sendMessage()"
+                        >
+                            Отправить
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ROOMS -->
+
+        <section
+            id="rooms"
+            class="page"
+        >
+
+            <div class="page-title">
+                Rooms
+            </div>
+
+            <button
+                class="primary-btn"
+                style="width:auto;margin-bottom:18px"
+                onclick="openModal('roomModal')"
+            >
+                Создать Room
+            </button>
+
+            <div
+                id="roomsList"
+                class="room-list"
+            ></div>
+
+            <div
+                id="roomChat"
+                class="hidden"
+                style="
+                    margin-top:20px;
+                    background:var(--card);
+                    border:1px solid var(--border);
+                    border-radius:18px;
+                    overflow:hidden;
+                "
+            >
+
+                <div
+                    id="roomChatHeader"
+                    style="
+                        padding:15px;
+                        border-bottom:1px solid var(--border);
+                        font-weight:700;
+                    "
+                ></div>
+
+                <div
+                    id="roomMessages"
+                    style="
+                        height:400px;
+                        overflow:auto;
+                        padding:15px;
+                    "
+                ></div>
+
+                <div
+                    style="
+                        display:flex;
+                        gap:8px;
+                        padding:12px;
+                        border-top:1px solid var(--border);
+                    "
+                >
+
+                    <input
+                        id="roomMessageInput"
+                        class="input"
+                        placeholder="Сообщение..."
+                        onkeydown="
+                            if(event.key==='Enter')
+                            sendRoomMessage()
+                        "
+                    >
+
+                    <button
+                        class="primary-btn"
+                        style="width:auto"
+                        onclick="sendRoomMessage()"
+                    >
+                        Отправить
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROFILE -->
+
+        <section
+            id="profile"
+            class="page"
+        >
+
+            <div class="page-title">
+                Профиль
+            </div>
+
+            <div
+                id="profileContent"
+                class="profile-header"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MOBILE NAV -->
+
+    <nav class="mobile-nav">
+
+        <div
+            class="mobile-item active"
+            data-page="home"
+            onclick="showPage('home')"
+        >
+            <div class="mobile-icon">
+                ⌂
+            </div>
+            Главная
+        </div>
+
+        <div
+            class="mobile-item"
+            data-page="explore"
+            onclick="showPage('explore')"
+        >
+            <div class="mobile-icon">
+                ⌕
+            </div>
+            Обзор
+        </div>
+
+        <div
+            class="mobile-item"
+            data-page="shorts"
+            onclick="showPage('shorts')"
+        >
+            <div class="mobile-icon">
+                ▶
+            </div>
+            Shorts
+        </div>
+
+        <div
+            class="mobile-item"
+            data-page="messages"
+            onclick="showPage('messages')"
+        >
+            <div class="mobile-icon">
+                □
+            </div>
+            Чаты
+        </div>
+
+        <div
+            class="mobile-item"
+            data-page="profile"
+            onclick="showPage('profile')"
+        >
+            <div class="mobile-icon">
+                ○
+            </div>
+            Профиль
+        </div>
+
+    </nav>
+
 </div>
-</header>
 
-<div class="layout">
 
-<aside class="sidebar">
+<!-- ROOM MODAL -->
 
-<button data-page="home" onclick="showPage('home')">
-<span class="icon" id="homeIcon"></span>
-Главная
-</button>
+<div
+    id="roomModal"
+    class="modal"
+>
 
-<button data-page="explore" onclick="showPage('explore')">
-<span class="icon" id="exploreIcon"></span>
-Обзор
-</button>
+    <div class="modal-box">
 
-<button data-page="notifications" onclick="showPage('notifications')">
-<span class="icon" id="sideNotificationIcon"></span>
-Уведомления
-</button>
+        <div class="modal-head">
 
-<button data-page="messages" onclick="showPage('messages')">
-<span class="icon" id="messagesIcon"></span>
-Сообщения
-</button>
+            <h2>
+                Создать Room
+            </h2>
 
-<button data-page="rooms" onclick="showPage('rooms')">
-<span class="icon" id="roomsIcon"></span>
-Rooms
-</button>
+            <button
+                class="modal-close"
+                onclick="closeModal('roomModal')"
+            >
+                ×
+            </button>
 
-<button data-page="profile" onclick="showPage('profile')">
-<span class="icon" id="profileIcon"></span>
-Профиль
-</button>
+        </div>
 
-</aside>
+        <input
+            id="roomName"
+            class="input"
+            placeholder="Название"
+        >
 
-<main class="main">
+        <textarea
+            id="roomDescription"
+            class="input"
+            placeholder="Описание"
+        ></textarea>
 
-<!-- HOME -->
-<section id="page-home" class="page active">
+        <button
+            class="primary-btn"
+            onclick="createRoom()"
+        >
+            Создать
+        </button>
 
-<div class="stories" id="stories"></div>
-
-<div class="card create-post">
-
-<div class="create-row">
-<textarea id="postContent" placeholder="Что нового?" maxlength="2000"></textarea>
-</div>
-
-<img id="postPreview" class="preview hidden">
-
-<div class="create-bottom">
-
-<label class="file-label">
-<span class="icon" id="imageIcon"></span>
-Фото
-<input id="postImage" type="file" accept="image/*" onchange="previewPostImage()">
-</label>
-
-<button class="primary" onclick="createPost()">Опубликовать</button>
-
-</div>
-</div>
-
-<div id="feed"></div>
-
-</section>
-
-<!-- EXPLORE -->
-<section id="page-explore" class="page">
-
-<div class="page-head">
-<h2>Обзор</h2>
-</div>
-
-<div class="search">
-<input id="searchInput" placeholder="Поиск пользователей..." oninput="searchUsers()">
-</div>
-
-<div id="searchResults"></div>
-
-<h3>Рекомендации</h3>
-<div id="recommendations"></div>
-
-</section>
-
-<!-- NOTIFICATIONS -->
-<section id="page-notifications" class="page">
-
-<div class="page-head">
-<h2>Уведомления</h2>
-</div>
-
-<div id="notifications"></div>
-
-</section>
-
-<!-- MESSAGES -->
-<section id="page-messages" class="page">
-
-<div class="page-head">
-<h2>Сообщения</h2>
-</div>
-
-<div class="messages-layout">
-
-<div class="chat-users" id="chatUsers"></div>
-
-<div class="chat">
-
-<div class="chat-head" id="chatTitle">
-Выберите пользователя
-</div>
-
-<div class="chat-messages" id="chatMessages">
-<div class="empty">
-<strong>Сообщения</strong>
-Выберите пользователя слева.
-</div>
-</div>
-
-<div class="chat-input">
-
-<input id="messageInput"
-placeholder="Написать сообщение..."
-maxlength="1000"
-onkeydown="if(event.key==='Enter')sendMessage()">
-
-<button class="primary" onclick="sendMessage()">
-<span class="icon" id="sendIcon"></span>
-</button>
+    </div>
 
 </div>
 
-</div>
+
+<!-- SHORTS MODAL -->
+
+<div
+    id="shortModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>
+                Создать Shorts
+            </h2>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('shortModal')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <textarea
+            id="shortContent"
+            class="input"
+            placeholder="Описание ролика..."
+            style="min-height:80px"
+        ></textarea>
+
+        <label
+            class="file-label"
+            style="
+                display:flex;
+                padding:14px;
+                border:1px dashed var(--border);
+                border-radius:12px;
+                margin-bottom:12px;
+            "
+        >
+
+            Выбрать видео
+
+            <input
+                id="shortFile"
+                type="file"
+                accept="video/*"
+                onchange="previewShort()"
+            >
+
+        </label>
+
+        <div
+            id="shortPreview"
+            class="preview"
+        ></div>
+
+        <div
+            style="
+                color:var(--muted);
+                font-size:13px;
+                margin-bottom:15px;
+            "
+        >
+            Максимум 60 секунд и 100 MB.
+            Лучше вертикальный формат 9:16.
+        </div>
+
+        <button
+            id="publishShortButton"
+            class="primary-btn"
+            onclick="publishShort()"
+        >
+            Опубликовать Shorts
+        </button>
+
+    </div>
 
 </div>
 
-</section>
-
-<!-- ROOMS -->
-<section id="page-rooms" class="page">
-
-<div id="roomsListView">
-
-<div class="page-head">
-<div>
-<h2>Rooms</h2>
-<div style="color:var(--muted);font-size:13px;margin-top:4px">
-Публичные комнаты Nurlink
-</div>
-</div>
-
-<button class="primary" onclick="openRoomModal()">
-Создать комнату
-</button>
-</div>
-
-<div id="roomsList" class="room-list"></div>
-
-</div>
-
-<div id="roomChat" class="room-chat" style="display:none">
-
-<div class="room-chat-head">
-
-<button class="icon-btn" onclick="closeRoom()" style="width:36px;height:36px">
-<span class="icon" id="backRoomIcon"></span>
-</button>
-
-<div class="room-chat-head-info">
-<strong id="roomTitle">Room</strong>
-<span id="roomDescription">Публичная комната</span>
-</div>
-
-</div>
-
-<div id="roomMessages" class="room-messages"></div>
-
-<div class="room-input">
-
-<input
-id="roomMessageInput"
-placeholder="Написать в комнату..."
-maxlength="1000"
-onkeydown="if(event.key==='Enter')sendRoomMessage()">
-
-<button class="primary" onclick="sendRoomMessage()">
-<span class="icon" id="roomSendIcon"></span>
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- PROFILE -->
-<section id="page-profile" class="page">
-
-<div class="page-head">
-<h2>Профиль</h2>
-<button class="secondary" onclick="openModal('profileModal')">
-Редактировать
-</button>
-</div>
-
-<div id="profile"></div>
-
-</section>
-
-</main>
-</div>
-
-<!-- MOBILE NAV -->
-<nav class="mobile-nav">
-
-<button data-mobile="home" onclick="showPage('home')">
-<span class="icon" id="mHome"></span>
-Главная
-</button>
-
-<button data-mobile="explore" onclick="showPage('explore')">
-<span class="icon" id="mExplore"></span>
-Обзор
-</button>
-
-<button data-mobile="messages" onclick="showPage('messages')">
-<span class="icon" id="mMessages"></span>
-Сообщения
-</button>
-
-<button data-mobile="rooms" onclick="showPage('rooms')">
-<span class="icon" id="mRooms"></span>
-Rooms
-</button>
-
-<button data-mobile="profile" onclick="showPage('profile')">
-<span class="icon" id="mProfile"></span>
-Профиль
-</button>
-
-</nav>
-
-</div>
-
-<!-- CREATE ROOM MODAL -->
-<div class="modal" id="roomModal">
-
-<div class="modal-card">
-
-<div class="modal-head">
-Создать комнату
-<button class="close" onclick="closeModal('roomModal')">×</button>
-</div>
-
-<div class="modal-body">
-
-<div class="field">
-<label>Название</label>
-<input id="roomName" maxlength="50" placeholder="Например: CS2 Community">
-</div>
-
-<div class="field">
-<label>Описание</label>
-<textarea
-id="roomDescriptionInput"
-rows="3"
-maxlength="150"
-placeholder="О чём эта комната?"></textarea>
-</div>
-
-<button class="primary" onclick="createRoom()">
-Создать комнату
-</button>
-
-</div>
-</div>
-</div>
 
 <!-- PROFILE MODAL -->
-<div class="modal" id="profileModal">
 
-<div class="modal-card">
+<div
+    id="profileModal"
+    class="modal"
+>
 
-<div class="modal-head">
-Редактировать профиль
-<button class="close" onclick="closeModal('profileModal')">×</button>
-</div>
+    <div class="modal-box">
 
-<div class="modal-body">
+        <div class="modal-head">
 
-<div class="field">
-<label>Имя</label>
-<input id="editName" maxlength="50">
-</div>
+            <h2>
+                Редактировать профиль
+            </h2>
 
-<div class="field">
-<label>Username</label>
-<input id="editUsername" maxlength="30">
-</div>
+            <button
+                class="modal-close"
+                onclick="closeModal('profileModal')"
+            >
+                ×
+            </button>
 
-<div class="field">
-<label>Bio</label>
-<textarea id="editBio" rows="4" maxlength="160"></textarea>
-</div>
+        </div>
 
-<div class="field">
-<label>Аватар</label>
-<input id="avatarFile" type="file" accept="image/*">
-</div>
+        <input
+            id="editUsername"
+            class="input"
+            placeholder="Username"
+        >
 
-<button class="primary" onclick="saveProfile()">
-Сохранить
-</button>
+        <input
+            id="editDisplayName"
+            class="input"
+            placeholder="Имя"
+        >
 
-</div>
-</div>
-</div>
+        <input
+            id="editAvatar"
+            class="input"
+            placeholder="URL аватарки"
+        >
 
-<!-- STORY CREATE MODAL -->
-<div class="modal" id="storyModal">
+        <textarea
+            id="editBio"
+            class="input"
+            placeholder="О себе"
+        ></textarea>
 
-<div class="modal-card">
+        <button
+            class="primary-btn"
+            onclick="saveProfile()"
+        >
+            Сохранить
+        </button>
 
-<div class="modal-head">
-Добавить Story
-<button class="close" onclick="closeModal('storyModal')">×</button>
-</div>
-
-<div class="modal-body">
-
-<div class="field">
-<label>Фото</label>
-<input id="storyFile" type="file" accept="image/*">
-</div>
-
-<button class="primary" onclick="createStory()">
-Опубликовать
-</button>
+    </div>
 
 </div>
-</div>
-</div>
+
 
 <!-- STORY VIEWER -->
-<div class="modal" id="storyViewer">
 
-<div class="modal-card" style="max-width:500px">
+<div
+    id="storyViewer"
+    class="story-viewer"
+>
 
-<div class="modal-head">
-<span id="storyViewerName">Story</span>
-<button class="close" onclick="closeModal('storyViewer')">×</button>
+    <button
+        class="story-close"
+        onclick="closeStory()"
+    >
+        ×
+    </button>
+
+    <img
+        id="storyViewerImage"
+        src=""
+    >
+
 </div>
 
-<div style="padding:10px">
-<img id="storyViewerImage"
-style="width:100%;max-height:70vh;object-fit:contain;border-radius:12px">
-</div>
-
-</div>
-</div>
 
 <script>
 
-/* SUPABASE */
+/* =========================
+   SUPABASE
+========================= */
 
-const SUPABASE_URL="https://yaycdogysqslorprxhgs.supabase.co";
+const SUPABASE_URL =
+    "https://yaycdogysqslorprxhgs.supabase.co";
 
-const SUPABASE_KEY="sb_publishable_zby9kHgYS0i-KTBFKswqDA_P2XMlWuy";
+const SUPABASE_KEY =
+    "sb_publishable_zby9kHgYS0i-KTBFKswqDA_P2XMlWuy";
 
-const supabaseClient=supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-/* STATE */
-
-let currentUser=null;
-let currentProfile=null;
-
-let currentChatUser=null;
-let currentRoom=null;
-
-let messageChannel=null;
-let roomChannel=null;
-let roomsRealtime=null;
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
-/* ICONS */
+/* =========================
+   STATE
+========================= */
 
-const icons={
+let currentUser = null;
+let currentProfile = null;
 
-home:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<path d="M3 10.5 12 3l9 7.5"/>
-<path d="M5 9v11h14V9"/>
-<path d="M9 20v-6h6v6"/>
-</svg>`,
+let currentChatUser = null;
+let currentRoom = null;
 
-explore:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<circle cx="11" cy="11" r="7"/>
-<path d="m20 20-4-4"/>
-</svg>`,
-
-notifications:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-<path d="M10 21h4"/>
-</svg>`,
-
-messages:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.5 8.5 0 0 1-4-.9L4 20l1.4-3.5A7.5 7.5 0 1 1 20 11.5Z"/>
-</svg>`,
-
-rooms:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<rect x="3" y="5" width="18" height="14" rx="3"/>
-<path d="M7 9h10M7 13h6"/>
-</svg>`,
-
-profile:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<circle cx="12" cy="8" r="4"/>
-<path d="M4 21c.8-4 3.4-6 8-6s7.2 2 8 6"/>
-</svg>`,
-
-send:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<path d="m4 4 16 8-16 8 3-8-3-8Z"/>
-<path d="M7 12h13"/>
-</svg>`,
-
-image:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<rect x="3" y="4" width="18" height="16" rx="2"/>
-<circle cx="8" cy="9" r="1.5"/>
-<path d="m4 17 5-5 4 4 2-2 5 5"/>
-</svg>`,
-
-logout:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<path d="M10 5H5v14h5"/>
-<path d="m14 8 4 4-4 4"/>
-<path d="M18 12H9"/>
-</svg>`,
-
-theme:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<circle cx="12" cy="12" r="4"/>
-<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
-</svg>`,
-
-back:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-<path d="m15 18-6-6 6-6"/>
-</svg>`
-
-};
+let messageChannel = null;
+let roomChannel = null;
+let shortsObserver = null;
 
 
-function setIcon(id,name){
-
-const el=document.getElementById(id);
-
-if(el)el.innerHTML=icons[name]||"";
-
-}
-
-
-/* INIT ICONS */
-
-[
-["homeIcon","home"],
-["exploreIcon","explore"],
-["sideNotificationIcon","notifications"],
-["notificationIcon","notifications"],
-["messagesIcon","messages"],
-["roomsIcon","rooms"],
-["profileIcon","profile"],
-["imageIcon","image"],
-["sendIcon","send"],
-["roomSendIcon","send"],
-["backRoomIcon","back"],
-["logoutIcon","logout"],
-["themeIcon","theme"],
-["mHome","home"],
-["mExplore","explore"],
-["mMessages","messages"],
-["mRooms","rooms"],
-["mProfile","profile"]
-].forEach(x=>setIcon(x[0],x[1]));
-
-
-/* HELPERS */
+/* =========================
+   HELPERS
+========================= */
 
 function escapeHTML(value){
 
-return String(value??"")
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
+    if(
+        value === null ||
+        value === undefined
+    ){
+        return "";
+    }
 
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 
-function avatar(url,name){
+function avatar(url){
 
-if(url)return escapeHTML(url);
+    if(url){
+        return escapeHTML(url);
+    }
 
-const letter=(name||"U").charAt(0).toUpperCase();
-
-return "https://ui-avatars.com/api/?name="+
-encodeURIComponent(letter)+
-"&background=111827&color=ffffff";
-
+    return "https://ui-avatars.com/api/?name=N&background=6d4aff&color=fff";
 }
 
 
 function timeAgo(date){
 
-const diff=Math.floor((Date.now()-new Date(date).getTime())/1000);
+    if(!date){
+        return "";
+    }
 
-if(diff<60)return "только что";
+    const diff =
+        Date.now() -
+        new Date(date).getTime();
 
-if(diff<3600)return Math.floor(diff/60)+" мин.";
+    const sec =
+        Math.floor(diff / 1000);
 
-if(diff<86400)return Math.floor(diff/3600)+" ч.";
+    if(sec < 60){
+        return "только что";
+    }
 
-if(diff<604800)return Math.floor(diff/86400)+" дн.";
+    const min =
+        Math.floor(sec / 60);
 
-return new Date(date).toLocaleDateString("ru-RU");
+    if(min < 60){
+        return `${min} мин назад`;
+    }
 
+    const hour =
+        Math.floor(min / 60);
+
+    if(hour < 24){
+        return `${hour} ч назад`;
+    }
+
+    const days =
+        Math.floor(hour / 24);
+
+    if(days < 30){
+        return `${days} дн назад`;
+    }
+
+    return new Date(date)
+        .toLocaleDateString("ru-RU");
 }
 
 
-/* AUTH UI */
+function isVideoUrl(url){
 
-function showRegister(){
+    if(!url){
+        return false;
+    }
 
-document.getElementById("loginForm").classList.add("hidden");
-document.getElementById("registerForm").classList.remove("hidden");
-
+    return /\.(mp4|webm|mov|m4v|ogg)(\?|#|$)/i
+        .test(url);
 }
 
-
-function showLogin(){
-
-document.getElementById("registerForm").classList.add("hidden");
-document.getElementById("loginForm").classList.remove("hidden");
-
-}
-
-
-/* REGISTER */
-
-async function register(){
-
-const username=document.getElementById("registerUsername").value.trim().toLowerCase();
-const name=document.getElementById("registerName").value.trim();
-const email=document.getElementById("registerEmail").value.trim();
-const password=document.getElementById("registerPassword").value;
-
-if(!username||!name||!email||!password){
-
-alert("Заполни все поля.");
-
-return;
-
-}
-
-if(password.length<6){
-
-alert("Пароль должен быть минимум 6 символов.");
-
-return;
-
-}
-
-const {data,error}=await supabaseClient.auth.signUp({
-
-email,
-password
-
-});
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-if(data.user){
-
-const {error:profileError}=await supabaseClient
-.from("profiles")
-.insert({
-
-id:data.user.id,
-username,
-display_name:name,
-bio:"",
-avatar_url:""
-
-});
-
-if(profileError){
-
-console.log(profileError);
-
-alert("Аккаунт создан, но профиль не сохранился: "+profileError.message);
-
-}
-
-}
-
-alert("Аккаунт создан. Теперь войди.");
-
-showLogin();
-
-}
-
-
-/* LOGIN */
-
-async function login(){
-
-const email=document.getElementById("loginEmail").value.trim();
-const password=document.getElementById("loginPassword").value;
-
-const {error}=await supabaseClient.auth.signInWithPassword({
-
-email,
-password
-
-});
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-}
-
-
-/* LOGOUT */
-
-async function logout(){
-
-await supabaseClient.auth.signOut();
-
-location.reload();
-
-}
-
-
-/* SESSION */
-
-async function startApp(){
-
-const {data}=await supabaseClient.auth.getUser();
-
-if(!data.user)return;
-
-currentUser=data.user;
-
-const {data:profile}=await supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",currentUser.id)
-.single();
-
-currentProfile=profile;
-
-document.getElementById("authScreen").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-
-await loadStories();
-await loadFeed();
-await loadRecommendations();
-await loadChatUsers();
-await loadRooms();
-await loadProfile();
-
-subscribeRealtime();
-subscribeRooms();
-
-}
-
-
-supabaseClient.auth.onAuthStateChange((event,session)=>{
-
-if(session && !currentUser){
-
-startApp();
-
-}
-
-});
-
-
-/* NAVIGATION */
-
-function showPage(page){
-
-document.querySelectorAll(".page").forEach(p=>{
-p.classList.remove("active");
-});
-
-const target=document.getElementById("page-"+page);
-
-if(target)target.classList.add("active");
-
-document.querySelectorAll(".sidebar button").forEach(btn=>{
-btn.classList.toggle("active",btn.dataset.page===page);
-});
-
-document.querySelectorAll(".mobile-nav button").forEach(btn=>{
-btn.classList.toggle("active",btn.dataset.mobile===page);
-});
-
-if(page==="home"){
-
-loadFeed();
-loadStories();
-
-}
-
-if(page==="explore")loadRecommendations();
-
-if(page==="notifications")loadNotifications();
-
-if(page==="messages")loadChatUsers();
-
-if(page==="rooms")loadRooms();
-
-if(page==="profile")loadProfile();
-
-}
-
-
-/* MODALS */
 
 function openModal(id){
 
-document.getElementById(id).classList.add("show");
-
+    document
+        .getElementById(id)
+        .classList
+        .add("show");
 }
 
 
 function closeModal(id){
 
-document.getElementById(id).classList.remove("show");
-
+    document
+        .getElementById(id)
+        .classList
+        .remove("show");
 }
 
 
-/* THEME */
+/* =========================
+   AUTH
+========================= */
 
-function toggleTheme(){
+function showLogin(){
 
-const dark=document.documentElement.dataset.theme==="dark";
+    document
+        .getElementById("loginForm")
+        .classList
+        .remove("hidden");
 
-if(dark){
-
-document.documentElement.dataset.theme="";
-
-document.documentElement.style.setProperty("--bg","#f5f7fb");
-document.documentElement.style.setProperty("--card","#fff");
-document.documentElement.style.setProperty("--text","#111827");
-document.documentElement.style.setProperty("--muted","#6b7280");
-document.documentElement.style.setProperty("--border","#e5e7eb");
-document.documentElement.style.setProperty("--primary","#111827");
-document.documentElement.style.setProperty("--soft","#f0f2f5");
-
-localStorage.setItem("nurlink-theme","light");
-
-}else{
-
-document.documentElement.dataset.theme="dark";
-
-document.documentElement.style.setProperty("--bg","#0b0f14");
-document.documentElement.style.setProperty("--card","#11161d");
-document.documentElement.style.setProperty("--text","#f3f4f6");
-document.documentElement.style.setProperty("--muted","#9ca3af");
-document.documentElement.style.setProperty("--border","#252b34");
-document.documentElement.style.setProperty("--primary","#f3f4f6");
-document.documentElement.style.setProperty("--soft","#1a2028");
-
-localStorage.setItem("nurlink-theme","dark");
-
+    document
+        .getElementById("registerForm")
+        .classList
+        .add("hidden");
 }
 
+
+function showRegister(){
+
+    document
+        .getElementById("loginForm")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("registerForm")
+        .classList
+        .remove("hidden");
 }
 
+
+async function login(){
+
+    const email =
+        document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+    if(!email || !password){
+
+        alert("Заполни все поля.");
+        return;
+    }
+
+    const {error} =
+        await supabaseClient.auth
+        .signInWithPassword({
+            email,
+            password
+        });
+
+    if(error){
+        alert(error.message);
+    }
+}
+
+
+async function register(){
+
+    const username =
+        document
+        .getElementById("registerUsername")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const displayName =
+        document
+        .getElementById("registerName")
+        .value
+        .trim();
+
+    const email =
+        document
+        .getElementById("registerEmail")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("registerPassword")
+        .value;
+
+    if(
+        !username ||
+        !displayName ||
+        !email ||
+        !password
+    ){
+
+        alert("Заполни все поля.");
+        return;
+    }
+
+    if(password.length < 6){
+
+        alert(
+            "Пароль должен быть минимум 6 символов."
+        );
+
+        return;
+    }
+
+    const {data,error} =
+        await supabaseClient.auth
+        .signUp({
+            email,
+            password
+        });
+
+    if(error){
+
+        alert(error.message);
+        return;
+    }
+
+    if(data.user){
+
+        const {error:profileError} =
+            await supabaseClient
+            .from("profiles")
+            .insert({
+                id:data.user.id,
+                username,
+                display_name:displayName,
+                bio:"",
+                avatar_url:""
+            });
+
+        if(profileError){
+
+            alert(
+                "Аккаунт создан, но профиль не удалось создать: " +
+                profileError.message
+            );
+
+            return;
+        }
+    }
+
+    alert(
+        "Аккаунт создан. Если требуется подтверждение email, проверь почту."
+    );
+}
+
+
+async function logout(){
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+async function startApp(user){
+
+    currentUser = user;
+
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id",user.id)
+        .maybeSingle();
+
+    if(error){
+
+        console.error(error);
+        alert(error.message);
+        return;
+    }
+
+    currentProfile = data;
+
+    document
+        .getElementById("authScreen")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("app")
+        .classList
+        .remove("hidden");
+
+    loadTheme();
+
+    await loadFeed();
+    await loadStories();
+    await loadNotifications();
+    await loadChatUsers();
+    await loadProfile();
+
+    document
+        .getElementById("createAvatar")
+        .src =
+        avatar(
+            currentProfile?.avatar_url
+        );
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showPage(page){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(el => {
+
+            el.classList.remove("active");
+
+        });
+
+    const target =
+        document.getElementById(page);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(el => {
+
+            el.classList.toggle(
+                "active",
+                el.dataset.page === page
+            );
+
+        });
+
+    document
+        .querySelectorAll(".mobile-item")
+        .forEach(el => {
+
+            el.classList.toggle(
+                "active",
+                el.dataset.page === page
+            );
+
+        });
+
+    if(page === "messages"){
+        loadChatUsers();
+    }
+
+    if(page === "notifications"){
+        loadNotifications();
+    }
+
+    if(page === "rooms"){
+        loadRooms();
+    }
+
+    if(page === "profile"){
+        loadProfile();
+    }
+
+    if(page === "shorts"){
+        loadShorts();
+    }
+}
+
+
+/* =========================
+   THEME
+========================= */
 
 function loadTheme(){
 
-if(localStorage.getItem("nurlink-theme")==="dark"){
+    const saved =
+        localStorage.getItem(
+            "nurlink_theme"
+        );
 
-toggleTheme();
-
-}
-
-}
-
-
-/* STORIES */
-
-async function loadStories(){
-
-const container=document.getElementById("stories");
-
-if(!container)return;
-
-const since=new Date(Date.now()-24*60*60*1000).toISOString();
-
-const {data,error}=await supabaseClient
-.from("stories")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.gt("created_at",since)
-.order("created_at",{ascending:false});
-
-if(error){
-
-console.log(error);
-
-return;
-
-}
-
-let html=`
-
-<div class="story" onclick="openModal('storyModal')">
-
-<div class="add-story">+</div>
-
-<div class="story-name">Добавить</div>
-
-</div>
-
-`;
-
-html+=(data||[]).map(story=>{
-
-const p=story.profiles||{};
-
-return `
-
-<div class="story" onclick='viewStory(${JSON.stringify(story.image_url)},${JSON.stringify(p.display_name||p.username||"Story")})'>
-
-<div class="story-avatar">
-
-<img src="${avatar(p.avatar_url,p.display_name)}">
-
-</div>
-
-<div class="story-name">
-${escapeHTML(p.username||"user")}
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-container.innerHTML=html;
-
+    if(saved === "dark"){
+        document.body.classList.add("dark");
+    }
 }
 
 
-function viewStory(url,name){
+function toggleTheme(){
 
-document.getElementById("storyViewerName").textContent=name;
+    document.body
+        .classList
+        .toggle("dark");
 
-document.getElementById("storyViewerImage").src=url;
-
-openModal("storyViewer");
-
+    localStorage.setItem(
+        "nurlink_theme",
+        document.body.classList.contains("dark")
+            ? "dark"
+            : "light"
+    );
 }
 
 
-async function createStory(){
+/* =========================
+   VIDEO HELPERS
+========================= */
 
-const file=document.getElementById("storyFile").files[0];
+function getVideoDuration(file){
 
-if(!file){
+    return new Promise((resolve,reject)=>{
 
-alert("Выбери фото.");
+        const video =
+            document.createElement("video");
 
-return;
+        video.preload = "metadata";
 
-}
+        const url =
+            URL.createObjectURL(file);
 
-const path=currentUser.id+"/"+Date.now()+"_"+file.name;
+        video.onloadedmetadata = () => {
 
-const {error:uploadError}=await supabaseClient
-.storage
-.from("stories")
-.upload(path,file);
+            const duration =
+                video.duration;
 
-if(uploadError){
+            URL.revokeObjectURL(url);
 
-alert(uploadError.message);
+            resolve(duration);
+        };
 
-return;
+        video.onerror = () => {
 
-}
+            URL.revokeObjectURL(url);
 
-const {data}=supabaseClient
-.storage
-.from("stories")
-.getPublicUrl(path);
+            reject(
+                new Error(
+                    "Не удалось прочитать видео."
+                )
+            );
+        };
 
-const {error}=await supabaseClient
-.from("stories")
-.insert({
-
-user_id:currentUser.id,
-image_url:data.publicUrl
-
-});
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-document.getElementById("storyFile").value="";
-
-closeModal("storyModal");
-
-await loadStories();
-
+        video.src = url;
+    });
 }
 
 
-/* POSTS */
+/* =========================
+   NORMAL POST PREVIEW
+========================= */
 
-function previewPostImage(){
+function previewPostFile(){
 
-const file=document.getElementById("postImage").files[0];
+    const input =
+        document.getElementById("postImage");
 
-const preview=document.getElementById("postPreview");
+    const preview =
+        document.getElementById("postPreview");
 
-if(!file){
+    preview.innerHTML = "";
 
-preview.classList.add("hidden");
+    const file =
+        input.files[0];
 
-return;
+    if(!file){
+        return;
+    }
 
+    if(file.type.startsWith("video/")){
+
+        if(
+            file.size >
+            100 * 1024 * 1024
+        ){
+
+            alert(
+                "Видео слишком большое. Максимум 100 MB."
+            );
+
+            input.value = "";
+            return;
+        }
+
+        const video =
+            document.createElement("video");
+
+        const url =
+            URL.createObjectURL(file);
+
+        video.src = url;
+        video.controls = true;
+        video.playsInline = true;
+
+        video.onloadedmetadata = () => {
+
+            if(video.duration > 60){
+
+                alert(
+                    "Видео не должно быть длиннее 60 секунд."
+                );
+
+                input.value = "";
+                preview.innerHTML = "";
+
+                URL.revokeObjectURL(url);
+
+                return;
+            }
+
+            preview.appendChild(video);
+        };
+
+    }else{
+
+        const img =
+            document.createElement("img");
+
+        img.src =
+            URL.createObjectURL(file);
+
+        preview.appendChild(img);
+    }
 }
 
-preview.src=URL.createObjectURL(file);
 
-preview.classList.remove("hidden");
-
-}
-
+/* =========================
+   CREATE NORMAL POST
+========================= */
 
 async function createPost(){
 
-const content=document.getElementById("postContent").value.trim();
+    if(!currentUser){
+        return;
+    }
 
-const file=document.getElementById("postImage").files[0];
+    const content =
+        document
+        .getElementById("postContent")
+        .value
+        .trim();
 
-if(!content && !file){
+    const file =
+        document
+        .getElementById("postImage")
+        .files[0];
 
-alert("Напиши что-нибудь или добавь фото.");
+    if(!content && !file){
 
-return;
+        alert(
+            "Добавь текст, фото или видео."
+        );
 
+        return;
+    }
+
+    let imageUrl = null;
+
+    if(file){
+
+        if(
+            file.type.startsWith("video/")
+        ){
+
+            if(
+                file.size >
+                100 * 1024 * 1024
+            ){
+
+                alert(
+                    "Видео слишком большое. Максимум 100 MB."
+                );
+
+                return;
+            }
+
+            let duration;
+
+            try{
+
+                duration =
+                    await getVideoDuration(file);
+
+            }catch{
+
+                alert(
+                    "Не удалось проверить видео."
+                );
+
+                return;
+            }
+
+            if(duration > 60){
+
+                alert(
+                    "Видео не должно быть длиннее 60 секунд."
+                );
+
+                return;
+            }
+        }
+
+        const safeName =
+            file.name
+            .replace(
+                /[^a-zA-Z0-9._-]/g,
+                "_"
+            );
+
+        const path =
+            `${currentUser.id}/${Date.now()}_${safeName}`;
+
+        const {error:uploadError} =
+            await supabaseClient
+            .storage
+            .from("nurlink")
+            .upload(
+                path,
+                file,
+                {
+                    upsert:false,
+                    contentType:file.type
+                }
+            );
+
+        if(uploadError){
+
+            alert(
+                "Ошибка загрузки файла: " +
+                uploadError.message
+            );
+
+            return;
+        }
+
+        const {data:urlData} =
+            supabaseClient
+            .storage
+            .from("nurlink")
+            .getPublicUrl(path);
+
+        imageUrl =
+            urlData.publicUrl;
+    }
+
+    const {error} =
+        await supabaseClient
+        .from("posts")
+        .insert({
+            user_id:currentUser.id,
+            content,
+            image_url:imageUrl
+        });
+
+    if(error){
+
+        alert(error.message);
+        return;
+    }
+
+    document
+        .getElementById("postContent")
+        .value = "";
+
+    document
+        .getElementById("postImage")
+        .value = "";
+
+    document
+        .getElementById("postPreview")
+        .innerHTML = "";
+
+    await loadFeed();
 }
 
-let image_url="";
 
-if(file){
+/* =========================
+   STORIES
+========================= */
 
-const path=currentUser.id+"/"+Date.now()+"_"+file.name;
+async function loadStories(){
 
-const {error:uploadError}=await supabaseClient
-.storage
-.from("nurlink")
-.upload(path,file);
+    const container =
+        document.getElementById(
+            "stories"
+        );
 
-if(uploadError){
+    const {data,error} =
+        await supabaseClient
+        .from("stories")
+        .select("*")
+        .order(
+            "created_at",
+            {ascending:false}
+        )
+        .limit(30);
 
-alert(uploadError.message);
+    if(error){
 
-return;
+        console.error(error);
+        return;
+    }
 
+    if(!data?.length){
+
+        container.innerHTML = "";
+        return;
+    }
+
+    const ids =
+        [
+            ...new Set(
+                data.map(
+                    x => x.user_id
+                )
+            )
+        ];
+
+    const {data:profiles} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .in("id",ids);
+
+    const profileMap =
+        new Map(
+            (profiles || [])
+            .map(
+                p => [p.id,p]
+            )
+        );
+
+    container.innerHTML =
+        data.map(story => {
+
+            const profile =
+                profileMap.get(
+                    story.user_id
+                );
+
+            const url =
+                encodeURIComponent(
+                    story.image_url || ""
+                );
+
+            return `
+
+                <div
+                    class="story"
+                    onclick="viewStory(decodeURIComponent('${url}'))"
+                >
+
+                    <div class="story-avatar">
+
+                        <img
+                            src="${avatar(profile?.avatar_url)}"
+                        >
+
+                    </div>
+
+                    <div class="story-name">
+                        ${escapeHTML(
+                            profile?.display_name ||
+                            profile?.username ||
+                            "User"
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
 }
 
-const {data}=supabaseClient
-.storage
-.from("nurlink")
-.getPublicUrl(path);
 
-image_url=data.publicUrl;
+function viewStory(url){
 
-}
+    document
+        .getElementById(
+            "storyViewerImage"
+        )
+        .src = url;
 
-const {error}=await supabaseClient
-.from("posts")
-.insert({
-
-user_id:currentUser.id,
-content,
-image_url
-
-});
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-document.getElementById("postContent").value="";
-document.getElementById("postImage").value="";
-document.getElementById("postPreview").classList.add("hidden");
-
-await loadFeed();
-
+    document
+        .getElementById(
+            "storyViewer"
+        )
+        .classList
+        .add("show");
 }
 
 
-/* FEED */
+function closeStory(){
+
+    document
+        .getElementById(
+            "storyViewer"
+        )
+        .classList
+        .remove("show");
+}
+
+
+/* =========================
+   FEED
+========================= */
 
 async function loadFeed(){
 
-const container=document.getElementById("feed");
+    const container =
+        document.getElementById(
+            "feed"
+        );
 
-if(!container)return;
+    if(!container){
+        return;
+    }
 
-const {data,error}=await supabaseClient
-.from("posts")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.order("created_at",{ascending:false})
-.limit(50);
+    container.innerHTML =
+        `<div class="loading">Загрузка...</div>`;
 
-if(error){
+    const {data,error} =
+        await supabaseClient
+        .from("posts")
+        .select(`
+            *,
+            profiles(
+                id,
+                username,
+                display_name,
+                avatar_url
+            )
+        `)
+        .order(
+            "created_at",
+            {ascending:false}
+        )
+        .limit(50);
 
-container.innerHTML=`
-<div class="empty">
-<strong>Ошибка</strong>
-${escapeHTML(error.message)}
-</div>`;
+    if(error){
 
-return;
+        console.error(error);
 
-}
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
 
-if(!data?.length){
+        return;
+    }
 
-container.innerHTML=`
-<div class="empty">
-<strong>Пока нет постов</strong>
-Будь первым, кто опубликует что-нибудь.
-</div>`;
+    if(!data?.length){
 
-return;
+        container.innerHTML =
+            `<div class="empty">
+                Пока нет публикаций.
+            </div>`;
 
-}
+        return;
+    }
 
-container.innerHTML="";
+    container.innerHTML =
+        data
+        .map(post => renderPost(post))
+        .join("");
 
-for(const post of data){
-
-container.insertAdjacentHTML(
-"beforeend",
-await renderPost(post)
-);
-
-}
-
-}
-
-
-async function renderPost(post){
-
-const p=post.profiles||{};
-
-const {data:likes}=await supabaseClient
-.from("likes")
-.select("user_id")
-.eq("post_id",post.id);
-
-const liked=(likes||[]).some(x=>x.user_id===currentUser.id);
-
-const {data:comments}=await supabaseClient
-.from("comments")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.eq("post_id",post.id)
-.order("created_at",{ascending:true})
-.limit(30);
-
-return `
-
-<article class="card post">
-
-<div class="post-head">
-
-<img class="avatar"
-src="${avatar(p.avatar_url,p.display_name)}">
-
-<div class="post-user">
-
-<strong>
-${escapeHTML(p.display_name||p.username||"User")}
-</strong>
-
-<span>
-@${escapeHTML(p.username||"user")} · ${timeAgo(post.created_at)}
-</span>
-
-</div>
-
-${post.user_id===currentUser.id?`
-
-<button class="post-menu danger"
-onclick="deletePost('${post.id}')">
-Удалить
-</button>
-
-`:""}
-
-</div>
-
-${post.content?`
-<div class="post-content">
-${escapeHTML(post.content)}
-</div>
-`:""}
-
-${post.image_url?`
-<img class="post-image"
-src="${escapeHTML(post.image_url)}">
-`:""}
-
-<div class="post-actions">
-
-<button onclick="toggleLike('${post.id}',${liked})">
-<span>${liked?"♥":"♡"}</span>
-<span>${likes?.length||0}</span>
-</button>
-
-<button onclick="focusComment('${post.id}')">
-<span>○</span>
-<span>${comments?.length||0}</span>
-</button>
-
-<button onclick="sharePost('${post.id}')">
-<span>↗</span>
-Поделиться
-</button>
-
-</div>
-
-<div class="comments">
-
-${(comments||[]).map(c=>{
-
-const cp=c.profiles||{};
-
-return `
-
-<div class="comment">
-
-<img src="${avatar(cp.avatar_url,cp.display_name)}">
-
-<div class="comment-body">
-
-<div class="comment-name">
-${escapeHTML(cp.display_name||cp.username||"User")}
-</div>
-
-<div class="comment-text">
-${escapeHTML(c.content)}
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}).join("")}
-
-<div class="comment-form">
-
-<input
-id="comment-${post.id}"
-placeholder="Написать комментарий..."
-maxlength="500"
-onkeydown="if(event.key==='Enter')addComment('${post.id}')">
-
-<button class="secondary"
-onclick="addComment('${post.id}')">
-Отправить
-</button>
-
-</div>
-
-</div>
-
-</article>
-
-`;
-
+    for(const post of data){
+        await loadPostActions(post.id);
+    }
 }
 
 
-async function toggleLike(postId,liked){
+function renderPost(post){
 
-if(liked){
+    const video =
+        isVideoUrl(post.image_url);
 
-await supabaseClient
-.from("likes")
-.delete()
-.eq("post_id",postId)
-.eq("user_id",currentUser.id);
+    return `
 
-}else{
+        <article
+            class="post"
+            id="post-${post.id}"
+            data-user-id="${escapeHTML(post.user_id)}"
+        >
 
-await supabaseClient
-.from("likes")
-.insert({
+            <div class="post-head">
 
-post_id:postId,
-user_id:currentUser.id
+                <img
+                    class="avatar"
+                    src="${avatar(
+                        post.profiles?.avatar_url
+                    )}"
+                >
 
-});
+                <div class="post-user">
 
+                    <div class="post-name">
+                        ${escapeHTML(
+                            post.profiles?.display_name ||
+                            post.profiles?.username ||
+                            "User"
+                        )}
+                    </div>
+
+                    <div class="post-username">
+                        @${escapeHTML(
+                            post.profiles?.username ||
+                            "user"
+                        )}
+                    </div>
+
+                </div>
+
+                <div class="post-time">
+                    ${timeAgo(post.created_at)}
+                </div>
+
+            </div>
+
+            ${
+                post.content
+                ?
+                `
+                <div class="post-content">
+                    ${escapeHTML(post.content)}
+                </div>
+                `
+                :
+                ""
+            }
+
+            ${
+                post.image_url
+                ?
+                video
+                ?
+                `
+                <video
+                    class="post-video"
+                    src="${escapeHTML(post.image_url)}"
+                    controls
+                    playsinline
+                    preload="metadata"
+                ></video>
+                `
+                :
+                `
+                <img
+                    class="post-image"
+                    src="${escapeHTML(post.image_url)}"
+                >
+                `
+                :
+                ""
+            }
+
+            <div
+                class="post-actions"
+                id="actions-${post.id}"
+            >
+                Загрузка...
+            </div>
+
+            <div
+                id="comments-${post.id}"
+                class="comments hidden"
+            ></div>
+
+        </article>
+    `;
 }
 
-await loadFeed();
 
+/* =========================
+   POST ACTIONS
+========================= */
+
+async function loadPostActions(postId){
+
+    const box =
+        document.getElementById(
+            `actions-${postId}`
+        );
+
+    if(!box){
+        return;
+    }
+
+    const {data:likes} =
+        await supabaseClient
+        .from("likes")
+        .select("*")
+        .eq("post_id",postId);
+
+    const likeCount =
+        likes?.length || 0;
+
+    const liked =
+        likes?.some(
+            x =>
+            x.user_id ===
+            currentUser.id
+        );
+
+    const post =
+        document.getElementById(
+            `post-${postId}`
+        );
+
+    const isOwner =
+        post?.dataset.userId ===
+        currentUser.id;
+
+    box.innerHTML = `
+
+        <button
+            class="post-action ${
+                liked ? "liked" : ""
+            }"
+            onclick="toggleLike(${postId})"
+        >
+            ${liked ? "Нравится" : "Лайк"}
+            ${likeCount}
+        </button>
+
+        <button
+            class="post-action"
+            onclick="toggleComments(${postId})"
+        >
+            Комментарии
+        </button>
+
+        <button
+            class="post-action"
+            onclick="sharePost(${postId})"
+        >
+            Поделиться
+        </button>
+
+        ${
+            isOwner
+            ?
+            `
+            <button
+                class="post-action"
+                onclick="deletePost(${postId})"
+            >
+                Удалить
+            </button>
+            `
+            :
+            ""
+        }
+
+    `;
+}
+
+
+async function toggleLike(postId){
+
+    const {data:existing} =
+        await supabaseClient
+        .from("likes")
+        .select("id")
+        .eq(
+            "post_id",
+            postId
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .maybeSingle();
+
+    if(existing){
+
+        await supabaseClient
+            .from("likes")
+            .delete()
+            .eq("id",existing.id);
+
+    }else{
+
+        await supabaseClient
+            .from("likes")
+            .insert({
+                post_id:postId,
+                user_id:currentUser.id
+            });
+    }
+
+    await loadPostActions(postId);
+}
+
+
+async function toggleComments(postId){
+
+    const box =
+        document.getElementById(
+            `comments-${postId}`
+        );
+
+    if(!box){
+        return;
+    }
+
+    if(box.classList.contains("hidden")){
+
+        box.classList.remove("hidden");
+
+        await loadComments(postId);
+
+    }else{
+
+        box.classList.add("hidden");
+    }
+}
+
+
+async function loadComments(postId){
+
+    const box =
+        document.getElementById(
+            `comments-${postId}`
+        );
+
+    const {data,error} =
+        await supabaseClient
+        .from("comments")
+        .select("*")
+        .eq(
+            "post_id",
+            postId
+        )
+        .order(
+            "created_at",
+            {ascending:true}
+        );
+
+    if(error){
+
+        box.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
+
+        return;
+    }
+
+    const ids =
+        [
+            ...new Set(
+                (data || [])
+                .map(
+                    x => x.user_id
+                )
+            )
+        ];
+
+    let profiles = [];
+
+    if(ids.length){
+
+        const result =
+            await supabaseClient
+            .from("profiles")
+            .select("*")
+            .in("id",ids);
+
+        profiles =
+            result.data || [];
+    }
+
+    const map =
+        new Map(
+            profiles.map(
+                p => [p.id,p]
+            )
+        );
+
+    box.innerHTML = `
+
+        ${
+            (data || [])
+            .map(comment => {
+
+                const p =
+                    map.get(
+                        comment.user_id
+                    );
+
+                return `
+
+                    <div class="comment">
+
+                        <img
+                            class="avatar"
+                            style="
+                                width:32px;
+                                height:32px;
+                            "
+                            src="${avatar(
+                                p?.avatar_url
+                            )}"
+                        >
+
+                        <div class="comment-content">
+
+                            <div class="comment-name">
+                                ${escapeHTML(
+                                    p?.display_name ||
+                                    p?.username ||
+                                    "User"
+                                )}
+                            </div>
+
+                            <div class="comment-text">
+                                ${escapeHTML(
+                                    comment.content
+                                )}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("")
+        }
+
+        <div class="comment-form">
+
+            <input
+                id="comment-input-${postId}"
+                class="input"
+                placeholder="Написать комментарий..."
+                onkeydown="
+                    if(event.key==='Enter')
+                    addComment(${postId})
+                "
+            >
+
+            <button
+                class="secondary-btn"
+                onclick="addComment(${postId})"
+            >
+                Отправить
+            </button>
+
+        </div>
+    `;
 }
 
 
 async function addComment(postId){
 
-const input=document.getElementById("comment-"+postId);
+    const input =
+        document.getElementById(
+            `comment-input-${postId}`
+        );
 
-const content=input.value.trim();
+    if(!input){
+        return;
+    }
 
-if(!content)return;
+    const content =
+        input.value.trim();
 
-const {error}=await supabaseClient
-.from("comments")
-.insert({
+    if(!content){
+        return;
+    }
 
-post_id:postId,
-user_id:currentUser.id,
-content
+    const {error} =
+        await supabaseClient
+        .from("comments")
+        .insert({
+            post_id:postId,
+            user_id:currentUser.id,
+            content
+        });
 
-});
+    if(error){
 
-if(error){
+        alert(error.message);
+        return;
+    }
 
-alert(error.message);
+    input.value = "";
 
-return;
-
-}
-
-input.value="";
-
-await loadFeed();
-
-}
-
-
-function focusComment(postId){
-
-const input=document.getElementById("comment-"+postId);
-
-if(input){
-
-input.focus();
-
-}
-
-}
-
-
-async function deletePost(postId){
-
-if(!confirm("Удалить пост?"))return;
-
-const {error}=await supabaseClient
-.from("posts")
-.delete()
-.eq("id",postId)
-.eq("user_id",currentUser.id);
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-await loadFeed();
-
+    await loadComments(postId);
 }
 
 
 async function sharePost(postId){
 
-const url=location.origin+location.pathname+"?post="+postId;
+    const url =
+        `${location.origin}${location.pathname}#post-${postId}`;
 
-if(navigator.share){
+    if(navigator.share){
 
-try{
+        try{
 
-await navigator.share({
-title:"Nurlink",
-url
-});
+            await navigator.share({
+                title:"Nurlink",
+                text:"Посмотри эту публикацию в Nurlink",
+                url
+            });
 
-}catch(e){}
+        }catch{}
 
-}else{
+    }else{
 
-await navigator.clipboard.writeText(url);
+        try{
 
-alert("Ссылка скопирована.");
+            await navigator.clipboard
+                .writeText(url);
 
+            alert("Ссылка скопирована.");
+
+        }catch{
+
+            alert(url);
+
+        }
+    }
 }
 
+
+async function deletePost(postId){
+
+    if(!confirm(
+        "Удалить публикацию?"
+    )){
+        return;
+    }
+
+    const {error} =
+        await supabaseClient
+        .from("posts")
+        .delete()
+        .eq(
+            "id",
+            postId
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        );
+
+    if(error){
+
+        alert(error.message);
+        return;
+    }
+
+    await loadFeed();
+    await loadShorts();
 }
 
 
-/* EXPLORE */
+/* =========================
+   SHORTS CREATION
+========================= */
+
+function previewShort(){
+
+    const input =
+        document.getElementById(
+            "shortFile"
+        );
+
+    const preview =
+        document.getElementById(
+            "shortPreview"
+        );
+
+    preview.innerHTML = "";
+
+    const file =
+        input.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(
+        !file.type.startsWith("video/")
+    ){
+
+        alert(
+            "Выбери видео."
+        );
+
+        input.value = "";
+        return;
+    }
+
+    if(
+        file.size >
+        100 * 1024 * 1024
+    ){
+
+        alert(
+            "Видео слишком большое. Максимум 100 MB."
+        );
+
+        input.value = "";
+        return;
+    }
+
+    const video =
+        document.createElement("video");
+
+    const url =
+        URL.createObjectURL(file);
+
+    video.src = url;
+    video.controls = true;
+    video.playsInline = true;
+
+    video.style.width = "100%";
+    video.style.maxHeight = "500px";
+    video.style.borderRadius = "14px";
+    video.style.background = "#000";
+
+    video.onloadedmetadata = () => {
+
+        if(video.duration > 60){
+
+            alert(
+                "Shorts должен быть не длиннее 60 секунд."
+            );
+
+            input.value = "";
+            preview.innerHTML = "";
+
+            URL.revokeObjectURL(url);
+
+            return;
+        }
+
+        preview.appendChild(video);
+    };
+
+    video.onerror = () => {
+
+        alert(
+            "Не удалось прочитать видео."
+        );
+
+        input.value = "";
+        preview.innerHTML = "";
+
+        URL.revokeObjectURL(url);
+    };
+}
+
+
+async function publishShort(){
+
+    if(!currentUser){
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "shortFile"
+        );
+
+    const content =
+        document
+        .getElementById(
+            "shortContent"
+        )
+        .value
+        .trim();
+
+    const file =
+        input.files[0];
+
+    if(!file){
+
+        alert(
+            "Выбери видео."
+        );
+
+        return;
+    }
+
+    if(
+        !file.type.startsWith("video/")
+    ){
+
+        alert(
+            "Можно загрузить только видео."
+        );
+
+        return;
+    }
+
+    if(
+        file.size >
+        100 * 1024 * 1024
+    ){
+
+        alert(
+            "Видео слишком большое. Максимум 100 MB."
+        );
+
+        return;
+    }
+
+    let duration;
+
+    try{
+
+        duration =
+            await getVideoDuration(file);
+
+    }catch{
+
+        alert(
+            "Не удалось проверить видео."
+        );
+
+        return;
+    }
+
+    if(duration > 60){
+
+        alert(
+            "Shorts должен быть не длиннее 60 секунд."
+        );
+
+        return;
+    }
+
+    if(duration <= 0){
+
+        alert(
+            "Не удалось определить длительность видео."
+        );
+
+        return;
+    }
+
+    const safeName =
+        file.name
+        .replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+        );
+
+    const path =
+        `${currentUser.id}/shorts/${Date.now()}_${safeName}`;
+
+    const button =
+        document.getElementById(
+            "publishShortButton"
+        );
+
+    button.disabled = true;
+    button.textContent =
+        "Загрузка...";
+
+    const {error:uploadError} =
+        await supabaseClient
+        .storage
+        .from("nurlink")
+        .upload(
+            path,
+            file,
+            {
+                upsert:false,
+                contentType:file.type
+            }
+        );
+
+    if(uploadError){
+
+        button.disabled = false;
+        button.textContent =
+            "Опубликовать Shorts";
+
+        alert(
+            "Ошибка загрузки: " +
+            uploadError.message
+        );
+
+        return;
+    }
+
+    const {data:urlData} =
+        supabaseClient
+        .storage
+        .from("nurlink")
+        .getPublicUrl(path);
+
+    const videoUrl =
+        urlData.publicUrl;
+
+    const {error:postError} =
+        await supabaseClient
+        .from("posts")
+        .insert({
+            user_id:currentUser.id,
+            content:content,
+            image_url:videoUrl
+        });
+
+    if(postError){
+
+        button.disabled = false;
+        button.textContent =
+            "Опубликовать Shorts";
+
+        alert(
+            "Видео загрузилось, но публикация не создалась: " +
+            postError.message
+        );
+
+        return;
+    }
+
+    document
+        .getElementById(
+            "shortContent"
+        )
+        .value = "";
+
+    document
+        .getElementById(
+            "shortFile"
+        )
+        .value = "";
+
+    document
+        .getElementById(
+            "shortPreview"
+        )
+        .innerHTML = "";
+
+    button.disabled = false;
+    button.textContent =
+        "Опубликовать Shorts";
+
+    closeModal("shortModal");
+
+    await loadShorts();
+    await loadFeed();
+
+    alert(
+        "Shorts опубликован."
+    );
+}
+
+
+/* =========================
+   SHORTS FEED
+========================= */
+
+async function loadShorts(){
+
+    const container =
+        document.getElementById(
+            "shortsFeed"
+        );
+
+    if(!container){
+        return;
+    }
+
+    container.innerHTML =
+        `<div class="empty">
+            Загрузка Shorts...
+        </div>`;
+
+    const {data,error} =
+        await supabaseClient
+        .from("posts")
+        .select(`
+            *,
+            profiles(
+                id,
+                username,
+                display_name,
+                avatar_url
+            )
+        `)
+        .order(
+            "created_at",
+            {ascending:false}
+        )
+        .limit(100);
+
+    if(error){
+
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
+
+        return;
+    }
+
+    const shorts =
+        (data || [])
+        .filter(
+            post =>
+            isVideoUrl(
+                post.image_url
+            )
+        );
+
+    if(!shorts.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                Пока нет Shorts.
+
+                <br><br>
+
+                Нажми
+                <b>Создать Shorts</b>
+                и загрузи видео.
+
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        shorts
+        .map(
+            post =>
+            renderShort(post)
+        )
+        .join("");
+
+    for(const post of shorts){
+
+        await loadShortStats(
+            post.id
+        );
+    }
+
+    setupShortsObserver();
+}
+
+
+function renderShort(post){
+
+    return `
+
+        <article
+            class="short-card"
+            id="short-${post.id}"
+        >
+
+            <video
+                class="short-video"
+                src="${escapeHTML(
+                    post.image_url
+                )}"
+                playsinline
+                muted
+                loop
+                preload="metadata"
+            ></video>
+
+            <div class="short-gradient"></div>
+
+            <div class="video-badge">
+                Nurlink Shorts
+            </div>
+
+            <button
+                class="short-action short-mute"
+                onclick="
+                    toggleShortSound(
+                        event,
+                        ${post.id}
+                    )
+                "
+                id="mute-${post.id}"
+            >
+                Звук
+            </button>
+
+            <div class="short-info">
+
+                <div class="short-author">
+                    @${escapeHTML(
+                        post.profiles?.username ||
+                        "user"
+                    )}
+                </div>
+
+                <div class="short-description">
+                    ${escapeHTML(
+                        post.content || ""
+                    )}
+                </div>
+
+            </div>
+
+            <div class="short-actions">
+
+                <button
+                    id="short-like-${post.id}"
+                    class="short-action"
+                    onclick="
+                        shortLike(${post.id})
+                    "
+                >
+                    Лайк
+                </button>
+
+                <button
+                    class="short-action"
+                    onclick="
+                        toggleShortComments(
+                            ${post.id}
+                        )
+                    "
+                >
+                    Комм.
+                </button>
+
+                <button
+                    class="short-action"
+                    onclick="
+                        sharePost(${post.id})
+                    "
+                >
+                    Поделиться
+                </button>
+
+                ${
+                    post.user_id ===
+                    currentUser.id
+                    ?
+                    `
+                    <button
+                        class="short-action"
+                        onclick="
+                            deletePost(
+                                ${post.id}
+                            )
+                        "
+                    >
+                        Удалить
+                    </button>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+            <div
+                id="short-comments-${post.id}"
+                class="hidden"
+                style="
+                    position:absolute;
+                    left:15px;
+                    right:15px;
+                    bottom:85px;
+                    max-height:45%;
+                    overflow:auto;
+                    background:rgba(0,0,0,.86);
+                    border-radius:14px;
+                    padding:12px;
+                    color:#fff;
+                "
+            ></div>
+
+        </article>
+    `;
+}
+
+
+function setupShortsObserver(){
+
+    if(shortsObserver){
+
+        shortsObserver.disconnect();
+    }
+
+    const videos =
+        document.querySelectorAll(
+            ".short-video"
+        );
+
+    shortsObserver =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(entry => {
+
+                    const video =
+                        entry.target;
+
+                    if(
+                        entry.isIntersecting
+                    ){
+
+                        videos.forEach(
+                            other => {
+
+                                if(
+                                    other !==
+                                    video
+                                ){
+
+                                    other.pause();
+                                }
+
+                            }
+                        );
+
+                        video.play()
+                            .catch(
+                                () => {}
+                            );
+
+                    }else{
+
+                        video.pause();
+                    }
+
+                });
+
+            },
+            {
+                threshold:.7
+            }
+        );
+
+    videos.forEach(video => {
+
+        shortsObserver.observe(
+            video
+        );
+
+        video.addEventListener(
+            "click",
+            () => {
+
+                if(video.paused){
+
+                    video.play()
+                        .catch(
+                            () => {}
+                        );
+
+                }else{
+
+                    video.pause();
+                }
+
+            }
+        );
+
+    });
+}
+
+
+function toggleShortSound(
+    event,
+    postId
+){
+
+    event.stopPropagation();
+
+    const card =
+        document.getElementById(
+            `short-${postId}`
+        );
+
+    if(!card){
+        return;
+    }
+
+    const video =
+        card.querySelector(
+            ".short-video"
+        );
+
+    const button =
+        document.getElementById(
+            `mute-${postId}`
+        );
+
+    video.muted =
+        !video.muted;
+
+    button.textContent =
+        video.muted
+        ? "Звук"
+        : "Без звука";
+}
+
+
+async function loadShortStats(
+    postId
+){
+
+    const button =
+        document.getElementById(
+            `short-like-${postId}`
+        );
+
+    if(!button){
+        return;
+    }
+
+    const {data} =
+        await supabaseClient
+        .from("likes")
+        .select("id,user_id")
+        .eq(
+            "post_id",
+            postId
+        );
+
+    const likes =
+        data || [];
+
+    const liked =
+        likes.some(
+            x =>
+            x.user_id ===
+            currentUser.id
+        );
+
+    button.textContent =
+        liked
+        ? `Нравится ${likes.length}`
+        : `Лайк ${likes.length}`;
+
+    button.classList.toggle(
+        "liked",
+        liked
+    );
+}
+
+
+async function shortLike(
+    postId
+){
+
+    const {data:existing} =
+        await supabaseClient
+        .from("likes")
+        .select("id")
+        .eq(
+            "post_id",
+            postId
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .maybeSingle();
+
+    if(existing){
+
+        await supabaseClient
+            .from("likes")
+            .delete()
+            .eq(
+                "id",
+                existing.id
+            );
+
+    }else{
+
+        await supabaseClient
+            .from("likes")
+            .insert({
+                post_id:postId,
+                user_id:currentUser.id
+            });
+    }
+
+    await loadShortStats(
+        postId
+    );
+}
+
+
+async function toggleShortComments(
+    postId
+){
+
+    const box =
+        document.getElementById(
+            `short-comments-${postId}`
+        );
+
+    if(!box){
+        return;
+    }
+
+    if(
+        box.classList.contains(
+            "hidden"
+        )
+    ){
+
+        box.classList.remove(
+            "hidden"
+        );
+
+        await loadShortComments(
+            postId
+        );
+
+    }else{
+
+        box.classList.add(
+            "hidden"
+        );
+    }
+}
+
+
+async function loadShortComments(
+    postId
+){
+
+    const box =
+        document.getElementById(
+            `short-comments-${postId}`
+        );
+
+    const {data,error} =
+        await supabaseClient
+        .from("comments")
+        .select("*")
+        .eq(
+            "post_id",
+            postId
+        )
+        .order(
+            "created_at",
+            {ascending:true}
+        );
+
+    if(error){
+
+        box.innerHTML =
+            escapeHTML(
+                error.message
+            );
+
+        return;
+    }
+
+    const ids =
+        [
+            ...new Set(
+                (data || [])
+                .map(
+                    x => x.user_id
+                )
+            )
+        ];
+
+    let profiles = [];
+
+    if(ids.length){
+
+        const result =
+            await supabaseClient
+            .from("profiles")
+            .select("*")
+            .in("id",ids);
+
+        profiles =
+            result.data || [];
+    }
+
+    const map =
+        new Map(
+            profiles.map(
+                p => [p.id,p]
+            )
+        );
+
+    box.innerHTML = `
+
+        <div
+            style="
+                margin-bottom:10px;
+                font-weight:700;
+            "
+        >
+            Комментарии
+        </div>
+
+        ${
+            (data || [])
+            .map(comment => {
+
+                const p =
+                    map.get(
+                        comment.user_id
+                    );
+
+                return `
+
+                    <div
+                        style="
+                            padding:7px 0;
+                            border-bottom:
+                                1px solid
+                                rgba(255,255,255,.1);
+                        "
+                    >
+
+                        <strong>
+                            ${escapeHTML(
+                                p?.username ||
+                                "user"
+                            )}
+                        </strong>
+
+                        <div>
+                            ${escapeHTML(
+                                comment.content
+                            )}
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("")
+        }
+
+        <div
+            style="
+                display:flex;
+                gap:6px;
+                margin-top:10px;
+            "
+        >
+
+            <input
+                id="short-comment-input-${postId}"
+                class="input"
+                style="
+                    color:#111;
+                    background:#fff;
+                "
+                placeholder="Комментарий..."
+                onkeydown="
+                    if(event.key==='Enter')
+                    addShortComment(
+                        ${postId}
+                    )
+                "
+            >
+
+            <button
+                class="secondary-btn"
+                onclick="
+                    addShortComment(
+                        ${postId}
+                    )
+                "
+            >
+                Отправить
+            </button>
+
+        </div>
+    `;
+}
+
+
+async function addShortComment(
+    postId
+){
+
+    const input =
+        document.getElementById(
+            `short-comment-input-${postId}`
+        );
+
+    if(!input){
+        return;
+    }
+
+    const content =
+        input.value.trim();
+
+    if(!content){
+        return;
+    }
+
+    const {error} =
+        await supabaseClient
+        .from("comments")
+        .insert({
+            post_id:postId,
+            user_id:currentUser.id,
+            content
+        });
+
+    if(error){
+
+        alert(error.message);
+        return;
+    }
+
+    input.value = "";
+
+    await loadShortComments(
+        postId
+    );
+}
+
+
+/* =========================
+   EXPLORE
+========================= */
 
 async function searchUsers(){
 
-const q=document.getElementById("searchInput").value.trim();
+    const input =
+        document.getElementById(
+            "searchInput"
+        );
 
-const container=document.getElementById("searchResults");
+    const q =
+        input.value
+        .trim()
+        .toLowerCase();
 
-if(!q){
+    const container =
+        document.getElementById(
+            "searchResults"
+        );
 
-container.innerHTML="";
+    if(!q){
 
-return;
+        container.innerHTML =
+            `<div class="empty">
+                Введи имя или username.
+            </div>`;
 
-}
+        return;
+    }
 
-const {data,error}=await supabaseClient
-.from("profiles")
-.select("*")
-.or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
-.limit(20);
+    const safeQ =
+        q.replace(/[,%()]/g,"");
 
-if(error){
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .or(
+            `username.ilike.%${safeQ}%,display_name.ilike.%${safeQ}%`
+        )
+        .limit(20);
 
-container.innerHTML=escapeHTML(error.message);
+    if(error){
 
-return;
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
 
-}
+        return;
+    }
 
-container.innerHTML=(data||[]).map(renderUserCard).join("");
+    if(!data?.length){
 
-}
+        container.innerHTML =
+            `<div class="empty">
+                Ничего не найдено.
+            </div>`;
 
+        return;
+    }
 
-function renderUserCard(user){
+    container.innerHTML =
+        data
+        .map(profile => `
 
-if(user.id===currentUser.id)return "";
+            <div class="user-card">
 
-return `
+                <img
+                    class="avatar"
+                    src="${avatar(
+                        profile.avatar_url
+                    )}"
+                >
 
-<div class="card user-card">
+                <div class="user-info">
 
-<img class="avatar"
-src="${avatar(user.avatar_url,user.display_name)}">
+                    <div class="user-name">
+                        ${escapeHTML(
+                            profile.display_name ||
+                            profile.username
+                        )}
+                    </div>
 
-<div class="user-card-info">
+                    <div class="user-username">
+                        @${escapeHTML(
+                            profile.username
+                        )}
+                    </div>
 
-<strong>${escapeHTML(user.display_name||user.username)}</strong>
+                </div>
 
-<span>@${escapeHTML(user.username||"user")}</span>
+                ${
+                    profile.id !==
+                    currentUser.id
+                    ?
+                    `
+                    <button
+                        class="secondary-btn"
+                        onclick="
+                            openProfileById(
+                                '${profile.id}'
+                            )
+                        "
+                    >
+                        Профиль
+                    </button>
+                    `
+                    :
+                    ""
+                }
 
-</div>
-
-<button class="secondary"
-onclick="toggleFollow('${user.id}',this)">
-Профиль
-</button>
-
-</div>
-
-`;
-
-}
-
-
-async function loadRecommendations(){
-
-const container=document.getElementById("recommendations");
-
-if(!container)return;
-
-const {data,error}=await supabaseClient
-.from("profiles")
-.select("*")
-.neq("id",currentUser.id)
-.limit(10);
-
-if(error){
-
-console.log(error);
-
-return;
-
-}
-
-container.innerHTML=(data||[]).map(renderUserCard).join("");
-
-}
-
-
-async function toggleFollow(userId,button){
-
-const {data}=await supabaseClient
-.from("follows")
-.select("id")
-.eq("follower_id",currentUser.id)
-.eq("following_id",userId)
-.maybeSingle();
-
-if(data){
-
-await supabaseClient
-.from("follows")
-.delete()
-.eq("id",data.id);
-
-button.textContent="Подписаться";
-
-}else{
-
-await supabaseClient
-.from("follows")
-.insert({
-
-follower_id:currentUser.id,
-following_id:userId
-
-});
-
-button.textContent="Подписано";
-
-}
-
+            </div>
+        `)
+        .join("");
 }
 
 
-/* NOTIFICATIONS */
+async function openProfileById(
+    id
+){
+
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id",id)
+        .maybeSingle();
+
+    if(error || !data){
+
+        alert(
+            error?.message ||
+            "Пользователь не найден."
+        );
+
+        return;
+    }
+
+    alert(
+        `${data.display_name || data.username}\n\n` +
+        `@${data.username}\n\n` +
+        `${data.bio || "Нет описания"}`
+    );
+}
+
+
+/* =========================
+   NOTIFICATIONS
+========================= */
 
 async function loadNotifications(){
 
-const container=document.getElementById("notifications");
+    const container =
+        document.getElementById(
+            "notificationsList"
+        );
 
-if(!container)return;
+    if(!container || !currentUser){
+        return;
+    }
 
-const {data,error}=await supabaseClient
-.from("notifications")
-.select(`
-*,
-profiles:actor_id(
-username,
-display_name,
-avatar_url
-)
-`)
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false})
-.limit(50);
+    const {data,error} =
+        await supabaseClient
+        .from("notifications")
+        .select("*")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .order(
+            "created_at",
+            {ascending:false}
+        )
+        .limit(50);
 
-if(error){
+    if(error){
 
-container.innerHTML=`
-<div class="empty">
-<strong>Уведомления недоступны</strong>
-${escapeHTML(error.message)}
-</div>`;
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
 
-return;
+        return;
+    }
 
+    if(!data?.length){
+
+        container.innerHTML =
+            `<div class="empty">
+                Нет уведомлений.
+            </div>`;
+
+        return;
+    }
+
+    const actorIds =
+        [
+            ...new Set(
+                data.map(
+                    x => x.actor_id
+                )
+            )
+        ];
+
+    let profiles = [];
+
+    if(actorIds.length){
+
+        const result =
+            await supabaseClient
+            .from("profiles")
+            .select("*")
+            .in(
+                "id",
+                actorIds
+            );
+
+        profiles =
+            result.data || [];
+    }
+
+    const map =
+        new Map(
+            profiles.map(
+                p => [p.id,p]
+            )
+        );
+
+    container.innerHTML =
+        data.map(n => {
+
+            const actor =
+                map.get(
+                    n.actor_id
+                );
+
+            let text =
+                "Новое уведомление";
+
+            if(n.type === "like"){
+                text =
+                    "поставил лайк вашей публикации";
+            }
+
+            if(n.type === "comment"){
+                text =
+                    "прокомментировал вашу публикацию";
+            }
+
+            if(n.type === "follow"){
+                text =
+                    "подписался на вас";
+            }
+
+            return `
+
+                <div
+                    class="notification ${
+                        n.read
+                        ? ""
+                        : "unread"
+                    }"
+                >
+
+                    <strong>
+                        ${escapeHTML(
+                            actor?.display_name ||
+                            actor?.username ||
+                            "User"
+                        )}
+                    </strong>
+
+                    ${text}
+
+                    <div
+                        style="
+                            color:var(--muted);
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        ${timeAgo(
+                            n.created_at
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
 }
 
-if(!data?.length){
 
-container.innerHTML=`
-<div class="empty">
-<strong>Пока нет уведомлений</strong>
-</div>`;
-
-return;
-
-}
-
-container.innerHTML=data.map(n=>{
-
-const p=n.profiles||{};
-
-let text="новое действие";
-
-if(n.type==="like")text="понравился ваш пост";
-if(n.type==="comment")text="прокомментировал ваш пост";
-if(n.type==="follow")text="подписался на вас";
-
-return `
-
-<div class="card user-card">
-
-<img class="avatar"
-src="${avatar(p.avatar_url,p.display_name)}">
-
-<div class="user-card-info">
-
-<strong>
-${escapeHTML(p.display_name||p.username||"User")}
-</strong>
-
-<span>${text} · ${timeAgo(n.created_at)}</span>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-await supabaseClient
-.from("notifications")
-.update({read:true})
-.eq("user_id",currentUser.id);
-
-}
-
-
-/* MESSAGES */
+/* =========================
+   MESSAGES
+========================= */
 
 async function loadChatUsers(){
 
-const container=document.getElementById("chatUsers");
+    const container =
+        document.getElementById(
+            "chatUsers"
+        );
 
-if(!container)return;
+    if(!container || !currentUser){
+        return;
+    }
 
-const {data,error}=await supabaseClient
-.from("profiles")
-.select("*")
-.neq("id",currentUser.id)
-.order("username")
-.limit(100);
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .neq(
+            "id",
+            currentUser.id
+        )
+        .order("username")
+        .limit(100);
 
-if(error){
+    if(error){
 
-console.log(error);
+        console.error(error);
+        return;
+    }
 
-return;
+    container.innerHTML =
+        (data || [])
+        .map(profile => `
 
+            <div
+                class="chat-user"
+                onclick="
+                    openChatById(
+                        '${profile.id}'
+                    )
+                "
+            >
+
+                <img
+                    class="avatar"
+                    style="
+                        width:38px;
+                        height:38px;
+                    "
+                    src="${avatar(
+                        profile.avatar_url
+                    )}"
+                >
+
+                <div>
+
+                    <div
+                        style="
+                            font-weight:700;
+                        "
+                    >
+                        ${escapeHTML(
+                            profile.display_name ||
+                            profile.username
+                        )}
+                    </div>
+
+                    <div
+                        style="
+                            color:var(--muted);
+                            font-size:11px;
+                        "
+                    >
+                        @${escapeHTML(
+                            profile.username
+                        )}
+                    </div>
+
+                </div>
+
+            </div>
+        `)
+        .join("");
 }
 
-container.innerHTML=(data||[]).map(user=>`
 
-<div class="chat-user"
-onclick="openChat('${user.id}')">
+async function openChatById(id){
 
-<img class="avatar"
-src="${avatar(user.avatar_url,user.display_name)}">
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id",id)
+        .maybeSingle();
 
-<div class="chat-user-info">
+    if(error || !data){
 
-<strong>${escapeHTML(user.display_name||user.username)}</strong>
+        alert(
+            error?.message ||
+            "Пользователь не найден."
+        );
 
-<span>@${escapeHTML(user.username||"user")}</span>
+        return;
+    }
 
-</div>
-
-</div>
-
-`).join("");
-
+    await openChat(data);
 }
 
 
-async function openChat(userId){
+async function openChat(profile){
 
-const {data:user,error}=await supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",userId)
-.single();
+    currentChatUser =
+        profile;
 
-if(error)return;
+    document
+        .getElementById(
+            "chatHeader"
+        )
+        .textContent =
+        profile.display_name ||
+        profile.username ||
+        "Чат";
 
-currentChatUser=user;
+    await loadMessages();
 
-document.getElementById("chatTitle").textContent=
-user.display_name||user.username||"User";
+    if(messageChannel){
 
-await loadMessages();
+        await supabaseClient
+            .removeChannel(
+                messageChannel
+            );
+    }
 
-if(messageChannel){
+    messageChannel =
+        supabaseClient
+        .channel(
+            "messages-" +
+            currentUser.id +
+            "-" +
+            profile.id
+        )
+        .on(
+            "postgres_changes",
+            {
+                event:"INSERT",
+                schema:"public",
+                table:"messages"
+            },
+            payload => {
 
-await supabaseClient.removeChannel(messageChannel);
+                const msg =
+                    payload.new;
 
-}
+                if(
+                    (
+                        msg.sender_id ===
+                        currentUser.id &&
+                        msg.receiver_id ===
+                        profile.id
+                    )
+                    ||
+                    (
+                        msg.sender_id ===
+                        profile.id &&
+                        msg.receiver_id ===
+                        currentUser.id
+                    )
+                ){
 
-messageChannel=supabaseClient
-.channel("private-chat-"+currentUser.id+"-"+userId)
-.on(
-"postgres_changes",
-{
-event:"INSERT",
-schema:"public",
-table:"messages"
-},
-payload=>{
+                    loadMessages();
+                }
 
-const m=payload.new;
-
-if(
-(m.sender_id===currentUser.id && m.receiver_id===userId) ||
-(m.sender_id===userId && m.receiver_id===currentUser.id)
-){
-
-appendMessage(m);
-
-}
-
-}
-)
-.subscribe();
-
+            }
+        )
+        .subscribe();
 }
 
 
 async function loadMessages(){
 
-if(!currentChatUser)return;
+    if(!currentChatUser){
+        return;
+    }
 
-const {data,error}=await supabaseClient
-.from("messages")
-.select("*")
-.or(
-`and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
-)
-.order("created_at",{ascending:true})
-.limit(100);
+    const container =
+        document.getElementById(
+            "chatMessages"
+        );
 
-if(error){
+    const {data,error} =
+        await supabaseClient
+        .from("messages")
+        .select("*")
+        .or(
+            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentChatUser.id}),and(sender_id.eq.${currentChatUser.id},receiver_id.eq.${currentUser.id})`
+        )
+        .order(
+            "created_at",
+            {ascending:true}
+        );
 
-console.log(error);
+    if(error){
 
-return;
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
 
-}
+        return;
+    }
 
-const container=document.getElementById("chatMessages");
+    container.innerHTML =
+        (data || [])
+        .map(message => `
 
-if(!data?.length){
+            <div
+                class="message ${
+                    message.sender_id ===
+                    currentUser.id
+                    ? "mine"
+                    : ""
+                }"
+            >
 
-container.innerHTML=`
-<div class="empty">
-<strong>Начните разговор</strong>
-Напишите первое сообщение.
-</div>`;
+                <div class="message-bubble">
+                    ${escapeHTML(
+                        message.content
+                    )}
+                </div>
 
-return;
+            </div>
+        `)
+        .join("");
 
-}
-
-container.innerHTML=data.map(renderMessage).join("");
-
-container.scrollTop=container.scrollHeight;
-
-}
-
-
-function renderMessage(message){
-
-const mine=message.sender_id===currentUser.id;
-
-return `
-
-<div class="message ${mine?"mine":""}">
-
-<div>${escapeHTML(message.content)}</div>
-
-<div class="message-time">
-${timeAgo(message.created_at)}
-</div>
-
-</div>
-
-`;
-
-}
-
-
-function appendMessage(message){
-
-const container=document.getElementById("chatMessages");
-
-const empty=container.querySelector(".empty");
-
-if(empty)container.innerHTML="";
-
-container.insertAdjacentHTML(
-"beforeend",
-renderMessage(message)
-);
-
-container.scrollTop=container.scrollHeight;
-
+    container.scrollTop =
+        container.scrollHeight;
 }
 
 
 async function sendMessage(){
 
-if(!currentChatUser)return;
+    if(!currentChatUser){
 
-const input=document.getElementById("messageInput");
+        alert(
+            "Сначала выбери пользователя."
+        );
 
-const content=input.value.trim();
+        return;
+    }
 
-if(!content)return;
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
 
-const {error}=await supabaseClient
-.from("messages")
-.insert({
+    const content =
+        input.value.trim();
 
-sender_id:currentUser.id,
-receiver_id:currentChatUser.id,
-content
+    if(!content){
+        return;
+    }
 
-});
+    const {error} =
+        await supabaseClient
+        .from("messages")
+        .insert({
+            sender_id:currentUser.id,
+            receiver_id:currentChatUser.id,
+            content
+        });
 
-if(error){
+    if(error){
 
-alert(error.message);
+        alert(error.message);
+        return;
+    }
 
-return;
+    input.value = "";
 
+    await loadMessages();
 }
 
-input.value="";
 
-}
+/* =========================
+   ROOMS
+========================= */
 
+async function loadRooms(){
 
-/* ROOMS */
+    const container =
+        document.getElementById(
+            "roomsList"
+        );
 
-function openRoomModal(){
+    if(!container || !currentUser){
+        return;
+    }
 
-document.getElementById("roomName").value="";
-document.getElementById("roomDescriptionInput").value="";
+    const {data,error} =
+        await supabaseClient
+        .from("rooms")
+        .select("*")
+        .order(
+            "created_at",
+            {ascending:false}
+        );
 
-openModal("roomModal");
+    if(error){
 
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
+
+        return;
+    }
+
+    const rooms =
+        data || [];
+
+    if(!rooms.length){
+
+        container.innerHTML =
+            `<div class="empty">
+                Пока нет Rooms.
+            </div>`;
+
+        return;
+    }
+
+    const ownerIds =
+        [
+            ...new Set(
+                rooms.map(
+                    x => x.owner_id
+                )
+            )
+        ];
+
+    let profiles = [];
+
+    if(ownerIds.length){
+
+        const result =
+            await supabaseClient
+            .from("profiles")
+            .select("*")
+            .in(
+                "id",
+                ownerIds
+            );
+
+        profiles =
+            result.data || [];
+    }
+
+    const map =
+        new Map(
+            profiles.map(
+                p => [p.id,p]
+            )
+        );
+
+    container.innerHTML =
+        rooms
+        .map(room => {
+
+            const owner =
+                map.get(
+                    room.owner_id
+                );
+
+            return `
+
+                <div class="room-card">
+
+                    <div class="room-title">
+                        ${escapeHTML(
+                            room.name
+                        )}
+                    </div>
+
+                    <div class="room-description">
+                        ${escapeHTML(
+                            room.description || ""
+                        )}
+                    </div>
+
+                    <div
+                        style="
+                            color:var(--muted);
+                            font-size:12px;
+                            margin-bottom:12px;
+                        "
+                    >
+                        Создал:
+                        @${escapeHTML(
+                            owner?.username ||
+                            "user"
+                        )}
+                    </div>
+
+                    <div class="room-actions">
+
+                        <button
+                            class="primary-btn"
+                            style="width:auto"
+                            onclick="
+                                openRoom(
+                                    ${room.id}
+                                )
+                            "
+                        >
+                            Открыть
+                        </button>
+
+                        ${
+                            room.owner_id ===
+                            currentUser.id
+                            ?
+                            `
+                            <button
+                                class="secondary-btn"
+                                onclick="
+                                    deleteRoom(
+                                        ${room.id}
+                                    )
+                                "
+                            >
+                                Удалить
+                            </button>
+                            `
+                            :
+                            ""
+                        }
+
+                    </div>
+
+                </div>
+            `;
+
+        })
+        .join("");
 }
 
 
 async function createRoom(){
 
-const name=document.getElementById("roomName").value.trim();
-
-const description=document
-.getElementById("roomDescriptionInput")
-.value.trim();
-
-if(!name){
-
-alert("Введите название комнаты.");
-
-return;
-
-}
-
-const {data,error}=await supabaseClient
-.from("rooms")
-.insert({
-
-owner_id:currentUser.id,
-name,
-description
-
-})
-.select()
-.single();
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-closeModal("roomModal");
-
-await loadRooms();
-
-openRoom(data.id);
-
-}
-
-
-async function loadRooms(){
-
-const container=document.getElementById("roomsList");
-
-if(!container)return;
-
-const {data,error}=await supabaseClient
-.from("rooms")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.order("created_at",{ascending:false});
-
-if(error){
-
-container.innerHTML=`
-<div class="empty room-empty">
-
-<strong>Не удалось загрузить Rooms</strong>
-
-${escapeHTML(error.message)}
-
-</div>`;
-
-return;
-
-}
-
-if(!data?.length){
-
-container.innerHTML=`
-<div class="empty room-empty">
-
-<strong>Пока нет комнат</strong>
-
-Создай первую комнату Nurlink.
-
-</div>`;
-
-return;
-
-}
-
-const roomIds=data.map(x=>x.id);
-
-let memberCounts={};
-
-if(roomIds.length){
-
-const {data:members}=await supabaseClient
-.from("room_members")
-.select("room_id")
-.in("room_id",roomIds);
-
-(members||[]).forEach(member=>{
-
-memberCounts[member.room_id]=
-(memberCounts[member.room_id]||0)+1;
-
-});
-
-}
-
-container.innerHTML=data.map(room=>{
-
-const owner=room.profiles||{};
-
-const count=memberCounts[room.id]||0;
-
-const initial=(room.name||"R").charAt(0).toUpperCase();
-
-const deleteButton=room.owner_id===currentUser.id
-?`
-<button
-class="room-join danger"
-onclick="event.stopPropagation();deleteRoom('${room.id}')">
-Удалить
-</button>
-`
-:"";
-
-return `
-
-<div class="room-card"
-onclick="openRoom('${room.id}')">
-
-<div class="room-top">
-
-<div class="room-avatar">
-${escapeHTML(initial)}
-</div>
-
-<div class="room-info">
-
-<div class="room-name">
-${escapeHTML(room.name)}
-</div>
-
-<div class="room-description">
-${escapeHTML(
-room.description||
-"Публичная комната Nurlink"
-)}
-</div>
-
-</div>
-
-${deleteButton}
-
-<button
-class="room-join"
-onclick="event.stopPropagation();openRoom('${room.id}')">
-Войти
-</button>
-
-</div>
-
-<div class="room-meta">
-
-<span>${count} участников</span>
-
-<span>
-@${escapeHTML(owner.username||"user")}
-</span>
-
-<span>${timeAgo(room.created_at)}</span>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
+    const name =
+        document
+        .getElementById(
+            "roomName"
+        )
+        .value
+        .trim();
+
+    const description =
+        document
+        .getElementById(
+            "roomDescription"
+        )
+        .value
+        .trim();
+
+    if(!name){
+
+        alert(
+            "Напиши название Room."
+        );
+
+        return;
+    }
+
+    const {data,error} =
+        await supabaseClient
+        .from("rooms")
+        .insert({
+            owner_id:currentUser.id,
+            name,
+            description
+        })
+        .select("*")
+        .single();
+
+    if(error){
+
+        alert(error.message);
+        return;
+    }
+
+    await supabaseClient
+        .from("room_members")
+        .insert({
+            room_id:data.id,
+            user_id:currentUser.id
+        });
+
+    document
+        .getElementById(
+            "roomName"
+        )
+        .value = "";
+
+    document
+        .getElementById(
+            "roomDescription"
+        )
+        .value = "";
+
+    closeModal(
+        "roomModal"
+    );
+
+    await loadRooms();
 }
 
 
 async function openRoom(roomId){
 
-const {data:room,error}=await supabaseClient
-.from("rooms")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.eq("id",roomId)
-.single();
+    const {data:room,error} =
+        await supabaseClient
+        .from("rooms")
+        .select("*")
+        .eq(
+            "id",
+            roomId
+        )
+        .maybeSingle();
 
-if(error){
+    if(error || !room){
 
-alert(error.message);
+        alert(
+            error?.message ||
+            "Room не найден."
+        );
 
-return;
+        return;
+    }
 
-}
+    currentRoom =
+        room;
 
-if(!room)return;
+    const {error:memberError} =
+        await supabaseClient
+        .from("room_members")
+        .upsert(
+            {
+                room_id:room.id,
+                user_id:currentUser.id
+            },
+            {
+                onConflict:
+                    "room_id,user_id"
+            }
+        );
 
-currentRoom=room;
+    if(memberError){
 
-const {error:joinError}=await supabaseClient
-.from("room_members")
-.upsert(
-{
-room_id:room.id,
-user_id:currentUser.id
-},
-{
-onConflict:"room_id,user_id"
-}
-);
+        alert(
+            memberError.message
+        );
 
-if(joinError){
+        return;
+    }
 
-console.log(joinError);
+    document
+        .getElementById(
+            "roomChat"
+        )
+        .classList
+        .remove("hidden");
 
-}
+    document
+        .getElementById(
+            "roomChatHeader"
+        )
+        .textContent =
+        room.name;
 
-document.getElementById("roomsListView").style.display="none";
+    await loadRoomMessages();
 
-document.getElementById("roomChat").style.display="flex";
+    if(roomChannel){
 
-document.getElementById("roomTitle").textContent=room.name;
+        await supabaseClient
+            .removeChannel(
+                roomChannel
+            );
+    }
 
-document.getElementById("roomDescription").textContent=
-room.description||"Публичная комната";
+    roomChannel =
+        supabaseClient
+        .channel(
+            "room-" +
+            room.id
+        )
+        .on(
+            "postgres_changes",
+            {
+                event:"INSERT",
+                schema:"public",
+                table:"room_messages",
+                filter:
+                    `room_id=eq.${room.id}`
+            },
+            () => {
 
-await loadRoomMessages();
+                loadRoomMessages();
 
-if(roomChannel){
-
-await supabaseClient.removeChannel(roomChannel);
-
-}
-
-roomChannel=supabaseClient
-.channel("room-"+room.id)
-.on(
-"postgres_changes",
-{
-event:"INSERT",
-schema:"public",
-table:"room_messages",
-filter:"room_id=eq."+room.id
-},
-payload=>{
-
-appendRoomMessage(payload.new);
-
-}
-)
-.subscribe();
-
+            }
+        )
+        .subscribe();
 }
 
 
 async function loadRoomMessages(){
 
-if(!currentRoom)return;
+    if(!currentRoom){
+        return;
+    }
 
-const {data,error}=await supabaseClient
-.from("room_messages")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.eq("room_id",currentRoom.id)
-.order("created_at",{ascending:true})
-.limit(100);
+    const container =
+        document.getElementById(
+            "roomMessages"
+        );
 
-if(error){
+    const {data,error} =
+        await supabaseClient
+        .from("room_messages")
+        .select("*")
+        .eq(
+            "room_id",
+            currentRoom.id
+        )
+        .order(
+            "created_at",
+            {ascending:true}
+        );
 
-console.log(error);
+    if(error){
 
-return;
+        container.innerHTML =
+            `<div class="empty">
+                ${escapeHTML(error.message)}
+            </div>`;
 
-}
+        return;
+    }
 
-const container=document.getElementById("roomMessages");
+    const messages =
+        data || [];
 
-if(!data?.length){
+    const ids =
+        [
+            ...new Set(
+                messages.map(
+                    x => x.user_id
+                )
+            )
+        ];
 
-container.innerHTML=`
-<div class="empty">
+    let profiles = [];
 
-<strong>Комната создана</strong>
+    if(ids.length){
 
-Напиши первое сообщение.
+        const result =
+            await supabaseClient
+            .from("profiles")
+            .select("*")
+            .in(
+                "id",
+                ids
+            );
 
-</div>`;
+        profiles =
+            result.data || [];
+    }
 
-return;
+    const map =
+        new Map(
+            profiles.map(
+                p => [p.id,p]
+            )
+        );
 
-}
+    container.innerHTML =
+        messages
+        .map(message => {
 
-container.innerHTML=data
-.map(message=>renderRoomMessage(message))
-.join("");
+            const profile =
+                map.get(
+                    message.user_id
+                );
 
-container.scrollTop=container.scrollHeight;
+            return `
 
-}
+                <div
+                    style="
+                        margin-bottom:12px;
+                    "
+                >
 
+                    <strong>
+                        ${escapeHTML(
+                            profile?.username ||
+                            "user"
+                        )}
+                    </strong>
 
-function renderRoomMessage(message){
+                    <div>
+                        ${escapeHTML(
+                            message.content
+                        )}
+                    </div>
 
-const profile=message.profiles||{};
+                </div>
+            `;
 
-const name=
-profile.display_name||
-profile.username||
-"User";
+        })
+        .join("");
 
-return `
-
-<div class="room-message">
-
-<img
-class="room-message-avatar"
-src="${avatar(profile.avatar_url,name)}">
-
-<div class="room-message-body">
-
-<div class="room-message-name">
-
-${escapeHTML(name)}
- · @${escapeHTML(profile.username||"user")}
-
-</div>
-
-<div class="room-message-text">
-${escapeHTML(message.content)}
-</div>
-
-<div class="room-message-time">
-${timeAgo(message.created_at)}
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-async function appendRoomMessage(message){
-
-if(!currentRoom)return;
-
-const {data}=await supabaseClient
-.from("room_messages")
-.select(`
-*,
-profiles(
-username,
-display_name,
-avatar_url
-)
-`)
-.eq("id",message.id)
-.single();
-
-if(!data)return;
-
-const container=document.getElementById("roomMessages");
-
-const empty=container.querySelector(".empty");
-
-if(empty)container.innerHTML="";
-
-if(
-container.querySelector(`[data-message-id="${message.id}"]`)
-)return;
-
-container.insertAdjacentHTML(
-"beforeend",
-`
-<div data-message-id="${message.id}">
-${renderRoomMessage(data)}
-</div>
-`
-);
-
-container.scrollTop=container.scrollHeight;
-
+    container.scrollTop =
+        container.scrollHeight;
 }
 
 
 async function sendRoomMessage(){
 
-if(!currentRoom)return;
+    if(!currentRoom){
+        return;
+    }
 
-const input=document.getElementById("roomMessageInput");
+    const input =
+        document.getElementById(
+            "roomMessageInput"
+        );
 
-const content=input.value.trim();
+    const content =
+        input.value.trim();
 
-if(!content)return;
+    if(!content){
+        return;
+    }
 
-if(content.length>1000){
+    const {error} =
+        await supabaseClient
+        .from("room_messages")
+        .insert({
+            room_id:currentRoom.id,
+            user_id:currentUser.id,
+            content
+        });
 
-alert("Сообщение слишком длинное.");
+    if(error){
 
-return;
+        alert(error.message);
+        return;
+    }
 
-}
+    input.value = "";
 
-const {error}=await supabaseClient
-.from("room_messages")
-.insert({
-
-room_id:currentRoom.id,
-user_id:currentUser.id,
-content
-
-});
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-input.value="";
-
-}
-
-
-async function closeRoom(){
-
-if(roomChannel){
-
-await supabaseClient.removeChannel(roomChannel);
-
-roomChannel=null;
-
-}
-
-currentRoom=null;
-
-document.getElementById("roomChat").style.display="none";
-
-document.getElementById("roomsListView").style.display="block";
-
-await loadRooms();
-
+    await loadRoomMessages();
 }
 
 
 async function deleteRoom(roomId){
 
-if(!confirm("Удалить эту комнату?"))return;
+    if(!confirm(
+        "Удалить Room?"
+    )){
+        return;
+    }
 
-const {error}=await supabaseClient
-.from("rooms")
-.delete()
-.eq("id",roomId)
-.eq("owner_id",currentUser.id);
+    const {error} =
+        await supabaseClient
+        .from("rooms")
+        .delete()
+        .eq(
+            "id",
+            roomId
+        )
+        .eq(
+            "owner_id",
+            currentUser.id
+        );
 
-if(error){
+    if(error){
 
-alert(error.message);
+        alert(error.message);
+        return;
+    }
 
-return;
+    if(
+        currentRoom &&
+        currentRoom.id === roomId
+    ){
 
-}
+        currentRoom = null;
 
-await loadRooms();
+        document
+            .getElementById(
+                "roomChat"
+            )
+            .classList
+            .add("hidden");
+    }
 
-}
-
-
-function subscribeRooms(){
-
-if(roomsRealtime){
-
-supabaseClient.removeChannel(roomsRealtime);
-
-}
-
-roomsRealtime=supabaseClient
-.channel("nurlink-rooms")
-.on(
-"postgres_changes",
-{
-event:"*",
-schema:"public",
-table:"rooms"
-},
-()=>{
-
-if(!currentRoom)loadRooms();
-
-}
-)
-.on(
-"postgres_changes",
-{
-event:"*",
-schema:"public",
-table:"room_members"
-},
-()=>{
-
-if(!currentRoom)loadRooms();
-
-}
-)
-.subscribe();
-
+    await loadRooms();
 }
 
 
-/* PROFILE */
+/* =========================
+   PROFILE
+========================= */
 
 async function loadProfile(){
 
-const container=document.getElementById("profile");
+    if(!currentUser){
+        return;
+    }
 
-if(!container)return;
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq(
+            "id",
+            currentUser.id
+        )
+        .maybeSingle();
 
-const {data:profile}=await supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",currentUser.id)
-.single();
+    if(error){
 
-if(!profile)return;
+        console.error(error);
+        return;
+    }
 
-currentProfile=profile;
+    if(data){
+        currentProfile = data;
+    }
 
-const {count:posts}=await supabaseClient
-.from("posts")
-.select("*",{count:"exact",head:true})
-.eq("user_id",currentUser.id);
+    const {count:postsCount} =
+        await supabaseClient
+        .from("posts")
+        .select(
+            "*",
+            {
+                count:"exact",
+                head:true
+            }
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        );
 
-const {count:followers}=await supabaseClient
-.from("follows")
-.select("*",{count:"exact",head:true})
-.eq("following_id",currentUser.id);
+    const {count:followersCount} =
+        await supabaseClient
+        .from("follows")
+        .select(
+            "*",
+            {
+                count:"exact",
+                head:true
+            }
+        )
+        .eq(
+            "following_id",
+            currentUser.id
+        );
 
-const {count:following}=await supabaseClient
-.from("follows")
-.select("*",{count:"exact",head:true})
-.eq("follower_id",currentUser.id);
+    const {count:followingCount} =
+        await supabaseClient
+        .from("follows")
+        .select(
+            "*",
+            {
+                count:"exact",
+                head:true
+            }
+        )
+        .eq(
+            "follower_id",
+            currentUser.id
+        );
 
-const {data:userPosts}=await supabaseClient
-.from("posts")
-.select("image_url")
-.eq("user_id",currentUser.id)
-.not("image_url","is",null)
-.order("created_at",{ascending:false})
-.limit(30);
+    const container =
+        document.getElementById(
+            "profileContent"
+        );
 
-container.innerHTML=`
+    container.innerHTML = `
 
-<div class="profile-head">
+        <img
+            class="profile-avatar"
+            src="${avatar(
+                currentProfile?.avatar_url
+            )}"
+        >
 
-<div class="profile-main">
+        <div class="profile-name">
+            ${escapeHTML(
+                currentProfile?.display_name ||
+                currentProfile?.username ||
+                "User"
+            )}
+        </div>
 
-<img class="profile-avatar"
-src="${avatar(profile.avatar_url,profile.display_name)}">
+        <div class="profile-username">
+            @${escapeHTML(
+                currentProfile?.username ||
+                "user"
+            )}
+        </div>
 
-<div class="profile-info">
+        <div class="profile-bio">
+            ${escapeHTML(
+                currentProfile?.bio ||
+                "Пока нет описания."
+            )}
+        </div>
 
-<h2>
-${escapeHTML(profile.display_name||"User")}
-</h2>
+        <div class="profile-stats">
 
-<div class="username">
-@${escapeHTML(profile.username||"user")}
-</div>
+            <div class="stat">
 
-<div class="profile-bio">
-${escapeHTML(profile.bio||"")}
-</div>
+                <strong>
+                    ${postsCount || 0}
+                </strong>
 
-</div>
+                <span>
+                    Публикации
+                </span>
 
-</div>
+            </div>
 
-<div class="stats">
+            <div class="stat">
 
-<div class="stat">
-<strong>${posts||0}</strong>
-<span>Посты</span>
-</div>
+                <strong>
+                    ${followersCount || 0}
+                </strong>
 
-<div class="stat">
-<strong>${followers||0}</strong>
-<span>Подписчики</span>
-</div>
+                <span>
+                    Подписчики
+                </span>
 
-<div class="stat">
-<strong>${following||0}</strong>
-<span>Подписки</span>
-</div>
+            </div>
 
-</div>
+            <div class="stat">
 
-</div>
+                <strong>
+                    ${followingCount || 0}
+                </strong>
 
-<div class="profile-grid">
+                <span>
+                    Подписки
+                </span>
 
-${(userPosts||[]).map(post=>`
+            </div>
 
-<img src="${escapeHTML(post.image_url)}">
+        </div>
 
-`).join("")}
-
-</div>
-
-`;
-
+        <button
+            class="secondary-btn"
+            style="margin-top:20px"
+            onclick="openProfileEditor()"
+        >
+            Редактировать профиль
+        </button>
+    `;
 }
 
 
 function openProfileEditor(){
 
-if(!currentProfile)return;
+    document
+        .getElementById(
+            "editUsername"
+        )
+        .value =
+        currentProfile?.username || "";
 
-document.getElementById("editName").value=
-currentProfile.display_name||"";
+    document
+        .getElementById(
+            "editDisplayName"
+        )
+        .value =
+        currentProfile?.display_name || "";
 
-document.getElementById("editUsername").value=
-currentProfile.username||"";
+    document
+        .getElementById(
+            "editAvatar"
+        )
+        .value =
+        currentProfile?.avatar_url || "";
 
-document.getElementById("editBio").value=
-currentProfile.bio||"";
+    document
+        .getElementById(
+            "editBio"
+        )
+        .value =
+        currentProfile?.bio || "";
 
-openModal("profileModal");
-
+    openModal(
+        "profileModal"
+    );
 }
 
 
 async function saveProfile(){
 
-const name=document.getElementById("editName").value.trim();
+    const username =
+        document
+        .getElementById(
+            "editUsername"
+        )
+        .value
+        .trim()
+        .toLowerCase();
 
-const username=document.getElementById("editUsername")
-.value.trim()
-.toLowerCase();
+    const displayName =
+        document
+        .getElementById(
+            "editDisplayName"
+        )
+        .value
+        .trim();
 
-const bio=document.getElementById("editBio").value.trim();
+    const avatarUrl =
+        document
+        .getElementById(
+            "editAvatar"
+        )
+        .value
+        .trim();
 
-let avatar_url=currentProfile.avatar_url||"";
+    const bio =
+        document
+        .getElementById(
+            "editBio"
+        )
+        .value
+        .trim();
 
-const file=document.getElementById("avatarFile").files[0];
+    if(!username){
 
-if(file){
+        alert(
+            "Username не может быть пустым."
+        );
 
-const path=currentUser.id+"/avatar_"+Date.now()+"_"+file.name;
+        return;
+    }
 
-const {error:uploadError}=await supabaseClient
-.storage
-.from("nurlink")
-.upload(path,file);
+    const {data,error} =
+        await supabaseClient
+        .from("profiles")
+        .update({
+            username,
+            display_name:displayName,
+            avatar_url:avatarUrl,
+            bio
+        })
+        .eq(
+            "id",
+            currentUser.id
+        )
+        .select("*")
+        .single();
 
-if(uploadError){
+    if(error){
 
-alert(uploadError.message);
+        alert(error.message);
+        return;
+    }
 
-return;
+    currentProfile =
+        data;
 
-}
+    closeModal(
+        "profileModal"
+    );
 
-const {data}=supabaseClient
-.storage
-.from("nurlink")
-.getPublicUrl(path);
+    await loadProfile();
 
-avatar_url=data.publicUrl;
-
-}
-
-const {error}=await supabaseClient
-.from("profiles")
-.update({
-
-display_name:name,
-username,
-bio,
-avatar_url
-
-})
-.eq("id",currentUser.id);
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-closeModal("profileModal");
-
-await loadProfile();
-
-}
-
-
-/* REALTIME */
-
-function subscribeRealtime(){
-
-supabaseClient
-.channel("nurlink-feed")
-.on(
-"postgres_changes",
-{
-event:"*",
-schema:"public",
-table:"posts"
-},
-()=>{
-
-if(document
-.getElementById("page-home")
-.classList.contains("active")
-){
-
-loadFeed();
-
-}
-
-}
-)
-.on(
-"postgres_changes",
-{
-event:"*",
-schema:"public",
-table:"comments"
-},
-()=>{
-
-if(document
-.getElementById("page-home")
-.classList.contains("active")
-){
-
-loadFeed();
-
-}
-
-}
-)
-.on(
-"postgres_changes",
-{
-event:"*",
-schema:"public",
-table:"likes"
-},
-()=>{
-
-if(document
-.getElementById("page-home")
-.classList.contains("active")
-){
-
-loadFeed();
-
-}
-
-}
-)
-.subscribe();
-
+    document
+        .getElementById(
+            "createAvatar"
+        )
+        .src =
+        avatar(
+            currentProfile.avatar_url
+        );
 }
 
 
-/* PROFILE BUTTON */
+/* =========================
+   INITIAL AUTH
+========================= */
 
-document.querySelector(
-'[onclick="openModal(\'profileModal\')"]'
-)?.addEventListener("click",openProfileEditor);
+supabaseClient.auth
+.getSession()
+.then(async ({data}) => {
 
+    if(data.session){
 
-/* CLOSE MODAL ON BACKDROP */
-
-document.querySelectorAll(".modal").forEach(modal=>{
-
-modal.addEventListener("click",e=>{
-
-if(e.target===modal){
-
-modal.classList.remove("show");
-
-}
-
-});
+        await startApp(
+            data.session.user
+        );
+    }
 
 });
 
 
-/* START */
+supabaseClient.auth
+.onAuthStateChange(
+    async (event,session) => {
 
-loadTheme();
+        if(
+            event === "SIGNED_IN" &&
+            session?.user &&
+            !currentUser
+        ){
 
-startApp();
+            await startApp(
+                session.user
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   CLOSE MODALS
+========================= */
+
+document
+.querySelectorAll(".modal")
+.forEach(modal => {
+
+    modal.addEventListener(
+        "click",
+        event => {
+
+            if(
+                event.target === modal
+            ){
+
+                modal.classList.remove(
+                    "show"
+                );
+            }
+
+        }
+    );
+
+});
 
 </script>
 
